@@ -20,8 +20,8 @@ up_all() {
 	fi
 
 	find . -maxdepth "$level" -type d \( ! -name . \) -exec bash -c "cd '{}' && [ -d '.git' ] && pwd && git pr" \;
-	find . -maxdepth "$level" -type d \( ! -name . \) -exec bash -c "cd '{}' && [ -f 'composer.json' ] && pwd && composer install" \;
-	#find . -maxdepth "$level" -type d \( ! -name . \) -exec bash -c "cd '{}' && [ -f 'package.json' ] && pwd && npm install" \;
+	find . -maxdepth "$level" -type d \( ! -name . \) -exec bash -c "cd '{}' && [ -f 'composer.json' ] && pwd && composer install --ignore-platform-reqs" \;
+	find . -maxdepth "$level" -type d \( ! -name . \) -exec bash -c "cd '{}' && [ -f 'package.json' ] && pwd && npm install" \;
 }
 
 bump_all() {
