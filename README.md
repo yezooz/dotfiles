@@ -18,6 +18,7 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~
 ; Vim
 brew install vim
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+pip3 install pynvim
 
 ; Configs via dotfiles repo
 git clone https://github.com/yezooz/dotfiles.git ~/dotfiles
@@ -27,7 +28,8 @@ ln -s ~/dotfiles/gitconfig ~/.gitconfig
 ln -s ~/dotfiles/gitignore ~/.gitignore
 ln -s ~/dotfiles/gitmessage ~/.gitmessage
 ln -s ~/dotfiles/git_template ~/.git_template
-mv ~/.vimrc ~/.vimrc.old && ln -s ~/dotfiles/vimrc ~/.vimrc
+mv ~/.vimrc ~/.vimrc.old 2>/dev/null
+ln -s ~/dotfiles/vimrc ~/.vimrc
 ln -s ~/dotfiles/vim/colors ~/.vim/colors
 ```
 

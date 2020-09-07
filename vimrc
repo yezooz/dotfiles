@@ -7,6 +7,7 @@ set nospell
 set relativenumber
 set nofoldenable
 set nolist
+set encoding=utf-8
 
 " Folding
 set foldmethod=manual
@@ -90,15 +91,18 @@ Plugin 'sheerun/vim-polyglot'
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
 Plugin 'tpope/vim-fugitive'
+
 " plugin from http://vim-scripts.org/vim/scripts.html
 " Plugin 'L9'
 " Git plugin not hosted on GitHub
 Plugin 'git://git.wincent.com/command-t.git'
+
 " git repos on your local machine (i.e. when working on your own plugin)
-"Plugin 'file:///home/gmarik/path/to/plugin'"
+" Plugin 'file:///home/gmarik/path/to/plugin'
 " The sparkup vim script is in a subdirectory of this repo called vim.
 " Pass the path to set the runtimepath properly.
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+
 " Install L9 and avoid a Naming conflict if you've already installed a
 " different version somewhere else.
 " Plugin 'ascenator/L9', {'name': 'newL9'}
@@ -115,17 +119,7 @@ Plugin 'majutsushi/tagbar'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 
-if has("unix")
-  let s:uname = system("uname -s")
-  if s:uname == "Darwin\n"
-    " Do Mac stuff here 
-	Plugin 'Shougo/deoplete.nvim'
-    Plugin 'roxma/nvim-yarp'
-    Plugin 'roxma/vim-hug-neovim-rpc'
-  else
-    Plugin 'Valloric/YouCompleteMe'
-  endif
-endif
+Plugin 'Valloric/YouCompleteMe'
 
 Plugin 'yegappan/grep'
 
@@ -136,16 +130,17 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 
-" Markdown - https://github.com/plasticboy/vim-markdown "
+" Markdown - https://github.com/plasticboy/vim-markdown
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 
-" Goyo - https://github.com/junegunn/goyo.vim "
+" Goyo - https://github.com/junegunn/goyo.vim
 Plugin 'junegunn/goyo.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
+
 " To ignore plugin indent changes, instead use:
 "filetype plugin on
 "
@@ -157,16 +152,3 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
-
-
-if has("unix")
-  let s:uname = system("uname -s")
-
-  " Mac
-  if s:uname == "Darwin\n"
-	let g:deoplete#enable_at_startup = 1
-  " Non-Mac
-  else
-
-  endif
-endif
