@@ -6,11 +6,11 @@ alias e="$EDITOR"
 alias v="$VISUAL"
 
 upgrade() {
-		brew update
-		brew upgrade
-		brew cask upgrade
-		composer global update
-		npm update -g
+	brew update
+	brew upgrade
+	brew upgrade --cask
+	composer global update
+	npm update -g
 }
 
 up_all() {
@@ -20,6 +20,15 @@ up_all() {
 	fi
 
 	find . -maxdepth "$level" -type d \( ! -name . \) -exec bash -c "cd '{}' && [ -d '.git' ] && pwd && git pr" \;
+}
+
+install_all() {
+	local level="$1"
+	if [[ -z "${level}" ]]; then
+		level=1
+	fi
+
+	up_all
 	find . -maxdepth "$level" -type d \( ! -name . \) -exec bash -c "cd '{}' && [ -f 'composer.json' ] && pwd && composer install --ignore-platform-reqs" \;
 	find . -maxdepth "$level" -type d \( ! -name . \) -exec bash -c "cd '{}' && [ -f 'package.json' ] && pwd && npm install" \;
 }
@@ -30,7 +39,7 @@ bump_all() {
 		level=1
 	fi
 
-	find . -maxdepth "$level" -type d \( ! -name . \) -exec bash -c "cd '{}' && [ -d '.git' ] && pwd && git pr" \;
+	up_all
 	find . -maxdepth "$level" -type d \( ! -name . \) -exec bash -c "cd '{}' && [ -f 'composer.json' ] && pwd && composer update" \;
 	find . -maxdepth "$level" -type d \( ! -name . \) -exec bash -c "cd '{}' && [ -f 'package.json' ] && pwd && npm update" \;
 }
