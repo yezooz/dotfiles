@@ -58,7 +58,7 @@ brew cask install sublime-text visual-studio-code intellij-idea phpstorm pycharm
 ### Desktop tools
 
 ```bash
-brew cask install alfred slack google-chrome firefox postman vlc spotify transmission whatsapp signal dropbox 1password the-unarchiver tor-browser karabiner-elements
+brew cask install alfred slack google-chrome firefox postman vlc spotify transmission whatsapp signal dropbox 1password the-unarchiver tor-browser karabiner-elements stats
 brew install youtube-dl ffmpeg
 ```
 
