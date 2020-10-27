@@ -10,7 +10,6 @@ upgrade() {
 	brew upgrade
 	brew upgrade --cask
 	composer global update
-	npm update -g
 }
 
 up_all() {
