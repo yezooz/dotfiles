@@ -10,10 +10,6 @@ export ZSH=$HOME/.oh-my-zsh
 
 source $HOME/.zsh_aliases
 
-export EDITOR='subl -w'
-
-export TERMINAL="terminator"
-
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
@@ -103,6 +99,7 @@ fi
 export OSX=
 export LINUX=
 
+# Linux
 if [[ $(uname) == 'Linux' ]]; then
   export LINUX=1
   export GNU_USERLAND=1
@@ -122,10 +119,15 @@ if [[ $(uname) == 'Linux' ]]; then
   # Homebrew
   export PATH=$PATH:~/.linuxbrew/bin
 
+  export EDITOR='vim'
+
+  export TERMINAL='terminator'
+
   # Caps Lock as ESC for Vim
   gsettings set org.gnome.desktop.input-sources xkb-options "['caps:escape']"
 fi
 
+# macOS
 if [[ $(uname) == 'Darwin' ]]; then
   export OSX=1
 
@@ -143,6 +145,8 @@ if [[ $(uname) == 'Darwin' ]]; then
 
    # Composer
   export PATH=~/.composer/vendor/bin:$PATH
+
+  export EDITOR='subl -w'
 
   test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 fi

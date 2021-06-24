@@ -18,7 +18,7 @@ up_all() {
 		level=1
 	fi
 
-	find . -maxdepth "$level" -type d \( ! -name . \) -exec bash -c "cd '{}' && [ -d '.git' ] && pwd && git pr" \;
+	find . -maxdepth "$level" -type d \( ! -name . \) -exec bash -c "cd '{}' && [ -d '.git' ] && pwd && git stash --include-untracked && git pr && git stash pop" \;
 }
 
 install_all() {
