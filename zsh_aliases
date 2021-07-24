@@ -61,3 +61,6 @@ alias tfae='
 # Kubectl
 alias k='kubectl'
 
+# youtube-dl
+alias yt-dl-mp3='youtube-dl -f "bestaudio/best" -ciw -o "%(title)s.%(ext)s" -v --extract-audio --audio-format mp3 --audio-quality 0 --restrict-filenames'
+alias yt-dl-vid='youtube-dl -f bestvideo -ciw -o "%(title)s.%(ext)s" --merge-output-format mp4 --restrict-filenames'
