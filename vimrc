@@ -119,8 +119,6 @@ Plugin 'majutsushi/tagbar'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 
-Plugin 'Valloric/YouCompleteMe'
-
 Plugin 'yegappan/grep'
 
 Plugin 'fatih/vim-go'

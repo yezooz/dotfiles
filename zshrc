@@ -39,7 +39,7 @@ DEFAULT_USER="marek"
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
+ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # COMPLETION_WAITING_DOTS="true"
@@ -84,7 +84,7 @@ fi
 # export ARCHFLAGS="-arch x86_64"
 
 # ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
+export SSH_KEY_PATH="~/.ssh/dsa_id"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -92,8 +92,8 @@ fi
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+alias zshconfig="subl ~/.zshrc"
+alias ohmyzsh="subl ~/.oh-my-zsh"
 
 # OS Detection
 export OSX=
@@ -131,7 +131,11 @@ fi
 if [[ $(uname) == 'Darwin' ]]; then
   export OSX=1
 
+  # Code
   export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin":$PATH
+
+  # Python 3.10
+  export PATH="/usr/local/opt/python@3.10/bin":$PATH
 
   # Brew Vim
   /usr/local/bin/vim --version >/dev/null 2>&1
@@ -167,3 +171,8 @@ export PATH="/usr/local/opt/mysql-client/bin:$PATH"
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/vault vault
+
+# gocryptotrader (https://github.com/thrasher-corp/gocryptotrader)
+PROG=gctcli
+_CLI_ZSH_AUTOCOMPLETE_HACK=1
+source ~/code/crypto/deps/gocryptotrader/cmd/gctcli/autocomplete/zsh_autocomplete
