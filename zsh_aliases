@@ -5,50 +5,61 @@ alias mkdir="mkdir -p"
 alias e="$EDITOR"
 alias v="$VISUAL"
 
-upgrade() {
-	brew update
-	brew upgrade
-	brew upgrade --cask
-	composer global update
-}
+alias upgrade="brew update && brew upgrade && brew upgrade --cask && composer global update"
 
-up_all() {
+alias up="git stash push --include-untracked --quiet && git pr && git stash pop --quiet"
+
+function up_all() {
 	local level="$1"
 	if [[ -z "${level}" ]]; then
 		level=1
 	fi
 
-	find . -maxdepth "$level" -type d \( ! -name . \) -exec bash -c "cd '{}' && [ -d '.git' ] && pwd && git stash --include-untracked && git pr && git stash pop" \;
+	find . -maxdepth "$level" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -d '.git' ] && pwd && git stash push --include-untracked --quiet && git pr && git stash pop --quiet" \;
 }
 
-install_all() {
+alias up_fork="git fetch upstream && git checkout master && git merge upstream/master && git push"
+
+function up_forks() {
+	local level="$1"
+	if [[ -z "${level}" ]]; then
+		level=1
+	fi
+  
+  find . -maxdepth "$level" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -d '.git' ] && pwd && git fetch upstream && git checkout master && git merge upstream/master && git push" \;
+}
+
+function install_all() {
 	local level="$1"
 	if [[ -z "${level}" ]]; then
 		level=1
 	fi
 
 	up_all
-	find . -maxdepth "$level" -type d \( ! -name . \) -exec bash -c "cd '{}' && [ -f 'composer.json' ] && pwd && composer install --ignore-platform-reqs" \;
-	find . -maxdepth "$level" -type d \( ! -name . \) -exec bash -c "cd '{}' && [ -f 'package.json' ] && pwd && npm install" \;
+	find . -maxdepth "$level" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -f 'composer.json' ] && pwd && composer install --ignore-platform-reqs" \;
+	find . -maxdepth "$level" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -f 'package.json' ] && pwd && npm install" \;
 }
 
-bump_all() {
+function bump_all() {
 	local level="$1"
 	if [[ -z "${level}" ]]; then
 		level=1
 	fi
 
 	up_all
-	find . -maxdepth "$level" -type d \( ! -name . \) -exec bash -c "cd '{}' && [ -f 'composer.json' ] && pwd && composer update" \;
-	find . -maxdepth "$level" -type d \( ! -name . \) -exec bash -c "cd '{}' && [ -f 'package.json' ] && pwd && npm update" \;
+	find . -maxdepth "$level" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -f 'composer.json' ] && pwd && composer update" \;
+	find . -maxdepth "$level" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -f 'package.json' ] && pwd && npm update" \;
 }
 
 # Pretty print the path
 alias path='echo $PATH | tr -s ":" "\n"'
 
+# Git
+alias gc='git clone'
+
 # Terraform
-alias tfp='terraform plan  -out=tf.plan | landscape '
-alias tfpnl='terraform plan  -out=tf.plan'
+alias tfp='terraform plan -out=tf.plan | landscape'
+alias tfpnl='terraform plan -out=tf.plan'
 # alias tfu='terraform get -update'
 alias tfu='rm -rf .terraform ; until terraform init; do sleep 3; done'
 alias tfa='terraform apply "tf.plan"'
