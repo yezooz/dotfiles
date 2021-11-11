@@ -57,11 +57,17 @@ ENABLE_CORRECTION="true"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
+# Colorize plugin
+# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/colorize
+ZSH_COLORIZE_TOOL=chroma
+# ZSH_COLORIZE_STYLE="colorful"
+ZSH_COLORIZE_CHROMA_FORMATTER=terminal256
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git ansible aws common-aliases extract python docker)
+plugins=(git aws common-aliases aliases extract colorize python golang terraform docker docker-compose)
 
 # User configuration
 
@@ -162,15 +168,18 @@ export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 # Kube
 source <(kubectl completion zsh)
 
+# AWS Vault
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/vault vault
+
+# MySQL client
+export PATH="/usr/local/opt/mysql-client/bin:$PATH"
+
 # Search
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-export PATH="/usr/local/opt/mysql-client/bin:$PATH"
-
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/local/bin/vault vault
 
 # gocryptotrader (https://github.com/thrasher-corp/gocryptotrader)
 PROG=gctcli
