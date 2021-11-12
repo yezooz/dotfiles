@@ -9,31 +9,18 @@ alias upgrade="brew update && brew upgrade && brew upgrade --cask && composer gl
 
 alias up="git stash push --include-untracked --quiet && git pr && git stash pop --quiet"
 
-function up_all() {
-	local level="$1"
-	if [[ -z "${level}" ]]; then
-		level=1
-	fi
-
-	find . -maxdepth "$level" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -d '.git' ] && pwd && git stash push --include-untracked --quiet && git pr && git stash pop --quiet" \;
-}
-
 alias up_fork="git fetch upstream && git checkout master && git merge upstream/master && git push"
 
+function up_all() {
+	find . -maxdepth "${1:-1}" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -d '.git' ] && pwd && git stash push --include-untracked --quiet && git pr && git stash pop --quiet" \;
+}
+
 function up_forks() {
-	local level="$1"
-	if [[ -z "${level}" ]]; then
-		level=1
-	fi
-  
-  find . -maxdepth "$level" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -d '.git' ] && pwd && git fetch upstream && git checkout master && git merge upstream/master && git push" \;
+	find . -maxdepth "${1:-1}" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -d '.git' ] && pwd && git fetch upstream && git checkout master && git merge upstream/master && git push" \;
 }
 
 function install_all() {
-	local level="$1"
-	if [[ -z "${level}" ]]; then
-		level=1
-	fi
+	local level="${1:-1}"
 
 	up_all
 	find . -maxdepth "$level" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -f 'composer.json' ] && pwd && composer install --ignore-platform-reqs" \;
@@ -41,10 +28,7 @@ function install_all() {
 }
 
 function bump_all() {
-	local level="$1"
-	if [[ -z "${level}" ]]; then
-		level=1
-	fi
+	local level="${1:-1}"
 
 	up_all
 	find . -maxdepth "$level" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -f 'composer.json' ] && pwd && composer update" \;
