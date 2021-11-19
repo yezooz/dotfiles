@@ -67,29 +67,16 @@ ZSH_COLORIZE_CHROMA_FORMATTER=terminal256
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git aws common-aliases aliases extract colorize python golang terraform docker docker-compose)
+plugins=(z sudo git aws common-aliases aliases extract colorize python golang terraform docker docker-compose)
 
 # User configuration
 
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin"
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
 
-# You may need to manually set your language environment
 export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='vim'
-fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
 export SSH_KEY_PATH="~/.ssh/dsa_id"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
@@ -106,44 +93,48 @@ export OSX=
 export LINUX=
 
 # Linux
-if [[ $(uname) == 'Linux' ]]; then
+if [[ $(uname) == "Linux" ]]; then
   export LINUX=1
   export GNU_USERLAND=1
+  export EDITOR="vim"
+  export TERMINAL="terminator"
 
   # Snap
-  export PATH=$PATH:/snap/bin
+  export PATH="$PATH:/snap/bin"
+  export PATH="$PATH:/snap/docker/current/bin"
 
-  # Docker via Snap
-  export PATH=$PATH:/snap/docker/current/bin
+  export PATH="$PATH:~/.local/bin"
 
-  # Pip
-  export PATH=$PATH:~/.local/bin
-
-  # GOROOT via Snap
-  export GOROOT=/snap/go/current
+  # GOROOT (via Snap)
+  export GOROOT="/snap/go/current"
 
   # Homebrew
-  export PATH=$PATH:~/.linuxbrew/bin
-
-  export EDITOR='vim'
-
-  export TERMINAL='terminator'
+  export PATH="$PATH:~/.linuxbrew/bin"
 
   # Caps Lock as ESC for Vim
   gsettings set org.gnome.desktop.input-sources xkb-options "['caps:escape']"
 fi
 
 # macOS
-if [[ $(uname) == 'Darwin' ]]; then
+if [[ $(uname) == "Darwin" ]]; then
   export OSX=1
 
-  # Code
-  export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin":$PATH
+  # Preferred editor for local and remote sessions
+  if [[ -n $SSH_CONNECTION ]]; then
+    export EDITOR="vim"
+  else
+    export EDITOR="subl -w"
+  fi
+
+  export PATH="/usr/local/sbin:$PATH"
 
   # Python 3.10
-  export PATH="/usr/local/opt/python@3.10/bin":$PATH
+  # export PATH="/usr/local/opt/python@3.10/bin":$PATH
 
-  # Brew Vim
+  # PHP 7.4 + Composer
+  export PATH="$PATH:/usr/local/opt/php@7.4/bin:/usr/local/opt/php@7.4/bin:~/.composer/vendor/bin"
+
+  # Vim via Brew
   /usr/local/bin/vim --version >/dev/null 2>&1
   BREW_VIM_INSTALLED=$?
   if [ $BREW_VIM_INSTALLED -eq 0 ]; then
@@ -151,19 +142,19 @@ if [[ $(uname) == 'Darwin' ]]; then
   fi
 
   # Go
-  export GOROOT=/usr/local/opt/go/libexec
+  export GOROOT="/usr/local/opt/go/libexec"
 
-   # Composer
-  export PATH=~/.composer/vendor/bin:$PATH
-
-  export EDITOR='subl -w'
+  # Visual Studio Code
+  export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+  # MySQL client
+  export PATH="$PATH:/usr/local/opt/mysql-client/bin"
 
   test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 fi
 
 # Go
-export GOPATH=$HOME/go
-export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
+export GOPATH="$HOME/go"
+export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
 
 # Kube
 source <(kubectl completion zsh)
@@ -172,9 +163,6 @@ source <(kubectl completion zsh)
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/vault vault
 
-# MySQL client
-export PATH="/usr/local/opt/mysql-client/bin:$PATH"
-
 # Search
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -182,6 +170,6 @@ export PATH="/usr/local/opt/mysql-client/bin:$PATH"
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # gocryptotrader (https://github.com/thrasher-corp/gocryptotrader)
-PROG=gctcli
-_CLI_ZSH_AUTOCOMPLETE_HACK=1
-source ~/code/crypto/deps/gocryptotrader/cmd/gctcli/autocomplete/zsh_autocomplete
+# PROG=gctcli
+# _CLI_ZSH_AUTOCOMPLETE_HACK=1
+# source ~/code/crypto/deps/gocryptotrader/cmd/gctcli/autocomplete/zsh_autocomplete
