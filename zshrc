@@ -169,6 +169,8 @@ complete -o nospace -C /usr/local/bin/vault vault
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+eval "$(direnv hook zsh)"
+
 # gocryptotrader (https://github.com/thrasher-corp/gocryptotrader)
 # PROG=gctcli
 # _CLI_ZSH_AUTOCOMPLETE_HACK=1
