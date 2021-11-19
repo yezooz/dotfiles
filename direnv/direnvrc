@@ -1,0 +1,55 @@
+# Usage: use_env_dir [env_dir]
+#
+# Load environment variables from `$(direnv_layout_dir)/envs" directory.
+# Under this directory, every file is read and set to an environment
+# variable whose name is the filename and value is the file content.
+#
+# Also watch files so to automatially reload on every file update.
+use_env_dir() {
+  local env_dir
+  env_dir="${1:-$(direnv_layout_dir)/envs}"
+  if [[ -d $env_dir ]]; then
+    for f in "$env_dir"/*; do
+      if [[ -f $f ]]; then
+        watch_file "$f"
+        export "$(basename "$f")=$(cat "$f")"
+      fi
+    done
+  fi
+}
+
+realpath() {
+    [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+}
+
+layout_python-venv() {
+    local python=${1:-python3}
+    [[ $# -gt 0 ]] && shift
+    unset PYTHONHOME
+    if [[ -n $VIRTUAL_ENV ]]; then
+        VIRTUAL_ENV=$(realpath "${VIRTUAL_ENV}")
+    else
+        local python_version
+        python_version=$("$python" -c "import platform; print(platform.python_version())")
+        if [[ -z $python_version ]]; then
+            log_error "Could not detect Python version"
+            return 1
+        fi
+        VIRTUAL_ENV=$PWD/.direnv/python-venv-$python_version
+    fi
+    export VIRTUAL_ENV
+    if [[ ! -d $VIRTUAL_ENV ]]; then
+        log_status "no venv found; creating $VIRTUAL_ENV"
+        "$python" -m venv "$VIRTUAL_ENV"
+    fi
+
+    PATH_add "$VIRTUAL_ENV/bin"
+
+    source "${VIRTUAL_ENV}/bin/activate"
+}
+
+layout_golang() {
+  export GOPATH="$PWD/vendor:$PWD"
+  PATH_add "$PWD/vendor/bin"
+  PATH_add bin
+}
