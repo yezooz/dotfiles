@@ -94,6 +94,8 @@ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
 ; Configs via dotfiles repo
 git clone https://github.com/yezooz/dotfiles.git ~/dotfiles
+mv ~/.bashrc ~/.bashrc.old 2>/dev/null
+ln -s ~/dotfiles/bashrc ~/.bashrc
 mv ~/.zshrc ~/.zshrc.old 2>/dev/null
 ln -s ~/dotfiles/zshrc ~/.zshrc
 ln -s ~/dotfiles/tmux.conf ~/.tmux.conf
@@ -124,7 +126,7 @@ sudo adduser $USER docker
 sudo snap install docker
 newgrp docker
 sudo snap restart docker
-brew install docker-completion docker-compose docker-compose-completion docker-machine docker-machine-completion
+brew install docker-completion docker-compose docker-compose-completion
 
 ; K8s
 brew install kubectl eksctl k9s helm kubectx
@@ -144,15 +146,4 @@ sudo snap install sublime-text --classic
 sudo snap install code --classic
 sudo snap install slack --classic
 sudo snap install filezilla --beta
-```
-
-#### Jetbrains
-
-```bash
-sudo snap install pycharm-professional --classic
-sudo snap install phpstorm --classic
-sudo snap install intellij-idea-ultimate --classic
-sudo snap install webstorm --classic
-sudo snap install datagrip --classic
-sudo snap install goland --classic
 ```
