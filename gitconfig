@@ -1,5 +1,15 @@
+[user]
+	email = marek.mikuliszyn@gmail.com
+	name = Marek Mikuliszyn
+[core]
+	autocrlf = input
+	excludesfile = ~/.gitignore
 [branch]
 	autosetupmerge = true
+[rebase]
+	autoStash = true	
+[pull]
+	rebase = true
 [push]
 	default = tracking
 [log]
@@ -33,12 +43,6 @@
 	undo = reset --hard HEAD^
 	tree = log --graph --decorate --pretty=oneline --abbrev-commit --all
 	myhist = !git log --author=\"$(git config user.name)\" --format=%H |xargs git show --name-only --format=-------------%n%Cred%s%Creset%n%Cblue%h%Creset
-[user]
-	email = marek.mikuliszyn@gmail.com
-	name = Marek Mikuliszyn
-[core]
-	autocrlf = input
-	excludesfile = ~/.gitignore
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
