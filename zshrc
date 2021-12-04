@@ -67,7 +67,7 @@ ZSH_COLORIZE_CHROMA_FORMATTER=terminal256
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(z sudo git aws common-aliases aliases extract colorize python golang terraform docker docker-compose)
+plugins=(z sudo git aws common-aliases aliases extract colorize python golang poetry terraform docker docker-compose)
 
 # User configuration
 
@@ -143,7 +143,11 @@ if [[ $(uname) == "Darwin" ]]; then
 
   # Go
   export GOROOT="/usr/local/opt/go/libexec"
-
+  export GOPATH="$HOME/go"
+  export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
+  # Rust
+  export PATH="$PATH:$HOME/.cargo/bin"
+  
   # Visual Studio Code
   export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
   # MySQL client
@@ -152,12 +156,10 @@ if [[ $(uname) == "Darwin" ]]; then
   test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 fi
 
-# Go
-export GOPATH="$HOME/go"
-export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
-
 # Kube
 source <(kubectl completion zsh)
+
+fpath+=~/.zfunc
 
 # AWS Vault
 autoload -U +X bashcompinit && bashcompinit
@@ -170,6 +172,7 @@ complete -o nospace -C /usr/local/bin/vault vault
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Direnv
+export DIRENV_LOG_FORMAT=""
 eval "$(direnv hook zsh)"
 
 # gocryptotrader (https://github.com/thrasher-corp/gocryptotrader)
