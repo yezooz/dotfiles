@@ -7,12 +7,13 @@ alias v="$VISUAL"
 
 alias upgrade="brew update && brew upgrade && brew upgrade --cask && composer global update"
 
-alias up="git stash push --include-untracked --quiet && git pr && git stash pop --quiet"
+# alias up="git stash push --include-untracked --quiet && git pr && git stash pop --quiet"
 
 alias up_fork="git fetch upstream && git checkout master && git merge upstream/master && git push"
 
 function up_all() {
-	find . -maxdepth "${1:-1}" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -d '.git' ] && pwd && git stash push --include-untracked --quiet && git pr && git stash pop --quiet" \;
+	# find . -maxdepth "${1:-1}" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -d '.git' ] && pwd && git stash push --include-untracked --quiet && git pr && git stash pop --quiet" \;
+	find . -maxdepth "${1:-1}" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -d '.git' ] && pwd && git pull" \;
 }
 
 function up_forks() {
@@ -39,10 +40,10 @@ function bump_all() {
 alias path='echo $PATH | tr -s ":" "\n"'
 
 # Git
-alias gc='git clone'
+alias gc="git clone $@"
 
 # Kubectl
-alias k='kubectl'
+alias k="kubectl"
 
 # youtube-dl
 alias yt-dl-mp3='youtube-dl -f "bestaudio/best" -ciw -o "%(title)s.%(ext)s" -v --extract-audio --audio-format mp3 --audio-quality 0 --restrict-filenames'
