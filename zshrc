@@ -128,8 +128,9 @@ if [[ $(uname) == "Darwin" ]]; then
 
   export PATH="/usr/local/sbin:$PATH"
 
-  # Python 3.10
-  # export PATH="/usr/local/opt/python@3.10/bin":$PATH
+  # pipx
+  export PATH="$PATH:/Users/marek/.local/bin"
+  eval "$(register-python-argcomplete pipx)"
 
   # PHP 7.4 + Composer
   export PATH="$PATH:/usr/local/opt/php@7.4/bin:/usr/local/opt/php@7.4/bin:~/.composer/vendor/bin"
@@ -154,28 +155,37 @@ if [[ $(uname) == "Darwin" ]]; then
   export PATH="$PATH:/usr/local/opt/mysql-client/bin"
 
   test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+  # Kube
+  source <(kubectl completion zsh)
+
+  # AWS Vault
+  autoload -U +X bashcompinit && bashcompinit
+  complete -o nospace -C /usr/local/bin/vault vault
+
+  # Search
+  fpath+=~/.zfunc
+  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+  # Direnv
+  export DIRENV_LOG_FORMAT=""
+  eval "$(direnv hook zsh)"
+
+  # >>> conda initialize >>>
+  # !! Contents within this block are managed by 'conda init' !!
+  __conda_setup="$('/usr/local/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+  if [ $? -eq 0 ]; then
+      eval "$__conda_setup"
+  else
+      if [ -f "/usr/local/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+          . "/usr/local/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+      else
+          export PATH="/usr/local/Caskroom/miniconda/base/bin:$PATH"
+      fi
+  fi
+  unset __conda_setup
+  # <<< conda initialize <<<
 fi
-
-# Kube
-source <(kubectl completion zsh)
-
-fpath+=~/.zfunc
-
-# AWS Vault
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/local/bin/vault vault
-
-# Search
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# Direnv
-export DIRENV_LOG_FORMAT=""
-eval "$(direnv hook zsh)"
-
-# gocryptotrader (https://github.com/thrasher-corp/gocryptotrader)
-# PROG=gctcli
-# _CLI_ZSH_AUTOCOMPLETE_HACK=1
-# source ~/code/crypto/deps/gocryptotrader/cmd/gctcli/autocomplete/zsh_autocomplete
