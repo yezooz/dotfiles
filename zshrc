@@ -72,11 +72,6 @@ plugins=(z sudo git aws common-aliases aliases extract colorize python golang po
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
-source $ZSH/oh-my-zsh.sh
-
-export LANG=en_US.UTF-8
-export SSH_KEY_PATH="~/.ssh/dsa_id"
-
 # OS Detection
 if [[ $(uname) == "Darwin" ]]; then
   export OSX=1
@@ -84,94 +79,22 @@ elif [[ $(uname) == "Linux" ]]; then
   export LINUX=1
 fi
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-source $HOME/.zsh_aliases
+source $ZSH/oh-my-zsh.sh
 
-# Linux
-if [[ -n $LINUX ]]; then
-  export GNU_USERLAND=1
-  export EDITOR="vim"
-  export TERMINAL="terminator"
+# Load the shell dotfiles, and then some:
+# * ~/.path can be used to extend `$PATH`.
+# * ~/.extra can be used for other settings you don’t want to commit.
+for file in ~/.{path,exports,aliases,functions,autocomplete,extra}; do
+	[ -r "$file" ] && [ -f "$file" ] && source "$file";
+done;
+unset file;
 
-  export PATH="$PATH:~/.local/bin"
-
-  # Snap
-  export PATH="$PATH:/snap/bin:/snap/docker/current/bin"
-  export GOROOT="/snap/go/current"
-
-  # Homebrew
-  export PATH="$PATH:~/.linuxbrew/bin"
-
+if [[ -n $OSX ]]; then
+  test -e "$HOME/.iterm2_shell_integration.zsh" && source "$HOME/.iterm2_shell_integration.zsh"
+elif [[ -n $LINUX ]]; then
   # Caps Lock as ESC for Vim
   gsettings set org.gnome.desktop.input-sources xkb-options "['caps:escape']"
 fi
-
-# macOS
-if [[ -n $OSX ]]; then
-
-  # Preferred editor for local and remote sessions
-  if [[ -n $SSH_CONNECTION ]]; then
-    export EDITOR="vim"
-  else
-    export EDITOR="subl -w"
-  fi
-
-  export PATH="$PATH:$HOME/.local/bin"
-  export PATH="/usr/local/sbin:$PATH"
-
-  # Go
-  if [ -x "$(command -v go)" ]; then
-    export GOROOT="/usr/local/opt/go/libexec"
-    export GOPATH="$HOME/go"
-    export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
-  fi
-
-  # Rust
-  if [ -x "$(command -v cargo)" ]; then
-    export PATH="$PATH:$HOME/.cargo/bin"
-  fi
-
-  # pipx
-  if [ -x "$(command -v pipx)" ]; then
-    # export PATH="$PATH:$HOME/.local/bin"
-    eval "$(register-python-argcomplete pipx)"
-  fi
-  
-  # Composer
-  if [ -x "$(command -v composer)" ]; then
-    export PATH="$PATH:$HOME/.composer/vendor/bin"
-  fi
-
-  if [ -x "$(command -v kubectl)" ]; then
-    source <(kubectl completion zsh)
-  fi
-
-  if [ -x "$(command -v vault)" ]; then
-    autoload -U +X bashcompinit && bashcompinit
-    complete -o nospace -C /usr/local/bin/vault vault
-  fi
-  
-  if [ -f "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" ]; then
-    export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-  fi
-
-  if [ -f /usr/local/opt/mysql-client/bin/mysql ]; then
-    export PATH="$PATH:/usr/local/opt/mysql-client/bin"
-  fi
-
-  test -e "$HOME/.iterm2_shell_integration.zsh" && source "$HOME/.iterm2_shell_integration.zsh"
-
-  # Direnv
-  export DIRENV_LOG_FORMAT=""
-  eval "$(direnv hook zsh)"
-fi
-
-# Search
-fpath+=~/.zfunc
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
