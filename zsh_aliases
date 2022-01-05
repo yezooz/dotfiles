@@ -1,11 +1,14 @@
 # Unix
-alias ll="ls -alh"
-alias ln="ln -v"
-alias mkdir="mkdir -p"
 alias e="$EDITOR"
 alias v="$VISUAL"
+alias path='echo $PATH | tr -s ":" "\n"'
+
+# alias ll="ls -lahF --color=auto"
+alias ln="ln -v"
+alias mkdir="mkdir -p"
 
 alias upgrade="brew update && brew upgrade && brew upgrade --cask && composer global update"
+alias reload="source ~/.zshrc"
 
 # alias up="git stash push --include-untracked --quiet && git pr && git stash pop --quiet"
 
@@ -36,15 +39,25 @@ function bump_all() {
 	find . -maxdepth "$level" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -f 'package.json' ] && pwd && npm update" \;
 }
 
-# Pretty print the path
-alias path='echo $PATH | tr -s ":" "\n"'
+# Vim
+if [ -x "$(command -v vim)" ]; then
+	alias vi="$(which vim)"
+fi
 
-# Git
-alias gc="git clone $@"
+# Exa
+if [ -x "$(command -v exa)" ]; then
+    alias ll="exa --long --all --header --group"
+    alias lg="exa --grid --all"
+    alias lt="exa --tree --long --all --header --group"
+fi
 
-# Kubectl
-alias k="kubectl"
+# Kube
+if [ -x "$(command -v kubectl)" ]; then
+    alias k="kubectl"
+fi
 
 # youtube-dl
-alias yt-dl-mp3='youtube-dl -f "bestaudio/best" -ciw -o "%(title)s.%(ext)s" -v --extract-audio --audio-format mp3 --audio-quality 0 --restrict-filenames'
-alias yt-dl-vid='youtube-dl -f bestvideo -ciw -o "%(title)s.%(ext)s" --merge-output-format mp4 --restrict-filenames'
+if [ -x "$(command -v youtube-dl)" ]; then
+    alias yt-dl-mp3='youtube-dl -f "bestaudio/best" -ciw -o "%(title)s.%(ext)s" -v --extract-audio --audio-format mp3 --audio-quality 0 --restrict-filenames'
+    alias yt-dl-vid='youtube-dl -f bestvideo -ciw -o "%(title)s.%(ext)s" --merge-output-format mp4 --restrict-filenames'
+fi
