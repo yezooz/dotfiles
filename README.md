@@ -23,7 +23,12 @@ pip3 install pynvim
 ; Configs via dotfiles repo
 git clone https://github.com/yezooz/dotfiles.git ~/dotfiles
 mv ~/.zshrc ~/.zshrc.old && ln -s ~/dotfiles/zshrc ~/.zshrc
-ln -s ~/dotfiles/zsh_aliases ~/.zsh_aliases
+ln -s ~/dotfiles/path ~/.path
+ln -s ~/dotfiles/exports ~/.exports
+ln -s ~/dotfiles/aliases ~/.aliases
+ln -s ~/dotfiles/functions ~/.functions
+ln -s ~/dotfiles/autocomplete ~/.autocomplete
+
 ln -s ~/dotfiles/gitconfig ~/.gitconfig
 ln -s ~/dotfiles/gitignore ~/.gitignore
 ln -s ~/dotfiles/gitmessage ~/.gitmessage
