@@ -30,6 +30,8 @@ DEFAULT_USER="marek"
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
 
+DISABLE_UPDATE_PROMPT="true"
+
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
 
@@ -57,44 +59,42 @@ ENABLE_CORRECTION="false"
 
 # Colorize plugin
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/colorize
-ZSH_COLORIZE_TOOL=chroma
+ZSH_COLORIZE_TOOL="chroma"
 # ZSH_COLORIZE_STYLE="colorful"
-ZSH_COLORIZE_CHROMA_FORMATTER=terminal256
+ZSH_COLORIZE_CHROMA_FORMATTER="terminal256"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(z sudo git aws common-aliases aliases extract colorize python golang poetry terraform docker docker-compose)
+# plugins=(z sudo git aws aliases extract colorize python golang poetry terraform docker docker-compose)
+plugins=(z command-not-found sudo aliases extract colorize cp python)
 
 # User configuration
 
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
+source $ZSH/oh-my-zsh.sh
+
 # OS Detection
 if [[ $(uname) == "Darwin" ]]; then
-  export OSX=1
+  export MACOS=1
 elif [[ $(uname) == "Linux" ]]; then
   export LINUX=1
 fi
 
-source $ZSH/oh-my-zsh.sh
-
 # Load the shell dotfiles, and then some:
-# * ~/.path can be used to extend `$PATH`.
-# * ~/.extra can be used for other settings you don’t want to commit.
-for file in ~/.{path,exports,aliases,functions,autocomplete,extra}; do
+for file in ~/.{path.zsh,exports.zsh,aliases.zsh,functions.zsh,autocomplete.zsh}; do
 	[ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;
 
-if [[ -n $OSX ]]; then
-  test -e "$HOME/.iterm2_shell_integration.zsh" && source "$HOME/.iterm2_shell_integration.zsh"
-elif [[ -n $LINUX ]]; then
-  # Caps Lock as ESC for Vim
-  gsettings set org.gnome.desktop.input-sources xkb-options "['caps:escape']"
-fi
+[[ -n $MACOS && -f ~/.macos.zsh ]] && source ~/.macos.zsh
+[[ -n $LINUX && -f ~/.linux.zsh ]] && source ~/.linux.zsh
+
+fpath+=~/.zfunc
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

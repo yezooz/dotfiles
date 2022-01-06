@@ -23,16 +23,21 @@ pip3 install pynvim
 ; Configs via dotfiles repo
 git clone https://github.com/yezooz/dotfiles.git ~/dotfiles
 mv ~/.zshrc ~/.zshrc.old && ln -s ~/dotfiles/zshrc ~/.zshrc
-ln -s ~/dotfiles/path ~/.path
-ln -s ~/dotfiles/exports ~/.exports
-ln -s ~/dotfiles/aliases ~/.aliases
-ln -s ~/dotfiles/functions ~/.functions
-ln -s ~/dotfiles/autocomplete ~/.autocomplete
+
+ln -s ~/dotfiles/path.zsh ~/.path.zsh
+ln -s ~/dotfiles/exports.zsh ~/.exports.zsh
+ln -s ~/dotfiles/aliases.zsh ~/.aliases.zsh
+ln -s ~/dotfiles/functions.zsh ~/.functions.zsh
+ln -s ~/dotfiles/autocomplete.zsh ~/.autocomplete.zsh
+ln -s ~/dotfiles/macos.zsh ~/.macos.zsh
+ln -s ~/dotfiles/linux.zsh ~/.linux.zsh
+ln -s ~/dotfiles/zfunc ~/.zfunc
 
 ln -s ~/dotfiles/gitconfig ~/.gitconfig
 ln -s ~/dotfiles/gitignore ~/.gitignore
 ln -s ~/dotfiles/gitmessage ~/.gitmessage
 ln -s ~/dotfiles/git_template ~/.git_template
+
 mv ~/.vimrc ~/.vimrc.old 2>/dev/null
 ln -s ~/dotfiles/vimrc ~/.vimrc
 ln -s ~/dotfiles/vim/colors ~/.vim/colors
