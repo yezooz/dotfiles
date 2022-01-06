@@ -12,7 +12,7 @@ alias -- -="cd -"
 alias d="cd ~/Documents/Dropbox"
 alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
-alias p="cd ~/code"
+# alias p="cd ~/code"
 alias c="clear"
 alias e="$EDITOR"
 alias v="$VISUAL"
@@ -21,12 +21,21 @@ alias path='echo $PATH | tr -s ":" "\n"'
 command -v vim > /dev/null && alias vi="$(which vim)"
 
 # alias ll="ls -lahF --color=auto"
+if [ -x "$(command -v exa)" ]; then
+    alias ls="exa --icons --group-directories-first --all"
+    alias ll="exa --icons --group-directories-first --long --all"
+    alias lt="exa --tree --long --all --header --group"
+    alias lg="exa --icons --group-directories-first --grid --all"
+fi
+
+# alias g="goto"
+alias grep="grep --color"
 alias ln="ln -v"
 alias mkdir="mkdir -p"
 alias mk="mkdir -p "$@" && cd "$@""
 
 # Enable aliases to be sudo’ed
-alias sudo='sudo '
+alias sudo="sudo "
 alias dotfiles="cd $DOTFILES"
 alias reload="source ~/.zshrc"
 
@@ -54,13 +63,6 @@ alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.ar
 
 # Lock the screen (when going AFK)
 alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
-
-# Exa
-if [ -x "$(command -v exa)" ]; then
-    alias ll="exa --long --all --header --group"
-    alias lg="exa --grid --all"
-    alias lt="exa --tree --long --all --header --group"
-fi
 
 # Kube
 if [ -x "$(command -v kubectl)" ]; then

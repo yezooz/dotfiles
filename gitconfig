@@ -3,7 +3,7 @@
 	name = Marek Mikuliszyn
 [core]
 	autocrlf = input
-	excludesfile = ~/.gitignore
+	excludesfile = /Users/marek/.gitignore
 [branch]
 	autosetupmerge = true
 [rebase]

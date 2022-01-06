@@ -30,7 +30,7 @@ DEFAULT_USER="marek"
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
 
-DISABLE_UPDATE_PROMPT="true"
+# DISABLE_UPDATE_PROMPT="true"
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -55,7 +55,7 @@ ENABLE_CORRECTION="false"
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
+# ZSH_CUSTOM="$DOTFILES/zsh"
 
 # Colorize plugin
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/colorize
@@ -68,24 +68,17 @@ ZSH_COLORIZE_CHROMA_FORMATTER="terminal256"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 # plugins=(z sudo git aws aliases extract colorize python golang poetry terraform docker docker-compose)
-plugins=(z command-not-found sudo aliases extract colorize cp python)
+plugins=(z command-not-found sudo aliases extract colorize colored-man-pages cp git python zsh-nvm)
 
 # User configuration
 
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-# export MANPATH="/usr/local/man:$MANPATH"
+source $HOME/.pre.zsh
 
 source $ZSH/oh-my-zsh.sh
 
-# OS Detection
-if [[ $(uname) == "Darwin" ]]; then
-  export MACOS=1
-elif [[ $(uname) == "Linux" ]]; then
-  export LINUX=1
-fi
-
 # Load the shell dotfiles, and then some:
-for file in ~/.{path.zsh,exports.zsh,aliases.zsh,functions.zsh,autocomplete.zsh}; do
+for file in ~/.{path,exports,aliases,functions,autocomplete}; do
+  file="$file.zsh"
 	[ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;
@@ -93,11 +86,8 @@ unset file;
 [[ -n $MACOS && -f ~/.macos.zsh ]] && source ~/.macos.zsh
 [[ -n $LINUX && -f ~/.linux.zsh ]] && source ~/.linux.zsh
 
-fpath+=~/.zfunc
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
