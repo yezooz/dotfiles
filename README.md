@@ -1,5 +1,10 @@
 # Use dotfiles
 
+```bash
+git submodule add https://github.com/iridakos/goto.git zsh/plugins/goto
+
+```
+
 ## MacOS
 
 ### Reqs
@@ -32,6 +37,7 @@ ln -s ~/dotfiles/autocomplete.zsh ~/.autocomplete.zsh
 ln -s ~/dotfiles/macos.zsh ~/.macos.zsh
 ln -s ~/dotfiles/linux.zsh ~/.linux.zsh
 ln -s ~/dotfiles/zfunc ~/.zfunc
+ln -s ~/dotfiles/zsh/pre.zsh ~/.pre.zsh
 
 ln -s ~/dotfiles/gitconfig ~/.gitconfig
 ln -s ~/dotfiles/gitignore ~/.gitignore

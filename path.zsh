@@ -1,45 +1,52 @@
+#!/usr/bin/env bash
+
 if [[ -n $MACOS ]]; then
-  export PATH="$PATH:$HOME/.local/bin"
-  export PATH="/usr/local/sbin:$PATH"
+  path=("$HOME/.local/bin" "/usr/local/sbin" $path)
 
   # Go
   if [ -x "$(command -v go)" ]; then
     export GOROOT="/usr/local/opt/go/libexec"
     export GOPATH="$HOME/go"
-    export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
   fi
-
-  # Rust
-  if [ -x "$(command -v cargo)" ]; then
-    export PATH="$PATH:$HOME/.cargo/bin"
-  fi
-
-  # Composer
-  if [ -x "$(command -v composer)" ]; then
-    export PATH="$PATH:$HOME/.composer/vendor/bin"
-  fi
-
-  # Load Node global installed binaries
-  export PATH="$HOME/.node/bin:$PATH"
-  # Use project specific binaries before global ones
-  # export PATH="node_modules/.bin:vendor/bin:$PATH"
 
   if [ -f "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" ]; then
-    export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+    path+="/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
   fi
 
-  if [ -f /usr/local/opt/mysql-client/bin/mysql ]; then
-    export PATH="$PATH:/usr/local/opt/mysql-client/bin"
+  if [ -f "/usr/local/opt/mysql-client/bin/mysql" ]; then
+    path+="/usr/local/opt/mysql-client/bin"
   fi
-fi
-
-if [[ -n $LINUX ]]; then
-  export PATH="$PATH:~/.local/bin"
+elif [[ -n $LINUX ]]; then
+  path+="$HOME/.local/bin"
 
   # Snap
-  export PATH="$PATH:/snap/bin:/snap/docker/current/bin"
   export GOROOT="/snap/go/current"
+  export GOPATH="$HOME/go"
+
+  path=($path "/snap/bin" "/snap/docker/current/bin")
 
   # Homebrew
-  export PATH="$PATH:~/.linuxbrew/bin"
+  # export PATH="$PATH:~/.linuxbrew/bin"
+  path+="$HOME/.linuxbrew/bin"
 fi
+
+# Go
+# if [ -x "$(command -v go)" ]; then
+#   path+="$GOROOT/bin"
+#   path+="$GOPATH/bin"
+# fi
+
+# Rust
+if [ -x "$(command -v cargo)" ]; then
+  path+="$HOME/.cargo/bin"
+fi
+
+# Composer
+if [ -x "$(command -v composer)" ]; then
+  path+="$HOME/.composer/vendor/bin"
+fi
+
+# Nodejs
+path+="$HOME/.node/bin"
+# Use project specific binaries before global ones
+# path=(node_modules/.bin vendor/bin $path)
