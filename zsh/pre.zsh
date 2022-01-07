@@ -7,7 +7,7 @@ export EDITOR="vim"
 export MANPATH="/usr/local/man:$MANPATH"
 export DOTFILES="$HOME/dotfiles"
 
-fpath+="$HOME/.zfunc"
+# fpath+="$HOME/.zfunc"
 
 # OS Detection
 if [[ $(uname) == "Darwin" ]]; then

@@ -33,26 +33,26 @@ zplug "plugins/python", from:oh-my-zsh
 # zplug "plugins/zsh-aws-vault", from:oh-my-zsh
 
 # https://github.com/zpm-zsh/colors
-zplug "zpm-zsh/colors"
+# zplug "zpm-zsh/colors"
 
 # https://github.com/apachler/zsh-aws
 # zplug "apachler/zsh-aws"
 
 # https://github.com/zpm-zsh/clipboard
-zplug "zpm-zsh/clipboard"
+# zplug "zpm-zsh/clipboard"
 # https://github.com/arzzen/calc.plugin.zsh
-zplug "arzzen/calc.plugin.zsh"
+# zplug "arzzen/calc.plugin.zsh"
 # https://github.com/D3STY/cros-auto-notify-zsh
-zplug "D3STY/cros-auto-notify-zsh"
+# zplug "D3STY/cros-auto-notify-zsh"
 # https://github.com/ptavares/zsh-direnv
 # zplug "ptavares/zsh-direnv"
 # https://github.com/ytakahashi/igit
 # zplug "ytakahashi/igit"
 
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
+# zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
 # Can manage local plugins
-zplug "$ZSH_CUSTOM/plugins", from:local
+# zplug "$ZSH_CUSTOM/plugins", from:local
 
 # Load theme file
 # zplug 'agnoster', as:theme
