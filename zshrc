@@ -23,7 +23,6 @@ source $ZSH_CUSTOM/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 # time that oh-my-zsh is loaded.
 #ZSH_THEME="agnoster"
 ZSH_THEME="powerlevel10k/powerlevel10k"
-# ZSH_THEME="spaceship"
 # ZSH_THEME="pure"
 
 DEFAULT_USER="marek"
@@ -71,7 +70,7 @@ ZSH_CUSTOM_AUTOUPDATE_QUIET="true"
 # Colorize plugin
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/colorize
 ZSH_COLORIZE_TOOL="chroma"
-# ZSH_COLORIZE_STYLE="colorful"
+ZSH_COLORIZE_STYLE="colorful"
 ZSH_COLORIZE_CHROMA_FORMATTER="terminal256"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
@@ -100,14 +99,6 @@ unset file;
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
-
-# Starship
-# export STARSHIP_CONFIG="$HOME/.starship/config.toml"
-# eval "$(starship init zsh)"
-# function set_win_title(){
-#     echo -ne "\033]0; $(basename "$PWD") \007"
-# }
-# starship_precmd_user_func="set_win_title"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!

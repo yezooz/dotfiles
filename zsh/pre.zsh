@@ -4,6 +4,7 @@ typeset -U path fpath
 
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 export EDITOR="vim"
+export COLORTERM="truecolor"
 export MANPATH="/usr/local/man:$MANPATH"
 export DOTFILES="$HOME/dotfiles"
 
