@@ -23,7 +23,6 @@ source $ZSH_CUSTOM/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 # time that oh-my-zsh is loaded.
 #ZSH_THEME="agnoster"
 ZSH_THEME="powerlevel10k/powerlevel10k"
-# ZSH_THEME="pure"
 
 DEFAULT_USER="marek"
 

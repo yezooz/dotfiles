@@ -31,10 +31,10 @@ elif [[ -n $LINUX ]]; then
 fi
 
 # Go
-# if [ -x "$(command -v go)" ]; then
-#   path+="$GOROOT/bin"
-#   path+="$GOPATH/bin"
-# fi
+if [ -x "$(command -v go)" ]; then
+  path+="$GOROOT/bin"
+  path+="$GOPATH/bin"
+fi
 
 # Rust
 if [ -x "$(command -v cargo)" ]; then
@@ -50,3 +50,7 @@ fi
 path+="$HOME/.node/bin"
 # Use project specific binaries before global ones
 # path=(node_modules/.bin vendor/bin $path)
+
+# Ruby
+# path+="/usr/local/opt/ruby/bin"
+path=("/Users/marek/.rubies/ruby-3.1.0/bin" $path)
