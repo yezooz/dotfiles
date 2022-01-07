@@ -15,20 +15,12 @@ brew install git openssh fzf tree openssl python cmake wget freetype htop
 brew cask
 brew cask install iterm2 xquartz
 
-; Zsh
+# Zsh
 brew install zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
 
-; Vim
-brew install vim
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-pip3 install pynvim
-
-; Configs via dotfiles repo
-git clone https://github.com/yezooz/dotfiles.git ~/dotfiles
-mv ~/.zshrc ~/.zshrc.old && ln -s ~/dotfiles/zshrc ~/.zshrc
-
+# Zsh extensions
 ln -s ~/dotfiles/path.zsh ~/.path.zsh
 ln -s ~/dotfiles/exports.zsh ~/.exports.zsh
 ln -s ~/dotfiles/aliases.zsh ~/.aliases.zsh
@@ -39,18 +31,34 @@ ln -s ~/dotfiles/linux.zsh ~/.linux.zsh
 ln -s ~/dotfiles/zfunc ~/.zfunc
 ln -s ~/dotfiles/zsh/pre.zsh ~/.pre.zsh
 
+git clone https://github.com/TamCore/autoupdate-oh-my-zsh-plugins $ZSH_CUSTOM/plugins/autoupdate
+git clone https://github.com/Aloxaf/fzf-tab $ZSH_CUSTOM/plugins/fzf-tab
+git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git $ZSH_CUSTOM/plugins/zsh-autocomplete
+
+# Vim
+brew install vim
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+pip3 install pynvim
+mv ~/.vimrc ~/.vimrc.old 2>/dev/null
+ln -s ~/dotfiles/vimrc ~/.vimrc
+ln -s ~/dotfiles/vim/colors ~/.vim/colors
+
 ln -s ~/dotfiles/gitconfig ~/.gitconfig
 ln -s ~/dotfiles/gitignore ~/.gitignore
 ln -s ~/dotfiles/gitmessage ~/.gitmessage
 ln -s ~/dotfiles/git_template ~/.git_template
 
-mv ~/.vimrc ~/.vimrc.old 2>/dev/null
-ln -s ~/dotfiles/vimrc ~/.vimrc
-ln -s ~/dotfiles/vim/colors ~/.vim/colors
+; Ruby
+brew install ruby-install
+ruby-install ruby-3.1.0 \
+  --no-install-deps \
+  -- \
+  --without-X11 \
+  --without-tk \
+  --enable-shared \
+  --disable-install-doc \
+  --with-openssl-dir="$(brew --prefix openssl)"
 
-git clone https://github.com/TamCore/autoupdate-oh-my-zsh-plugins $ZSH_CUSTOM/plugins/autoupdate
-git clone https://github.com/Aloxaf/fzf-tab $ZSH_CUSTOM/plugins/fzf-tab
-git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git $ZSH_CUSTOM/plugins/zsh-autocomplete
 ```
 
 Launch `vim` and run `:PluginInstall`
