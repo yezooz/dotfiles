@@ -55,13 +55,15 @@ function upgrade() {
     npm install npm -g
     npm update -g
     # Update Ruby & gems
-    sudo gem update —system
-    sudo gem update
+    gem update —system
+    gem update
     # Update Composer packages
     composer global update
     # Update Python packages
-    pip3 install --upgrade pip
+    pip3 install --upgrade pip setuptools
     pipx upgrade-all
+
+    git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull
 }
 
 # Colormap
