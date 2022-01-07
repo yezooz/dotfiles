@@ -21,15 +21,29 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
 
 # Zsh extensions
-ln -s ~/dotfiles/path.zsh ~/.path.zsh
-ln -s ~/dotfiles/exports.zsh ~/.exports.zsh
-ln -s ~/dotfiles/aliases.zsh ~/.aliases.zsh
-ln -s ~/dotfiles/functions.zsh ~/.functions.zsh
-ln -s ~/dotfiles/autocomplete.zsh ~/.autocomplete.zsh
-ln -s ~/dotfiles/macos.zsh ~/.macos.zsh
-ln -s ~/dotfiles/linux.zsh ~/.linux.zsh
-ln -s ~/dotfiles/zfunc ~/.zfunc
-ln -s ~/dotfiles/zsh/pre.zsh ~/.pre.zsh
+ln -s ~/dotfiles/zsh/zshrc ~/.zshrc
+ln -s ~/dotfiles/zsh/p10k.zsh ~/.p10k.zsh
+ln -s ~/dotfiles/zsh/zfunc ~/.zfunc
+ln -s ~/dotfiles/zsh/files/pre.zsh ~/.pre.zsh
+ln -s ~/dotfiles/zsh/files/path.zsh ~/.path.zsh
+ln -s ~/dotfiles/zsh/files/exports.zsh ~/.exports.zsh
+ln -s ~/dotfiles/zsh/files/aliases.zsh ~/.aliases.zsh
+ln -s ~/dotfiles/zsh/files/functions.zsh ~/.functions.zsh
+ln -s ~/dotfiles/zsh/files/autocomplete.zsh ~/.autocomplete.zsh
+ln -s ~/dotfiles/zsh/files/macos.zsh ~/.macos.zsh
+ln -s ~/dotfiles/zsh/files/linux.zsh ~/.linux.zsh
+
+# unlink ~/.zshrc
+# unlink ~/.p10k.zsh
+# unlink ~/.zfunc
+# unlink ~/.pre.zsh
+# unlink ~/.path.zsh
+# unlink ~/.exports.zsh
+# unlink ~/.aliases.zsh
+# unlink ~/.functions.zsh
+# unlink ~/.autocomplete.zsh
+# unlink ~/.macos.zsh
+# unlink ~/.linux.zsh
 
 git clone https://github.com/TamCore/autoupdate-oh-my-zsh-plugins $ZSH_CUSTOM/plugins/autoupdate
 git clone https://github.com/Aloxaf/fzf-tab $ZSH_CUSTOM/plugins/fzf-tab

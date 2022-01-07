@@ -33,7 +33,7 @@ export ZPLUG_HOME=/usr/local/opt/zplug
 
 source $ZPLUG_HOME/init.zsh
 
-source $DOTFILES/zsh/zplug.zsh
+source $DOTFILES/zsh/files/zplug.zsh
 
 # Install plugins if there are plugins that have not been installed
 # if ! zplug check --verbose; then
