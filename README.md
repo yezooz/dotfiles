@@ -47,6 +47,10 @@ ln -s ~/dotfiles/git_template ~/.git_template
 mv ~/.vimrc ~/.vimrc.old 2>/dev/null
 ln -s ~/dotfiles/vimrc ~/.vimrc
 ln -s ~/dotfiles/vim/colors ~/.vim/colors
+
+git clone https://github.com/TamCore/autoupdate-oh-my-zsh-plugins $ZSH_CUSTOM/plugins/autoupdate
+git clone https://github.com/Aloxaf/fzf-tab $ZSH_CUSTOM/plugins/fzf-tab
+git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git $ZSH_CUSTOM/plugins/zsh-autocomplete
 ```
 
 Launch `vim` and run `:PluginInstall`

@@ -4,9 +4,18 @@
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+# POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true
 
 # Path to your oh-my-zsh installation.
-export ZSH=$HOME/.oh-my-zsh
+export ZSH="$HOME/.oh-my-zsh"
+export ZSH_CUSTOM="$ZSH/custom"
+# ZSH_CUSTOM="$DOTFILES/zsh"
+
+source $ZSH_CUSTOM/plugins/fzf-tab/fzf-tab.plugin.zsh
+
+# https://github.com/marlonrichert/zsh-autocomplete/blob/main/.zshrc
+zstyle ':autocomplete:*' min-input 1
+source $ZSH_CUSTOM/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -14,6 +23,8 @@ export ZSH=$HOME/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 #ZSH_THEME="agnoster"
 ZSH_THEME="powerlevel10k/powerlevel10k"
+# ZSH_THEME="spaceship"
+# ZSH_THEME="pure"
 
 DEFAULT_USER="marek"
 
@@ -28,9 +39,9 @@ DEFAULT_USER="marek"
 # DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+UPDATE_ZSH_DAYS=1
 
-# DISABLE_UPDATE_PROMPT="true"
+DISABLE_UPDATE_PROMPT="true"
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -54,8 +65,8 @@ ENABLE_CORRECTION="false"
 # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 # HIST_STAMPS="mm/dd/yyyy"
 
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM="$DOTFILES/zsh"
+# Autoupdate plugin
+ZSH_CUSTOM_AUTOUPDATE_QUIET="true"
 
 # Colorize plugin
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/colorize
@@ -68,9 +79,10 @@ ZSH_COLORIZE_CHROMA_FORMATTER="terminal256"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 # plugins=(z sudo git aws aliases extract colorize python golang poetry terraform docker docker-compose)
-plugins=(z command-not-found sudo aliases extract colorize colored-man-pages cp git python zsh-nvm)
+# plugins=(autoupdate command-not-found sudo aliases extract colorize colored-man-pages cp git python zsh-nvm)
+plugins=(autoupdate command-not-found sudo git aliases extract colorize cp python)
 
-# User configuration
+# --- User configuration ---
 
 source $HOME/.pre.zsh
 
@@ -88,6 +100,14 @@ unset file;
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
+# Starship
+# export STARSHIP_CONFIG="$HOME/.starship/config.toml"
+# eval "$(starship init zsh)"
+# function set_win_title(){
+#     echo -ne "\033]0; $(basename "$PWD") \007"
+# }
+# starship_precmd_user_func="set_win_title"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!

@@ -43,10 +43,10 @@ export MANPAGER="less -X"
 # https://stackoverflow.com/a/42265848/96656
 export GPG_TTY=$(tty)
 
+export TERM="xterm-256color"
+export term="xterm-256color"
+
 # Hide the “default interactive shell is now zsh” warning on macOS.
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 export SSH_KEY_PATH="$HOME/.ssh/dsa_id"
-
-export NVM_DIR="$HOME/.nvm"
-export NVM_COMPLETION=true
