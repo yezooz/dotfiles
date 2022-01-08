@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+
+# Where the magic happens.
+export DOTFILES=~/.dotfiles
+
+# Logging stuff.
+function e_header()   { echo -e "\n\033[1m$@\033[0m"; }
+function e_success()  { echo -e " \033[1;32m✔\033[0m  $@"; }
+function e_error()    { echo -e " \033[1;31m✖\033[0m  $@"; }
+function e_arrow()    { echo -e " \033[1;34m➜\033[0m  $@"; }
+
+# OS detection
+function is_osx() {
+  [[ "$OSTYPE" =~ ^darwin ]] || return 1
+}
+function is_ubuntu() {
+  [[ "$(cat /etc/issue 2> /dev/null)" =~ Ubuntu ]] || return 1
+}
+function is_ubuntu_desktop() {
+  dpkg -l ubuntu-desktop >/dev/null 2>&1 || return 1
+}
+function get_os() {
+  for os in osx ubuntu ubuntu_desktop; do
+    is_$os; [[ $? == ${1:-0} ]] && echo $os
+  done
+}
+
+# If this file was being sourced, exit now.
+[[ "$1" == "source" ]] && return
+
+# Copy files.
+function copy_header() { e_header "Copying files into home directory"; }
+function copy_test() {
+  if [[ -e "$2" && ! "$(cmp "$1" "$2" 2> /dev/null)" ]]; then
+    echo "same file"
+  elif [[ "$1" -ot "$2" ]]; then
+    echo "destination file newer"
+  fi
+}
+function copy_do() {
+  e_success "Copying ~/$1."
+  cp "$2" ~/
+}
+
+# Link files.
+function link_header() { e_header "Linking files into home directory"; }
+function link_test() {
+  [[ "$1" -ef "$2" ]] && echo "same file"
+}
+function link_do() {
+  e_success "Linking ~/$1."
+  ln -sf ${2#$HOME/} ~/
+}
+
+# Link config files.
+function config_header() { e_header "Linking files into ~/.config directory"; }
+function config_dest() {
+  echo "$HOME/.config/$base"
+}
+function config_test() {
+  [[ "$1" -ef "$2" ]] && echo "same file"
+}
+function config_do() {
+  e_success "Linking ~/.config/$1."
+  ln -sf ../${2#$HOME/} ~/.config/
+}
+
+# Ensure that we can actually, like, compile anything.
+if [[ ! "$(type -P gcc)" ]] && is_osx; then
+  e_error "XCode or the Command Line Tools for XCode must be installed first."
+  exit 1
+fi
+
+# If Git is not installed, install it (Ubuntu only, since Git comes standard
+# with recent XCode or CLT)
+if [[ ! "$(type -P git)" ]] && is_ubuntu; then
+  e_header "Installing Git"
+  sudo apt-get -qq install git-core
+fi
+
+# If Git isn't installed by now, something exploded. We gots to quit!
+if [[ ! "$(type -P git)" ]]; then
+  e_error "Git should be installed. It isn't. Aborting."
+  exit 1
+fi
+
+# Add binaries into the path
+[[ -d $DOTFILES/bin ]] && export PATH=$DOTFILES/bin:$PATH
+
+# Create caches dir and init subdir, if they don't already exist.
+mkdir -p "$DOTFILES/caches/init"
+
+# All done!
+e_header "All done!"

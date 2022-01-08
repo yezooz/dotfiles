@@ -119,35 +119,7 @@ Themes https://github.com/mbadolato/iTerm2-Color-Schemes
 ### Reqs
 
 ```bash
-sudo apt install -y git ssh build-essential curl file tmux screen mc tree curl wget htop xclip fonts-powerline software-properties-common gcc make pipx libpq-dev python-dev apt-transport-https ca-certificates gnupg-agent gnupg2 terminator
-git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew
-mkdir ~/.linuxbrew/bin
-ln -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin
-
-; Zsh
-sudo apt install -y zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-
-; Vim
-sudo apt install -y vim
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-
-; Configs via dotfiles repo
-git clone https://github.com/yezooz/dotfiles.git ~/dotfiles
-mv ~/.bashrc ~/.bashrc.old 2>/dev/null
-ln -s ~/dotfiles/bashrc ~/.bashrc
-mv ~/.zshrc ~/.zshrc.old 2>/dev/null
-ln -s ~/dotfiles/zshrc ~/.zshrc
-ln -s ~/dotfiles/tmux.conf ~/.tmux.conf
-ln -s ~/dotfiles/gitconfig ~/.gitconfig
-ln -s ~/dotfiles/gitignore ~/.gitignore
-ln -s ~/dotfiles/gitmessage ~/.gitmessage
-ln -s ~/dotfiles/git_template ~/.git_template
-mv ~/.vimrc ~/.vimrc.old 2>/dev/null
-ln -s ~/dotfiles/vimrc ~/.vimrc
-ln -s ~/dotfiles/vim/colors ~/.vim/colors
+./init/ubuntu.sh
 ```
 
 ### Dev tools
@@ -172,12 +144,6 @@ brew install docker-completion docker-compose docker-compose-completion
 
 ; K8s
 brew install kubectl eksctl k9s helm kubectx
-
-; Minikube + KVM
-sudo apt install -y qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
-sudo adduser `id -un` libvirt
-sudo adduser `id -un` kvm
-brew install minikube
 ```
 
 ### Desktop tools
