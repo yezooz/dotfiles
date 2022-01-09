@@ -17,7 +17,7 @@ elif [[ -n $LINUX ]]; then
   export TERMINAL="terminator"
 fi
 
-export DOTFILES="$HOME/dotfiles"
+export DOTFILES="$HOME/.dotfiles"
 
 # Enable persistent REPL history for `node`.
 export NODE_REPL_HISTORY="$HOME/.node_history"

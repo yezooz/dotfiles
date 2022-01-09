@@ -31,4 +31,4 @@ _distro=$(awk '/^ID=/' /etc/*-release | awk -F'=' '{ print tolower($2) }')
 #     *)                       ICON="";;
 # esac
 
-echo "Hello, {$_distro} Linux!"
+# echo "Hello, $_distro Linux!"
