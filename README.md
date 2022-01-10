@@ -21,17 +21,17 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
 
 # Zsh extensions
-ln -s ~/dotfiles/zsh/zshrc ~/.zshrc
-ln -s ~/dotfiles/zsh/p10k.zsh ~/.p10k.zsh
-ln -s ~/dotfiles/zsh/zfunc ~/.zfunc
-ln -s ~/dotfiles/zsh/files/pre.zsh ~/.pre.zsh
-ln -s ~/dotfiles/zsh/files/path.zsh ~/.path.zsh
-ln -s ~/dotfiles/zsh/files/exports.zsh ~/.exports.zsh
-ln -s ~/dotfiles/zsh/files/aliases.zsh ~/.aliases.zsh
-ln -s ~/dotfiles/zsh/files/functions.zsh ~/.functions.zsh
-ln -s ~/dotfiles/zsh/files/autocomplete.zsh ~/.autocomplete.zsh
-ln -s ~/dotfiles/zsh/files/macos.zsh ~/.macos.zsh
-ln -s ~/dotfiles/zsh/files/linux.zsh ~/.linux.zsh
+ln -s $DOTFILES/zsh/zshrc ~/.zshrc
+ln -s $DOTFILES/zsh/p10k.zsh ~/.p10k.zsh
+ln -s $DOTFILES/zsh/zfunc ~/.zfunc
+ln -s $DOTFILES/zsh/files/pre.zsh ~/.pre.zsh
+ln -s $DOTFILES/zsh/files/path.zsh ~/.path.zsh
+ln -s $DOTFILES/zsh/files/exports.zsh ~/.exports.zsh
+ln -s $DOTFILES/zsh/files/aliases.zsh ~/.aliases.zsh
+ln -s $DOTFILES/zsh/files/functions.zsh ~/.functions.zsh
+ln -s $DOTFILES/zsh/files/autocomplete.zsh ~/.autocomplete.zsh
+ln -s $DOTFILES/zsh/files/macos.zsh ~/.macos.zsh
+ln -s $DOTFILES/zsh/files/linux.zsh ~/.linux.zsh
 
 # unlink ~/.zshrc
 # unlink ~/.p10k.zsh
