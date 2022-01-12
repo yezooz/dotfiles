@@ -10,69 +10,8 @@ git submodule add https://github.com/iridakos/goto.git zsh/plugins/goto
 ### Reqs
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-brew install git openssh fzf tree openssl python cmake wget freetype htop
-brew cask
-brew cask install iterm2 xquartz
-
-# Zsh
-brew install zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
-
-# Zsh extensions
-ln -s $DOTFILES/zsh/zshrc ~/.zshrc
-ln -s $DOTFILES/zsh/p10k.zsh ~/.p10k.zsh
-ln -s $DOTFILES/zsh/zfunc ~/.zfunc
-ln -s $DOTFILES/zsh/files/pre.zsh ~/.pre.zsh
-ln -s $DOTFILES/zsh/files/path.zsh ~/.path.zsh
-ln -s $DOTFILES/zsh/files/exports.zsh ~/.exports.zsh
-ln -s $DOTFILES/zsh/files/aliases.zsh ~/.aliases.zsh
-ln -s $DOTFILES/zsh/files/functions.zsh ~/.functions.zsh
-ln -s $DOTFILES/zsh/files/autocomplete.zsh ~/.autocomplete.zsh
-ln -s $DOTFILES/zsh/files/macos.zsh ~/.macos.zsh
-ln -s $DOTFILES/zsh/files/linux.zsh ~/.linux.zsh
-
-# unlink ~/.zshrc
-# unlink ~/.p10k.zsh
-# unlink ~/.zfunc
-# unlink ~/.pre.zsh
-# unlink ~/.path.zsh
-# unlink ~/.exports.zsh
-# unlink ~/.aliases.zsh
-# unlink ~/.functions.zsh
-# unlink ~/.autocomplete.zsh
-# unlink ~/.macos.zsh
-# unlink ~/.linux.zsh
-
-git clone https://github.com/TamCore/autoupdate-oh-my-zsh-plugins $ZSH_CUSTOM/plugins/autoupdate
-git clone https://github.com/Aloxaf/fzf-tab $ZSH_CUSTOM/plugins/fzf-tab
-git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git $ZSH_CUSTOM/plugins/zsh-autocomplete
-
-# Vim
-brew install vim
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-pip3 install pynvim
-mv ~/.vimrc ~/.vimrc.old 2>/dev/null
-ln -s ~/dotfiles/vimrc ~/.vimrc
-ln -s ~/dotfiles/vim/colors ~/.vim/colors
-
-ln -s ~/dotfiles/gitconfig ~/.gitconfig
-ln -s ~/dotfiles/gitignore ~/.gitignore
-ln -s ~/dotfiles/gitmessage ~/.gitmessage
-ln -s ~/dotfiles/git_template ~/.git_template
-
-; Ruby
-brew install ruby-install
-ruby-install ruby-3.1.0 \
-  --no-install-deps \
-  -- \
-  --without-X11 \
-  --without-tk \
-  --enable-shared \
-  --disable-install-doc \
-  --with-openssl-dir="$(brew --prefix openssl)"
-
+DOTFILES=~/.dotfiles
+sh $DOTFILES/init/macos.sh
 ```
 
 Launch `vim` and run `:PluginInstall`
@@ -119,7 +58,8 @@ Themes https://github.com/mbadolato/iTerm2-Color-Schemes
 ### Reqs
 
 ```bash
-./init/ubuntu.sh
+DOTFILES=~/.dotfiles
+sh $DOTFILES/init/ubuntu.sh
 ```
 
 ### Dev tools

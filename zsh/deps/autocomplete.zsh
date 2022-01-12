@@ -30,4 +30,5 @@ if [[ -n $MACOS ]]; then
   eval "$(direnv hook zsh)"
 fi
 
-[[ -f $HOME/.fzf.zsh ]] && source "$HOME/.fzf.zsh"
+[[ -f $HOME/.fzf.zsh ]] && source $HOME/.fzf.zsh
+# source $ZSH_CUSTOM/plugins/fzf-tab/fzf-tab.plugin.zsh
