@@ -9,6 +9,10 @@ if [[ -n $MACOS ]]; then
     export GOPATH="$HOME/go"
   fi
 
+  # Ruby
+  # path+="/usr/local/opt/ruby/bin"
+  path=("/Users/marek/.rubies/ruby-3.1.0/bin" $path)
+
   if [ -f "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" ]; then
     path+="/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
   fi
@@ -16,6 +20,7 @@ if [[ -n $MACOS ]]; then
   if [ -f "/usr/local/opt/mysql-client/bin/mysql" ]; then
     path+="/usr/local/opt/mysql-client/bin"
   fi
+
 elif [[ -n $LINUX ]]; then
   path+="$HOME/.local/bin"
 
@@ -26,7 +31,6 @@ elif [[ -n $LINUX ]]; then
   path=($path "/snap/bin" "/snap/docker/current/bin")
 
   # Homebrew
-  # export PATH="$PATH:~/.linuxbrew/bin"
   path+="$HOME/.linuxbrew/bin"
 fi
 
@@ -50,7 +54,3 @@ fi
 path+="$HOME/.node/bin"
 # Use project specific binaries before global ones
 # path=(node_modules/.bin vendor/bin $path)
-
-# Ruby
-# path+="/usr/local/opt/ruby/bin"
-path=("/Users/marek/.rubies/ruby-3.1.0/bin" $path)

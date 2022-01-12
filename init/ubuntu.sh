@@ -56,10 +56,8 @@ fi
 add_path ~/.linuxbrew/bin
 
 # Git
-[[ ! -L ~/.gitconfig ]] && ln -s $DOTFILES/gitconfig ~/.gitconfig
-[[ ! -L ~/.gitignore ]] && ln -s $DOTFILES/gitignore ~/.gitignore
-[[ ! -L ~/.gitmessage ]] && ln -s $DOTFILES/gitmessage ~/.gitmessage
-[[ ! -L ~/.git_template ]] && ln -s $DOTFILES/git_template ~/.git_template
+[[ ! -L ~/.gitconfig ]] && ln -s $DOTFILES/git/gitconfig ~/.gitconfig
+[[ ! -L ~/.gitignore ]] && ln -s $DOTFILES/git/gitignore ~/.gitignore
 
 # Zsh
 if [[ ! "$(type -P zsh)" ]]; then
@@ -75,6 +73,11 @@ if [[ ! "$(type -P zsh)" ]]; then
 else
 	echo "zsh already installed"
 fi
+
+# Zsh extensions
+[[ ! -L ~/.zshrc ]] && ln -s $DOTFILES/zsh/zshrc ~/.zshrc
+[[ ! -L ~/.p10k.zsh ]] && ln -s $DOTFILES/zsh/p10k.zsh ~/.p10k.zsh
+[[ ! -L ~/.zfunc ]] && ln -s $DOTFILES/zsh/zfunc ~/.zfunc
 
 backup_and_link bashrc bash
 backup_and_link bash_profile bash

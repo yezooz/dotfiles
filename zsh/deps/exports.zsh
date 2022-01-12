@@ -10,14 +10,12 @@ if [[ -n $MACOS ]]; then
   fi
 
 elif [[ -n $LINUX ]]; then
-  export GNU_USERLAND=1
+  # export GNU_USERLAND=1
 
   # Make vim the default editor.
   export EDITOR="vim"
-  export TERMINAL="terminator"
+  # export TERMINAL="terminator"
 fi
-
-export DOTFILES="$HOME/.dotfiles"
 
 # Enable persistent REPL history for `node`.
 export NODE_REPL_HISTORY="$HOME/.node_history"

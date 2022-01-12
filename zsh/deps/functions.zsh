@@ -46,24 +46,43 @@ function installdeps() {
 # }
 
 function upgrade() {
+  if [[ -n $MACOS ]]; then
     # Update App Store apps
     sudo softwareupdate -i -a
+  fi
+  if [[ -n $LINUX ]]; then
+    # System updates
+    sudo apt update && sudo apt upgrade -y
+  fi
+
+  if [ -x "$(command -v brew)" ]; then
     # Update Homebrew (Cask) & packages
     brew update
     brew upgrade
+  fi
+  if [ -x "$(command -v npm)" ]; then
     # Update npm & packages
     npm install npm -g
     npm update -g
+  fi
+  if [ -x "$(command -v gem)" ]; then
     # Update Ruby & gems
     gem update —system
     gem update
+  fi
+  if [ -x "$(command -v composer)" ]; then
     # Update Composer packages
     composer global update
+  fi
+  if [ -x "$(command -v pip3)" ]; then  
     # Update Python packages
     pip3 install --upgrade pip setuptools
+  fi
+  if [ -x "$(command -v pipx)" ]; then
     pipx upgrade-all
+  fi
 
-    git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull
+  git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull
 }
 
 # Colormap
