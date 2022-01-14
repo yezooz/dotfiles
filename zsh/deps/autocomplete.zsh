@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 
+completions=(goto.sh exa kubectx kubens pipx youtube-dl.bash-completion)
+for completion in $completions; do
+  local c="$BREW_PREFIX/etc/bash_completion.d/${completion}"
+  [[ -r "${c}" ]] && source "${c}";
+done
+
 if is_macos; then
-  source $(brew --prefix)/etc/bash_completion.d/goto.sh
-
-  completions=(goto.sh kubectx kubens pipx youtube-dl.bash-completion)
-  for c in $completions; do
-    c="$(brew --prefix)/etc/bash_completion.d/${c}"
-    [[ -r "${c}" ]] && source "${c}";
-  done
-
   if [ -x "$(command -v pipx)" ]; then
     # export PATH="$PATH:$HOME/.local/bin"
     eval "$(register-python-argcomplete pipx)"

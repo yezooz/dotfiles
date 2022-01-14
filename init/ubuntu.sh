@@ -92,7 +92,7 @@ fi
 # fzf
 if [[ ! "$(type -P fzf)" ]]; then
 	brew install fzf
-	$(brew --prefix)/opt/fzf/install
+	$BREW_PREFIX/opt/fzf/install
 fi
 
 # https://github.com/iridakos/goto
@@ -139,6 +139,8 @@ fi
 if [[ ! "$(type -P tmux-xpanes)" ]]; then
     add_repo_and_install ppa:greymd/tmux-xpanes tmux-xpanes
 fi
+
+brew install exa chroma
 
 brew install docker-completion docker-compose docker-compose-completion
 
