@@ -16,8 +16,6 @@ if [[ ! -d $DOTFILES ]]; then
 	git clone https://github.com/yezooz/dotfiles.git $DOTFILES
 fi
 
-add_path $DOTFILES/bin
-
 # Homebrew
 if [[ ! "$(type -P brew)" ]]; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
@@ -40,7 +38,6 @@ fi
 # Zsh extensions
 [[ ! -L ~/.zshrc ]] && ln -s $DOTFILES/zsh/zshrc ~/.zshrc
 [[ ! -L ~/.p10k.zsh ]] && ln -s $DOTFILES/zsh/p10k.zsh ~/.p10k.zsh
-[[ ! -L ~/.zfunc ]] && ln -s $DOTFILES/zsh/zfunc ~/.zfunc
 
 brew install docker-completion docker-compose docker-compose-completion
 

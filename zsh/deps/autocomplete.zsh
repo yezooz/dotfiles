@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-if [[ -n $MACOS ]]; then
-  # source $(brew --prefix)/etc/bash_completion.d/goto.sh
+if is_macos; then
+  source $(brew --prefix)/etc/bash_completion.d/goto.sh
 
   completions=(goto.sh kubectx kubens pipx youtube-dl.bash-completion)
   for c in $completions; do
