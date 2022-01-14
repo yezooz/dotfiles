@@ -18,9 +18,6 @@ function add_repo_and_install() {
 }
 
 export DOTFILES=~/.dotfiles
-if [[ ! -d $DOTFILES ]]; then
-	git clone https://github.com/yezooz/dotfiles.git $DOTFILES
-fi
 
 add_path $DOTFILES/bin
 
