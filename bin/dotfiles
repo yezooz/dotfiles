@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# Where the magic happens.
-export DOTFILES=~/.dotfiles
-
 # Logging stuff.
 function e_header()   { echo -e "\n\033[1m$@\033[0m"; }
 function e_success()  { echo -e " \033[1;32m✔\033[0m  $@"; }
@@ -10,8 +7,11 @@ function e_error()    { echo -e " \033[1;31m✖\033[0m  $@"; }
 function e_arrow()    { echo -e " \033[1;34m➜\033[0m  $@"; }
 
 # OS detection
-function is_osx() {
+function is_macos() {
   [[ "$OSTYPE" =~ ^darwin ]] || return 1
+}
+function is_linux() {
+  [[ "$OSTYPE" =~ ^linux ]] || return 1
 }
 function is_ubuntu() {
   [[ "$(cat /etc/issue 2> /dev/null)" =~ Ubuntu ]] || return 1
@@ -20,53 +20,89 @@ function is_ubuntu_desktop() {
   dpkg -l ubuntu-desktop >/dev/null 2>&1 || return 1
 }
 function get_os() {
-  for os in osx ubuntu ubuntu_desktop; do
+  for os in macos ubuntu ubuntu_desktop; do
     is_$os; [[ $? == ${1:-0} ]] && echo $os
   done
 }
+
+if [[ ! -n $DOTFILES ]]; then
+  e_error "$$DOTFILES not set. Please set it to the root of your dotfiles."
+  exit 1
+fi
+
+if [[ ! -d $DOTFILES ]]; then
+  e_header "Fetching dotfiles from github..."
+	git clone https://github.com/yezooz/dotfiles.git $DOTFILES
+  e_success "Done."
+fi
+
+deps=(path.zsh exports.zsh aliases.zsh functions.zsh autocomplete.zsh)
+is_macos && deps+=(macos.zsh)
+is_linux && deps+=(linux.zsh)
+
+[[ -n $DEBUG ]] && e_header "Sourcing zsh files from dotfiles..."
+
+# Load the shell dotfiles, and then some:
+for file in "${deps[@]}"; do
+  local f="$DOTFILES/zsh/deps/$file"
+	[[ -f $f ]] && source $f || e_error "File not found: $f"
+
+  [[ -n $DEBUG ]] && e_arrow "$f done"
+done;
+
+[[ -n $DEBUG ]] && e_success "Done."
+
+fpath+="$DOTFILES/zsh/zfunc"
+fpath+="$BREW_PREFIX/share/zsh/site-functions"
+
+if [[ -n $DEBUG ]]; then
+  e_header "Summary"
+  e_success "\$PATH=$PATH"
+  e_success "\$FPATH=$FPATH"
+fi
 
 # If this file was being sourced, exit now.
 [[ "$1" == "source" ]] && return
 
 # Copy files.
-function copy_header() { e_header "Copying files into home directory"; }
-function copy_test() {
-  if [[ -e "$2" && ! "$(cmp "$1" "$2" 2> /dev/null)" ]]; then
-    echo "same file"
-  elif [[ "$1" -ot "$2" ]]; then
-    echo "destination file newer"
-  fi
-}
-function copy_do() {
-  e_success "Copying ~/$1."
-  cp "$2" ~/
-}
+# function copy_header() { e_header "Copying files into home directory"; }
+# function copy_test() {
+#   if [[ -e "$2" && ! "$(cmp "$1" "$2" 2> /dev/null)" ]]; then
+#     echo "same file"
+#   elif [[ "$1" -ot "$2" ]]; then
+#     echo "destination file newer"
+#   fi
+# }
+# function copy_do() {
+#   e_success "Copying ~/$1."
+#   cp "$2" ~/
+# }
 
 # Link files.
-function link_header() { e_header "Linking files into home directory"; }
-function link_test() {
-  [[ "$1" -ef "$2" ]] && echo "same file"
-}
-function link_do() {
-  e_success "Linking ~/$1."
-  ln -sf ${2#$HOME/} ~/
-}
+# function link_header() { e_header "Linking files into home directory"; }
+# function link_test() {
+#   [[ "$1" -ef "$2" ]] && echo "same file"
+# }
+# function link_do() {
+#   e_success "Linking ~/$1."
+#   ln -sf ${2#$HOME/} ~/
+# }
 
 # Link config files.
-function config_header() { e_header "Linking files into ~/.config directory"; }
-function config_dest() {
-  echo "$HOME/.config/$base"
-}
-function config_test() {
-  [[ "$1" -ef "$2" ]] && echo "same file"
-}
-function config_do() {
-  e_success "Linking ~/.config/$1."
-  ln -sf ../${2#$HOME/} ~/.config/
-}
+# function config_header() { e_header "Linking files into ~/.config directory"; }
+# function config_dest() {
+#   echo "$HOME/.config/$base"
+# }
+# function config_test() {
+#   [[ "$1" -ef "$2" ]] && echo "same file"
+# }
+# function config_do() {
+#   e_success "Linking ~/.config/$1."
+#   ln -sf ../${2#$HOME/} ~/.config/
+# }
 
 # Ensure that we can actually, like, compile anything.
-if [[ ! "$(type -P gcc)" ]] && is_osx; then
+if [[ ! "$(type -P gcc)" ]] && is_macos; then
   e_error "XCode or the Command Line Tools for XCode must be installed first."
   exit 1
 fi
@@ -84,11 +120,50 @@ if [[ ! "$(type -P git)" ]]; then
   exit 1
 fi
 
+if is_macos; then
+  e_header "MacOS installation: Starting"
+  source $DOTFILES/init/macos.sh
+  e_success "MacOS installation: Complete"
+fi
+
+if [[ ! "$(type -P git)" ]] && is_ubuntu; then
+  e_header "Ubuntu installation: Starting"
+  source $DOTFILES/init/ubuntu.sh
+  e_success "Ubuntu installation: Complete"
+fi
+
 # Add binaries into the path
-[[ -d $DOTFILES/bin ]] && export PATH=$DOTFILES/bin:$PATH
+# [[ -d $DOTFILES/bin ]] && export PATH=$DOTFILES/bin:$PATH
 
 # Create caches dir and init subdir, if they don't already exist.
 mkdir -p "$DOTFILES/caches/init"
+
+# ZPLUG
+
+# export ZPLUG_HOME=$HOME/.zplug
+# [ ! -d "$ZPLUG_HOME" ] && mkdir -p "$ZPLUG_HOME"
+# export ZPLUG_BIN=$ZPLUG_HOME/bin
+# [ ! -d "$ZPLUG_BIN" ] && mkdir -p "$ZPLUG_BIN"
+
+# export ZPLUG_HOME=$(brew --prefix)/opt/zplug
+# export ZPLUG_USE_CACHE=false
+
+# source $ZPLUG_HOME/init.zsh
+
+# source $DOTFILES/zsh/files/zplug.zsh
+
+# Install plugins if there are plugins that have not been installed
+# if ! zplug check --verbose; then
+#     printf "Install? [y/N]: "
+#     if read -q; then
+#         echo; zplug install
+#     fi
+# fi
+# zplug check || zplug install
+
+# Then, source plugins and add commands to $PATH
+# zplug load --verbose
+# zplug load
 
 # All done!
 e_header "All done!"

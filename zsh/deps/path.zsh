@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-if [[ -n $MACOS ]]; then
-  path=("$HOME/.local/bin" "/usr/local/sbin" $path)
+path=($DOTFILES/bin $path)
+path+="$HOME/.local/bin"
+
+if is_macos; then
+  path=("/usr/local/sbin" $path)
 
   # Go
   if [ -x "$(command -v go)" ]; then
@@ -11,7 +14,7 @@ if [[ -n $MACOS ]]; then
 
   # Ruby
   # path+="/usr/local/opt/ruby/bin"
-  path=("/Users/marek/.rubies/ruby-3.1.0/bin" $path)
+  path=("$HOME/.rubies/ruby-3.1.0/bin" $path)
 
   if [ -f "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" ]; then
     path+="/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
@@ -21,9 +24,7 @@ if [[ -n $MACOS ]]; then
     path+="/usr/local/opt/mysql-client/bin"
   fi
 
-elif [[ -n $LINUX ]]; then
-  path+="$HOME/.local/bin"
-
+elif is_linux; then
   # Snap
   export GOROOT="/snap/go/current"
   export GOPATH="$HOME/go"
@@ -36,8 +37,8 @@ fi
 
 # Go
 if [ -x "$(command -v go)" ]; then
-  path+="$GOROOT/bin"
-  path+="$GOPATH/bin"
+  [[ -d $GOROOT/bin ]] && path+="$GOROOT/bin"
+  [[ -d $GOPATH/bin ]] && path+="$GOPATH/bin"
 fi
 
 # Rust
@@ -54,3 +55,8 @@ fi
 path+="$HOME/.node/bin"
 # Use project specific binaries before global ones
 # path=(node_modules/.bin vendor/bin $path)
+
+# Pipx
+# if [ -x "$(command -v pipx)" ]; then
+#   path+="$HOME/.local/bin"
+# fi

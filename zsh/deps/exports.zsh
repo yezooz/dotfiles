@@ -1,21 +1,15 @@
 #!/usr/bin/env bash
 
-# OS Detection
-if [[ -n $MACOS ]]; then
-  # Preferred editor for local and remote sessions
-  if [[ -n $SSH_CONNECTION ]]; then
-    export EDITOR="vim"
-  else
-    export EDITOR="subl -w"
-  fi
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#     export EDITOR="vim"
+# else
+#     export EDITOR="subl -w"
+# fi
 
-elif [[ -n $LINUX ]]; then
-  # export GNU_USERLAND=1
-
-  # Make vim the default editor.
-  export EDITOR="vim"
-  # export TERMINAL="terminator"
-fi
+export EDITOR="vim"
+export COLORTERM="truecolor"
+export MANPATH="/usr/local/man:$MANPATH"
 
 # Enable persistent REPL history for `node`.
 export NODE_REPL_HISTORY="$HOME/.node_history"
@@ -45,3 +39,6 @@ export GPG_TTY=$(tty)
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 export SSH_KEY_PATH="$HOME/.ssh/dsa_id"
+
+export HOMEBREW_NO_ANALYTICS=1
+export BREW_PREFIX=$(brew --prefix)

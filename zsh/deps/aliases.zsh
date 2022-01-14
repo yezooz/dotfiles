@@ -37,7 +37,7 @@ alias mk="mkdir -p "$@" && cd "$@""
 # Enable aliases to be sudo’ed
 alias sudo="sudo "
 alias dotfiles="cd $DOTFILES"
-alias reload="source ~/.zshrc"
+alias reload="clear && exec zsh"
 
 # IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"

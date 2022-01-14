@@ -46,11 +46,11 @@ function installdeps() {
 # }
 
 function upgrade() {
-  if [[ -n $MACOS ]]; then
+  if is_macos; then
     # Update App Store apps
     sudo softwareupdate -i -a
   fi
-  if [[ -n $LINUX ]]; then
+  if is_linux; then
     # System updates
     sudo apt update && sudo apt upgrade -y
   fi
@@ -83,6 +83,8 @@ function upgrade() {
   fi
 
   git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull
+
+  # git -C "$DOTFILES" pull
 }
 
 # Colormap
