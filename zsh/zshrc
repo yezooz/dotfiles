@@ -76,11 +76,10 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-# --- User configuration ---
-
 typeset -aU path fpath
 
 export DOTFILES=~/.dotfiles
+
 source $DOTFILES/bin/dotfiles "source"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
