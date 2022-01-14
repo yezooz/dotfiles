@@ -32,3 +32,5 @@ _distro=$(awk '/^ID=/' /etc/*-release | awk -F'=' '{ print tolower($2) }')
 # esac
 
 # echo "Hello, $_distro Linux!"
+
+alias live_network_usage='vnstat -i enp2s0 -l'
