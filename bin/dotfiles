@@ -145,7 +145,7 @@ mkdir -p "$DOTFILES/caches/init"
 # export ZPLUG_BIN=$ZPLUG_HOME/bin
 # [ ! -d "$ZPLUG_BIN" ] && mkdir -p "$ZPLUG_BIN"
 
-# export ZPLUG_HOME=$(brew --prefix)/opt/zplug
+# export ZPLUG_HOME=$BREW_PREFIX/opt/zplug
 # export ZPLUG_USE_CACHE=false
 
 # source $ZPLUG_HOME/init.zsh
