@@ -30,8 +30,9 @@ if [[ ! "$(type -P zsh)" ]]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
 
-	git clone https://github.com/TamCore/autoupdate-oh-my-zsh-plugins ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autoupdate
+	git clone https://github.com/TamCore/autoupdate-oh-my-zsh-plugins.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autoupdate
 	git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autocomplete
+	git clone https://github.com/olets/zsh-window-title.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-window-title
 	# git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
 fi
 
@@ -39,6 +40,7 @@ fi
 [[ ! -L ~/.zshrc ]] && ln -s $DOTFILES/zsh/zshrc ~/.zshrc
 [[ ! -L ~/.p10k.zsh ]] && ln -s $DOTFILES/zsh/p10k.zsh ~/.p10k.zsh
 
+brew install exa chroma
 brew install docker-completion docker-compose docker-compose-completion
 
 # https://github.com/ryanoasis/nerd-fonts

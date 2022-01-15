@@ -67,6 +67,7 @@ if [[ ! "$(type -P zsh)" ]]; then
 	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
 	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 	git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+	git clone https://github.com/olets/zsh-window-title.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-window-title
 else
 	echo "zsh already installed"
 fi
@@ -138,7 +139,6 @@ if [[ ! "$(type -P tmux-xpanes)" ]]; then
 fi
 
 brew install exa chroma
-
 brew install docker-completion docker-compose docker-compose-completion
 
 # K8s
