@@ -1693,9 +1693,9 @@
     p10k segment -i "${emojis[$RAND_EMOJI_N]}"
   }
 
-  # function instant_prompt_random_emoji() {
-  #   prompt_random_emoji
-  # }
+  function instant_prompt_random_emoji() {
+    prompt_random_emoji
+  }
 
   # User-defined prompt segments can be customized the same way as built-in segments.
   typeset -g POWERLEVEL9K_EXAMPLE_FOREGROUND=3
