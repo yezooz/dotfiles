@@ -6,6 +6,10 @@ path+="$HOME/.local/bin"
 if is_macos; then
   path=("/usr/local/sbin" $path)
 
+  if [ -f "/usr/local/opt/coreutils/libexec/gnubin" ]; then
+    path+="/usr/local/opt/coreutils/libexec/gnubin"
+  fi
+
   # Go
   if [ -x "$(command -v go)" ]; then
     export GOROOT="/usr/local/opt/go/libexec"
@@ -13,8 +17,11 @@ if is_macos; then
   fi
 
   # Ruby
-  # path+="/usr/local/opt/ruby/bin"
-  path=("$HOME/.rubies/ruby-3.1.0/bin" $path)
+  if [ -f "$HOME/.rubies/ruby-3.1.0/bin" ]; then
+    path=("$HOME/.rubies/ruby-3.1.0/bin" $path)
+  elif [ -f "/usr/local/opt/ruby/bin" ]; then
+    path+="/usr/local/opt/ruby/bin"
+  fi
 
   if [ -f "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" ]; then
     path+="/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
@@ -23,8 +30,9 @@ if is_macos; then
   if [ -f "/usr/local/opt/mysql-client/bin/mysql" ]; then
     path+="/usr/local/opt/mysql-client/bin"
   fi
+fi
 
-elif is_linux; then
+if is_linux; then
   # Snap
   export GOROOT="/snap/go/current"
   export GOPATH="$HOME/go"

@@ -82,6 +82,8 @@ function upgrade() {
     pipx upgrade-all
   fi
 
+  rm -rf $GOPATH/src/*
+
   git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull
 
   # git -C "$DOTFILES" pull
