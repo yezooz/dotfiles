@@ -6,7 +6,7 @@ path+="$HOME/.local/bin"
 if is_macos; then
   path=("/usr/local/sbin" $path)
 
-  if [ -f "/usr/local/opt/coreutils/libexec/gnubin" ]; then
+  if [ -d "/usr/local/opt/coreutils/libexec/gnubin" ]; then
     path+="/usr/local/opt/coreutils/libexec/gnubin"
   fi
 
@@ -17,9 +17,9 @@ if is_macos; then
   fi
 
   # Ruby
-  if [ -f "$HOME/.rubies/ruby-3.1.0/bin" ]; then
+  if [ -d "$HOME/.rubies/ruby-3.1.0/bin" ]; then
     path=("$HOME/.rubies/ruby-3.1.0/bin" $path)
-  elif [ -f "/usr/local/opt/ruby/bin" ]; then
+  elif [ -d "/usr/local/opt/ruby/bin" ]; then
     path+="/usr/local/opt/ruby/bin"
   fi
 
