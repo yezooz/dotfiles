@@ -15,6 +15,11 @@ if is_macos; then
     export GOROOT="/usr/local/opt/go/libexec"
     export GOPATH="$HOME/go"
   fi
+  
+  # Dotnet
+  if [ -x "$(command -v dotnet)" ]; then
+    export DOTNET_ROOT="/usr/local/opt/dotnet/libexec"
+  fi
 
   # Ruby
   if [ -d "$HOME/.rubies/ruby-3.1.0/bin" ]; then
