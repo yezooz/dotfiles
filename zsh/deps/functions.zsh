@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+# Run given command in each subdirectory
+function eachdir() {
+  if [[ $# -eq 0 ]]; then
+    echo "Usage: eachdir <command> [<depth=1>]"
+    return 1
+  fi
+
+  find . -maxdepth "${2:-1}" -type d \( ! -name . \) -exec zsh -c "source ~/.zshrc && cd '{}' && pwd && '$1'" \;
+}
+
 # No arguments: `git status`
 # With arguments: acts like `git`
 function g() {
@@ -7,6 +17,46 @@ function g() {
     git "$@"
   else
     git status
+  fi
+}
+
+# Sync forked git repo
+function sync() {
+  git fetch upstream && git checkout master && git merge upstream/master && git push
+}
+
+# Pull git repo (stash local changes)
+function pull() {
+  git stash push --include-untracked --quiet && git pull --rebase && git stash pop --quiet
+}
+
+# Install Node and PHP dependencies
+function installdeps() {
+  if [ -f "package.json" ]; then
+    if [ -x "$(command -v yarn)" ]; then
+      yarn install
+    else
+      npm install
+    fi
+  fi
+
+  if [ -f "composer.json" ]; then
+    composer install --ignore-platform-reqs
+  fi
+}
+
+# Bump Node and PHP dependencies
+function bumpdeps() {
+  if [ -f "package.json" ]; then
+    if [ -x "$(command -v yarn)" ]; then
+      yarn update
+    else
+      npm update
+    fi
+  fi
+
+  if [ -f "composer.json" ]; then
+    composer update
   fi
 }
 
@@ -20,62 +70,40 @@ function envup() {
   fi
 }
 
-function syncforks() {
-	find . -maxdepth "${1:-1}" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -d '.git' ] && pwd && git fetch upstream && git checkout master && git merge upstream/master && git push" \;
-}
-
-function updeps() {
-	# find . -maxdepth "${1:-1}" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -d '.git' ] && pwd && git stash push --include-untracked --quiet && git pr && git stash pop --quiet" \;
-	find . -maxdepth "${1:-1}" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -d '.git' ] && pwd && git pull" \;
-}
-
-function installdeps() {
-	local level="${1:-1}"
-
-	upall
-	find . -maxdepth "$level" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -f 'composer.json' ] && pwd && composer install --ignore-platform-reqs" \;
-	find . -maxdepth "$level" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -f 'package.json' ] && pwd && npm install" \;
-}
-
-# function bumpall() {
-# 	local level="${1:-1}"
-
-# 	upall
-# 	find . -maxdepth "$level" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -f 'composer.json' ] && pwd && composer update" \;
-# 	find . -maxdepth "$level" -type d \( ! -name . \) -exec zsh -c "cd '{}' && [ -f 'package.json' ] && pwd && npm update" \;
-# }
-
 function upgrade() {
+  # System updates
   if is_macos; then
-    # Update App Store apps
     sudo softwareupdate -i -a
   fi
   if is_linux; then
-    # System updates
     sudo apt update && sudo apt upgrade -y
   fi
 
+  # Update Homebrew (Cask) & packages
   if [ -x "$(command -v brew)" ]; then
-    # Update Homebrew (Cask) & packages
     brew update
     brew upgrade
   fi
+  
+  # Update npm & packages
   if [ -x "$(command -v npm)" ]; then
-    # Update npm & packages
     npm install npm -g
     npm update -g
   fi
+  
+  # Update Ruby & gems
   if [ -x "$(command -v gem)" ]; then
-    # Update Ruby & gems
     gem update —system
     gem update
   fi
+  
+  # Update Composer packages
   if [ -x "$(command -v composer)" ]; then
-    # Update Composer packages
     composer global update
   fi
+  
+  # Update Python packages
   if [ -x "$(command -v pip3)" ]; then  
-    # Update Python packages
     pip3 install --upgrade pip setuptools
   fi
   if [ -x "$(command -v pipx)" ]; then
