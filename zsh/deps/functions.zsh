@@ -7,7 +7,7 @@ function eachdir() {
     return 1
   fi
 
-  find . -maxdepth "${2:-1}" -type d \( ! -name . \) -exec zsh -c "source ~/.zshrc && cd '{}' && pwd && '$1'" \;
+  find . -maxdepth "${2:-1}" -type d \( ! -name . \) -exec zsh -c "source ~/.zshrc && cd '{}' && pwd && $1" \;
 }
 
 # No arguments: `git status`
@@ -22,12 +22,28 @@ function g() {
 
 # Sync forked git repo
 function sync() {
-  git fetch upstream && git checkout master && git merge upstream/master && git push
+  if [[ ! -d .git ]]; then
+    echo "Not a git repository."
+    return 1
+  fi
+
+  git fetch upstream && \
+  git checkout master && \
+  git merge upstream/master && \
+  git push
 }
 
 # Pull git repo (stash local changes)
 function pull() {
-  git stash push --include-untracked --quiet && git pull --rebase && git stash pop --quiet
+  if [[ ! -d .git ]]; then
+    echo "Not a git repository."
+    return 1
+  fi
+  
+  git stash push --include-untracked --quiet && \
+  git pull --rebase && \
+  git remote prune origin && \
+  git stash pop --quiet
 }
 
 # Install Node and PHP dependencies
