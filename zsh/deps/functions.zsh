@@ -33,6 +33,15 @@ function sync() {
   git push
 }
 
+function clone() {
+  if [[ $# -eq 0 ]]; then
+    echo "Usage: git clone <repo>"
+    return 1
+  fi
+
+  git clone "$@"
+}
+
 # Pull git repo (stash local changes)
 function pull() {
   if [[ ! -d .git ]]; then
