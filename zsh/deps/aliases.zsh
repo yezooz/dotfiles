@@ -70,7 +70,7 @@ if [ -x "$(command -v kubectl)" ]; then
 fi
 
 # youtube-dl
-if [ -x "$(command -v youtube-dl)" ]; then
-    alias yt-dl-mp3='youtube-dl -f "bestaudio/best" -ciw -o "%(title)s.%(ext)s" -v --extract-audio --audio-format mp3 --audio-quality 0 --restrict-filenames'
-    alias yt-dl-vid='youtube-dl -f bestvideo -ciw -o "%(title)s.%(ext)s" --merge-output-format mp4 --restrict-filenames'
+if [ -x "$(command -v yt-dlp)" ]; then
+    alias yt-dlp-mp3='yt-dlp -ciw -v -o "%(title)s.%(ext)s" --extract-audio --audio-format mp3 --audio-quality 0 --restrict-filenames'
+    alias yt-dlp-mp4='yt-dlp -ciw -v -o "%(title)s.%(ext)s" --merge-output-format mp4 --restrict-filenames'
 fi
