@@ -112,7 +112,7 @@ function upgrade() {
   
   # Update npm & packages
   if [ -x "$(command -v npm)" ]; then
-    npm install npm -g
+    npm install npm@latest -g
     npm update -g
   fi
   
