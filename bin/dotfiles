@@ -25,7 +25,11 @@ function get_os() {
   done
 }
 
-if [[ ! -n $DOTFILES ]]; then
+function is_git_repo() {
+  [[ -d .git ]] || return 1
+}
+
+if [[ -z $DOTFILES ]]; then
   e_error "$$DOTFILES not set. Please set it to the root of your dotfiles."
   exit 1
 fi
