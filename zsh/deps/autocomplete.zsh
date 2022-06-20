@@ -6,14 +6,18 @@ for completion in $completions; do
   [[ -r "${c}" ]] && source "${c}";
 done
 
+if [ -x "$(command -v kubectl)" ]; then
+  source <(kubectl completion zsh)
+fi
+
+# if [ -x "$(command -v dstask)" ]; then
+#   source <(dstask zsh-completion)
+# fi
+
 if is_macos; then
   if [ -x "$(command -v pipx)" ]; then
     # export PATH="$PATH:$HOME/.local/bin"
     eval "$(register-python-argcomplete pipx)"
-  fi
-
-  if [ -x "$(command -v kubectl)" ]; then
-    source <(kubectl completion zsh)
   fi
 
   if [ -x "$(command -v vault)" ]; then
