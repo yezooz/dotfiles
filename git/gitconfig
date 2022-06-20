@@ -39,6 +39,7 @@
 	amend = commit --amend
 	undo = reset --hard HEAD^
 	tree = log --graph --decorate --pretty=oneline --abbrev-commit --all
+	hist = !tig
 	myhist = !git log --author=\"$(git config user.name)\" --format=%H |xargs git show --name-only --format=-------------%n%Cred%s%Creset%n%Cblue%h%Creset
 	trim = !git branch | grep -v -E 'master|main|development|integration|production' | xargs git branch -D
 [filter "lfs"]
