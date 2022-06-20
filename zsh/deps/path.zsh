@@ -6,6 +6,10 @@ path+="$HOME/.local/bin"
 if is_macos; then
   path=("/usr/local/sbin" $path)
 
+  if [ -d "/usr/local/opt/python@3.10/bin" ]; then
+    path=("/usr/local/opt/python@3.10/bin" $path)
+  fi
+
   if [ -d "/usr/local/opt/coreutils/libexec/gnubin" ]; then
     path+="/usr/local/opt/coreutils/libexec/gnubin"
   fi
