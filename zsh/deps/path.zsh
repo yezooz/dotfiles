@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-path=($DOTFILES/bin $path)
-path+="$HOME/.local/bin"
+path=($DOTFILES/bin $path $HOME/.local/bin)
 
 if is_macos; then
   path=("/usr/local/sbin" $path)

@@ -146,3 +146,15 @@ function upgrade() {
 function colormap() {
   for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\n'}; done
 }
+
+# Boop; plays a happy sound if the previous command exited successfully 
+# (i.e., exited with status code 0) and a sad sound otherwise.
+function boop () {
+   local last="$?"
+   if [[ "$last" == '0' ]]; then
+     afplay /System/Library/Sounds/Glass.aiff
+   else
+     afplay /System/Library/Sounds/Submarine.aiff
+   fi
+   $(exit "$last")
+}
