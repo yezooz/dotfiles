@@ -33,3 +33,7 @@ Themes https://github.com/mbadolato/iTerm2-Color-Schemes
 
 ## Ubuntu
 
+```bash
+sudo adduser $username
+sudo usermod -aG sudo $username
+```
