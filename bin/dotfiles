@@ -48,7 +48,7 @@ is_linux && deps+=(linux.zsh)
 
 # Load the shell dotfiles, and then some:
 for file in "${deps[@]}"; do
-  local f="$DOTFILES/zsh/deps/$file"
+  f="$DOTFILES/zsh/deps/$file"
 	[[ -f $f ]] && source $f || e_error "File not found: $f"
 
   [[ -n $DEBUG ]] && e_arrow "$f done"
