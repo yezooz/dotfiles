@@ -130,7 +130,7 @@ if is_macos; then
   e_success "MacOS installation: Complete"
 fi
 
-if [[ ! "$(type -P git)" ]] && is_ubuntu; then
+if is_ubuntu; then
   e_header "Ubuntu installation: Starting"
   source $DOTFILES/init/ubuntu.sh
   e_success "Ubuntu installation: Complete"
