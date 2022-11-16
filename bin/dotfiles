@@ -40,7 +40,7 @@ if [[ ! -d $DOTFILES ]]; then
   e_success "Done."
 fi
 
-deps=(path.zsh exports.zsh aliases.zsh functions.zsh autocomplete.zsh)
+deps=(path.zsh exports.zsh aliases.zsh functions.zsh autocomplete.zsh bindkeys.zsh)
 is_macos && deps+=(macos.zsh)
 is_linux && deps+=(linux.zsh)
 
