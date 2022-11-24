@@ -13,6 +13,8 @@
 	autoStash = true	
 [pull]
 	rebase = true
+[fetch]
+	prune = true
 [push]
 	default = tracking
 [log]
@@ -41,7 +43,7 @@
 	tree = log --graph --decorate --pretty=oneline --abbrev-commit --all
 	hist = !tig
 	myhist = !git log --author=\"$(git config user.name)\" --format=%H |xargs git show --name-only --format=-------------%n%Cred%s%Creset%n%Cblue%h%Creset
-	trim = !git branch | grep -v -E 'master|main|development|integration|production' | xargs git branch -D
+	trim = !git remote prune origin && git repack && git prune-packed && git reflog expire --expire=1.month.ago && git gc --aggressive && git branch | grep -v -E 'master|main|development|integration|production' | xargs git branch -D
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
