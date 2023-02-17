@@ -103,3 +103,5 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+
+add-zsh-hook -Uz chpwd(){ source <(tea -Eds) }  #tea

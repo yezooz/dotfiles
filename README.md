@@ -37,3 +37,8 @@ Themes https://github.com/mbadolato/iTerm2-Color-Schemes
 sudo adduser $username
 sudo usermod -aG sudo $username
 ```
+
+## TODO
+
+- https://sharats.me/posts/shell-script-best-practices/
+- Use zaparseopts - https://xpmo.gitlab.io/post/using-zparseopts
