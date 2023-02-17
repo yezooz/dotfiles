@@ -71,8 +71,9 @@ fi
 
 # youtube-dl
 if [ -x "$(command -v yt-dlp)" ]; then
-    alias yt-dlp-mp3='yt-dlp -ciw -v -o "%(title)s.%(ext)s" --extract-audio --audio-format mp3 --audio-quality 0 --restrict-filenames'
-    alias yt-dlp-mp4='yt-dlp -ciw -v -o "%(title)s.%(ext)s" --merge-output-format mp4 --restrict-filenames'
+    alias yt='yt-dlp -ciw -v -o "%(title)s.%(ext)s" --restrict-filenames'
+    alias yt-mp3='yt-dlp -ciw -v -o "%(title)s.%(ext)s" --extract-audio --audio-format mp3 --audio-quality 0 --restrict-filenames'
+    alias yt-mp4='yt-dlp -ciw -v -o "%(title)s.%(ext)s" --merge-output-format mp4 --restrict-filenames'
 fi
 
 # dstask
