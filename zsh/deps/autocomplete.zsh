@@ -24,6 +24,10 @@ if is_macos; then
     complete -o nospace -C /usr/local/bin/vault vault
   fi
 
+  if [ -x "$(command -v op)" ]; then
+    eval "$(op completion zsh)"; compdef _op op
+  fi
+
   if [ -e "$HOME/.ssh/config" ]; then
     complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2- | tr ' ' '\n')" scp sftp ssh
   fi
