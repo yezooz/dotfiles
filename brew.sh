@@ -43,7 +43,6 @@ brew install vim --with-override-system-vi
 brew install grep
 brew install openssh
 brew install screen
-brew install php@7.4
 brew install php@8.1
 brew install gmp
 
@@ -73,6 +72,8 @@ brew install vbindiff
 brew install zopfli
 brew install mas
 brew install qlcolorcode qlstephen qlmarkdown quicklook-json qlimagesize suspicious-package apparency quicklookase qlvideo
+
+brew install --cask 1password/tap/1password-cli
 
 # Remove outdated versions from the cellar.
 brew cleanup
