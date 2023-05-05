@@ -5,8 +5,14 @@ path=($DOTFILES/bin $path $HOME/.local/bin)
 if is_macos; then
   path=("/usr/local/sbin" $path)
 
-  if [ -d "/usr/local/opt/python@3.10/bin" ]; then
-    path=("/usr/local/opt/python@3.10/bin" $path)
+  # Python 3.11
+  if [ -d "/usr/local/opt/python@3.11/bin" ]; then
+    path=("/usr/local/opt/python@3.11/bin" $path)
+  fi
+
+  # Node 18
+  if [ -d "/usr/local/opt/node@18/bin" ]; then
+    path=("/usr/local/opt/node@18/bin" $path)
   fi
 
   if [ -d "/usr/local/opt/coreutils/libexec/gnubin" ]; then
@@ -37,6 +43,10 @@ if is_macos; then
 
   if [ -f "/usr/local/opt/mysql-client/bin/mysql" ]; then
     path+="/usr/local/opt/mysql-client/bin"
+  fi
+
+  if [ -f "/usr/local/opt/libpq/bin" ]; then
+    path+="/usr/local/opt/libpq/bin"
   fi
 fi
 
