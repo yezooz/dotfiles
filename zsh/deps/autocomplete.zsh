@@ -15,6 +15,8 @@ fi
 # fi
 
 if is_macos; then
+  # setopt completealiases
+
   if [ -x "$(command -v pipx)" ]; then
     # export PATH="$PATH:$HOME/.local/bin"
     eval "$(register-python-argcomplete pipx)"
