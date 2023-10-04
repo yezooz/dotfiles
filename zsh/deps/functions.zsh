@@ -99,7 +99,7 @@ function upgrade() {
   # System updates
   if is_macos; then
     sudo softwareupdate -i -a
-    mas upgrade
+    # mas upgrade
   fi
   if is_linux; then
     sudo apt update && sudo apt upgrade -y
