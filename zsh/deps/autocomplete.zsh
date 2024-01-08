@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-completions=(goto.sh exa kubectx kubens pipx youtube-dl.bash-completion)
-for completion in $completions; do
-  local c="$BREW_PREFIX/etc/bash_completion.d/${completion}"
-  [[ -r "${c}" ]] && source "${c}";
-done
+# completions=(goto.sh exa kubectx kubens)
+# for completion in $completions; do
+#   local c="$BREW_PREFIX/etc/bash_completion.d/${completion}"
+#   [[ -r "${c}" ]] && source "${c}";
+# done
 
 if [ -x "$(command -v kubectl)" ]; then
   source <(kubectl completion zsh)
@@ -15,7 +15,7 @@ fi
 # fi
 
 if is_macos; then
-  # setopt completealiases
+  setopt completealiases
 
   if [ -x "$(command -v pipx)" ]; then
     # export PATH="$PATH:$HOME/.local/bin"
@@ -38,5 +38,5 @@ if is_macos; then
   eval "$(direnv hook zsh)"
 fi
 
-[[ -f $HOME/.fzf.zsh ]] && source $HOME/.fzf.zsh
+# [[ -f $HOME/.fzf.zsh ]] && source $HOME/.fzf.zsh
 # source $ZSH_CUSTOM/plugins/fzf-tab/fzf-tab.plugin.zsh
