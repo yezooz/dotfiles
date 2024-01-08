@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
 
 if is_macos; then
-    brew cask install virtualbox virtualbox-extension-pack vagrant vagrant-manager adoptopenjdk mysqlworkbench ngrok
-    brew install go readline awscli awslogs pgcli ruby terraform terraform_landscape composer jmeter lua jq dep node clojure mysql-client nmap php prettier aws-iam-authenticator
+    brew install --cask adoptopenjdk mysqlworkbench
+    brew install go readline awscli pgcli ruby terraform terraform_landscape composer lua jq node mysql-client nmap php aws-iam-authenticator
 
     # Docker
-    brew cask install docker docker-toolbox
-    brew install vagrant-completion docker-completion docker-compose docker-compose-completion docker-machine docker-machine-completion
+    # brew install --cask docker docker-toolbox
+    brew install docker-completion docker-compose-completion
 
     # K8s
-    brew install kubectl eksctl k9s helm kubectx minikube
+    brew install kubectl eksctl k9s helm kubectx
 
     # NPM
-    npm -g install bower grunt nodemon eslint cypress @nestjs/cli
+    # npm -g install nodemon @nestjs/cli
 
     # Editors
-    brew cask install sublime-text visual-studio-code intellij-idea phpstorm pycharm webstorm datagrip goland
+    # brew cask install sublime-text visual-studio-code intellij-idea phpstorm pycharm webstorm datagrip goland
 
 elif is_ubuntu; then
     sudo apt-get update

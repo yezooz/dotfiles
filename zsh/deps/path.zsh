@@ -15,9 +15,9 @@ if is_macos; then
   fi
 
   # Node 18
-  if [ -d "/usr/local/opt/node@18/bin" ]; then
-    path=("/usr/local/opt/node@18/bin" $path)
-  fi
+  # if [ -d "/usr/local/opt/node@18/bin" ]; then
+  #   path=("/usr/local/opt/node@18/bin" $path)
+  # fi
 
   if [ -d "/usr/local/opt/coreutils/libexec/gnubin" ]; then
     path+="/usr/local/opt/coreutils/libexec/gnubin"
@@ -30,16 +30,16 @@ if is_macos; then
   fi
   
   # Dotnet
-  if [ -x "$(command -v dotnet)" ]; then
-    export DOTNET_ROOT="/usr/local/opt/dotnet/libexec"
-  fi
+  # if [ -x "$(command -v dotnet)" ]; then
+  #   export DOTNET_ROOT="/usr/local/opt/dotnet/libexec"
+  # fi
 
   # Ruby
-  if [ -d "$HOME/.rubies/ruby-3.1.0/bin" ]; then
-    path=("$HOME/.rubies/ruby-3.1.0/bin" $path)
-  elif [ -d "/usr/local/opt/ruby/bin" ]; then
-    path+="/usr/local/opt/ruby/bin"
-  fi
+  # if [ -d "$HOME/.rubies/ruby-3.1.0/bin" ]; then
+  #   path=("$HOME/.rubies/ruby-3.1.0/bin" $path)
+  # elif [ -d "/usr/local/opt/ruby/bin" ]; then
+  #   path+="/usr/local/opt/ruby/bin"
+  # fi
 
   if [ -f "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" ]; then
     path+="/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
@@ -87,6 +87,6 @@ path+="$HOME/.node/bin"
 # path=(node_modules/.bin vendor/bin $path)
 
 # Pipx
-# if [ -x "$(command -v pipx)" ]; then
-#   path+="$HOME/.local/bin"
-# fi
+if [ -x "$(command -v pipx)" ]; then
+  path+="$HOME/.local/bin"
+fi

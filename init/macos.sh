@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+DOTFILES=~/.dotfiles
+if [[ ! -d $DOTFILES ]]; then
+	git clone https://github.com/yezooz/dotfiles.git $DOTFILES
+fi
+
 function backup_and_link() {
 	[[ -L ~/.$1 ]] && unlink ~/.$1 && echo "unlink ~/.$1"
 	[[ -f ~/.$1 ]] && mv ~/.$1 ~/.$1.old 2>/dev/null && echo "mv ~/.$1 ~/.$1.old"
@@ -10,11 +15,6 @@ function add_path() {
 	[[ :$PATH: == *:$1:* ]] || export PATH="$1:$PATH"
 	echo "updated PATH: $PATH"
 }
-
-DOTFILES=~/.dotfiles
-if [[ ! -d $DOTFILES ]]; then
-	git clone https://github.com/yezooz/dotfiles.git $DOTFILES
-fi
 
 # Homebrew
 if [[ ! "$(type -P brew)" ]]; then
@@ -33,6 +33,8 @@ if [[ ! "$(type -P zsh)" ]]; then
 	git clone https://github.com/TamCore/autoupdate-oh-my-zsh-plugins.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autoupdate
 	git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autocomplete
 	git clone https://github.com/olets/zsh-window-title.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-window-title
+	git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 	# git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
 fi
 
