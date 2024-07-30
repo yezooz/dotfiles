@@ -91,7 +91,7 @@ if [ -x "$(command -v pipx)" ]; then
   path+="$HOME/.local/bin"
 fi
 
-# Kubernetes
-if [ -x "$(command -v pipx)" ]; then
-  path+="$HOME/.local/bin"
+# Kubernetes - Krew
+if [ -d "$HOME/.krew/bin" ]; then
+  path=("${KREW_ROOT:-$HOME/.krew}/bin" $path)
 fi
