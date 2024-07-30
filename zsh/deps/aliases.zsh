@@ -21,11 +21,11 @@ alias path='echo $PATH | tr -s ":" "\n"'
 command -v vim > /dev/null && alias vi="$(which vim)"
 
 # alias ll="ls -lahF --color=auto"
-if [ -x "$(command -v exa)" ]; then
-    alias ls="exa --icons --group-directories-first --all"
-    alias ll="exa --icons --group-directories-first --long --all"
-    alias lt="exa --tree --long --all --header --group"
-    alias lg="exa --icons --group-directories-first --grid --all"
+if [ -x "$(command -v eza)" ]; then
+    alias ls="eza --icons --group-directories-first --all"
+    alias ll="eza --icons --group-directories-first --long --all"
+    alias lt="eza --tree --long --all --header --group"
+    alias lg="eza --icons --group-directories-first --grid --all"
 fi
 
 # alias g="goto"
