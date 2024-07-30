@@ -17,10 +17,10 @@ fi
 if is_macos; then
   setopt completealiases
 
-  if [ -x "$(command -v pipx)" ]; then
-    # export PATH="$PATH:$HOME/.local/bin"
-    eval "$(register-python-argcomplete pipx)"
-  fi
+  # if [ -x "$(command -v pipx)" ]; then
+    #export PATH="$PATH:$HOME/.local/bin"
+    #eval "$(register-python-argcomplete pipx)"
+  # fi
 
   if [ -x "$(command -v vault)" ]; then
     complete -o nospace -C /usr/local/bin/vault vault

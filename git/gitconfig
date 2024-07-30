@@ -11,6 +11,7 @@
 	whitespace = fix
 [branch]
 	autosetupmerge = true
+	sort = -committerdate
 [rebase]
 	autoStash = true	
 [pull]
@@ -78,3 +79,7 @@
 	pushInsteadOf = "git://gist.github.com/"
 [url "git://gist.github.com/"]
 	insteadOf = "gist:"
+[rerere]
+	enabled = true
+[column]
+	ui = auto
