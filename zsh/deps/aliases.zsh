@@ -80,3 +80,6 @@ fi
 if [ -x "$(command -v dstask)" ]; then
     alias t="dstask"
 fi
+
+# Work
+alias av="aws-vault exec assertis_Admin"
