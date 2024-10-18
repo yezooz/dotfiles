@@ -86,9 +86,9 @@ path+="$HOME/.node/bin"
 # Use project specific binaries before global ones
 # path=(node_modules/.bin vendor/bin $path)
 
-# Pipx
-if [ -x "$(command -v pipx)" ]; then
-  path+="$HOME/.local/bin"
+# uv
+if [ -x "($HOME/.cargo/bin/uv)" ]; then
+  path+="$HOME/.cargo/bin"
 fi
 
 # Kubernetes - Krew
