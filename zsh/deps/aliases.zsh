@@ -81,5 +81,10 @@ if [ -x "$(command -v dstask)" ]; then
     alias t="dstask"
 fi
 
+# Cursor
+if [ -f "/Applications/Cursor.app/Contents/MacOS/Cursor" ]; then
+    alias cursor="/Applications/Cursor.app/Contents/MacOS/Cursor"
+fi
+
 # Work
 alias av="aws-vault exec assertis_Admin"
