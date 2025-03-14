@@ -5,15 +5,6 @@ path=($DOTFILES/bin $path $HOME/.local/bin)
 if is_macos; then
   path=("/usr/local/sbin" $path)
 
-  # Python 3.12
-  # if [ -d "/usr/local/opt/python@3.12/libexec/bin" ]; then
-  #   path=("/usr/local/opt/python@3.12/libexec/bin" $path)
-  # elif [ -d "/usr/local/opt/python@3.11/bin" ]; then
-  #   path=("/usr/local/opt/python@3.11/bin" $path)
-  # elif [ -d "/usr/local/opt/python@3.10/bin" ]; then
-  #   path=("/usr/local/opt/python@3.10/bin" $path)
-  # fi
-
   if [ -d "/usr/local/opt/coreutils/libexec/gnubin" ]; then
     path+="/usr/local/opt/coreutils/libexec/gnubin"
   fi
