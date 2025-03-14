@@ -89,3 +89,6 @@ source $DOTFILES/bin/dotfiles "source"
 is_linux && return
 
 # add-zsh-hook -Uz chpwd(){ source <(tea -Eds) }  #tea
+
+# npm global path
+export PATH="/Users/marek/.npm-global/bin:$PATH"
