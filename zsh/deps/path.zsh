@@ -3,10 +3,10 @@
 path=($DOTFILES/bin $path $HOME/.local/bin)
 
 if is_macos; then
-  path=("/usr/local/sbin" $path)
+  p=("/usr/local/sbin")
 
   if [ -d "/usr/local/opt/coreutils/libexec/gnubin" ]; then
-    path+="/usr/local/opt/coreutils/libexec/gnubin"
+    p+="/usr/local/opt/coreutils/libexec/gnubin"
   fi
 
   # Go
@@ -16,23 +16,27 @@ if is_macos; then
   fi
   
   # Ruby
-  if [ -d "$HOME/.rubies/ruby-3.1.0/bin" ]; then
-    path=("$HOME/.rubies/ruby-3.1.0/bin" $path)
-  elif [ -d "/usr/local/opt/ruby/bin" ]; then
-    path+="/usr/local/opt/ruby/bin"
+  if [ -d "/usr/local/opt/ruby/bin" ]; then
+    p+="/usr/local/opt/ruby/bin"
   fi
 
   if [ -f "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" ]; then
-    path+="/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+    p+="/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
   fi
 
   if [ -f "/usr/local/opt/mysql-client/bin/mysql" ]; then
-    path+="/usr/local/opt/mysql-client/bin"
+    p+="/usr/local/opt/mysql-client/bin"
+  fi
+  
+  if [ -f "/usr/local/opt/sqlite/bin/sqlite3" ]; then
+    p+="/usr/local/opt/sqlite/bin"
   fi
 
   if [ -f "/usr/local/opt/libpq/bin" ]; then
-    path+="/usr/local/opt/libpq/bin"
+    p+="/usr/local/opt/libpq/bin"
   fi
+
+  path=($p $path)
 fi
 
 if is_linux; then
@@ -66,11 +70,6 @@ fi
 path+="$HOME/.node/bin"
 # Use project specific binaries before global ones
 # path=(node_modules/.bin vendor/bin $path)
-
-# uv
-if [ -x "($HOME/.cargo/bin/uv)" ]; then
-  path+="$HOME/.cargo/bin"
-fi
 
 # Kubernetes - Krew
 if [ -d "$HOME/.krew/bin" ]; then
