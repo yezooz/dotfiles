@@ -127,16 +127,11 @@ function upgrade() {
   if [ -x "$(command -v composer)" ]; then
     composer global update
   fi
-  
-  # Update Python packages
-  if [ -x "$(command -v pip3)" ]; then  
-    pip3 install --upgrade pip setuptools
-  fi
-  if [ -x "$(command -v pipx)" ]; then
-    pipx upgrade-all
-  fi
 
-  # rm -rf $GOPATH/src/*
+  # Update uv tools
+  if [ -x "$(command -v uv)" ]; then
+    uv tool upgrade --all
+  fi
 
   git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull
 

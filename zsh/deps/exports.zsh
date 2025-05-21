@@ -33,7 +33,7 @@ export MANPAGER="less -X"
 
 # Avoid issues with `gpg` as installed via Homebrew.
 # https://stackoverflow.com/a/42265848/96656
-export GPG_TTY=$(tty)
+# export GPG_TTY=$(tty)
 
 # Hide the “default interactive shell is now zsh” warning on macOS.
 export BASH_SILENCE_DEPRECATION_WARNING=1
@@ -41,6 +41,6 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 export SSH_KEY_PATH="$HOME/.ssh/dsa_id"
 
 export HOMEBREW_NO_ANALYTICS=1
-export BREW_PREFIX=$(brew --prefix)
+# export BREW_PREFIX=$(brew --prefix)
 
 # export DOCKER_HOST='unix:///var/folders/36/0h73z8ws6xld1c38dxbh4_2h0000gn/T/podman/podman-machine-default-api.sock'
