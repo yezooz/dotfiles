@@ -15,6 +15,11 @@ if is_macos; then
     export GOPATH="$HOME/go"
   fi
   
+  # Node
+  if [ -d "/usr/local/opt/node@20/bin" ]; then
+    p+="/usr/local/opt/node@20/bin"
+  fi
+  
   # Ruby
   if [ -d "/usr/local/opt/ruby/bin" ]; then
     p+="/usr/local/opt/ruby/bin"
