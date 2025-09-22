@@ -14,7 +14,7 @@ if is_macos; then
     export GOROOT="/usr/local/opt/go/libexec"
     export GOPATH="$HOME/go"
   fi
-  
+    
   # Node
   if [ -d "/usr/local/opt/node@20/bin" ]; then
     p+="/usr/local/opt/node@20/bin"
@@ -23,6 +23,7 @@ if is_macos; then
   # Ruby
   if [ -d "/usr/local/opt/ruby/bin" ]; then
     p+="/usr/local/opt/ruby/bin"
+    p+="/usr/local/lib/ruby/gems/3.4.0/bin"
   fi
 
   if [ -f "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" ]; then
