@@ -87,6 +87,6 @@ if [ -f "/Applications/Cursor.app/Contents/MacOS/Cursor" ]; then
 fi
 
 # Work
-alias av="aws-vault exec --duration=1h assertis_Admin"
+alias av='aws-vault exec --duration=1h assertis_Admin --mfa-token=$(op item get "AWS" --otp)'
 
 alias docker=podman
