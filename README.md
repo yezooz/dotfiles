@@ -18,7 +18,7 @@ Personal development environment configuration files (dotfiles) for Mac and Linu
 Install everything with a single command:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/yezooz/dotfiles/main/bootstrap.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/yezooz/dotfiles/master/bootstrap.sh)
 ```
 
 This will:
@@ -36,7 +36,7 @@ DOTFILES_NONINTERACTIVE=1 \
 DOTFILES_PROFILE=minimal \
 USER_EMAIL="your.email@example.com" \
 USER_NAME="Your Name" \
-bash <(curl -fsSL https://raw.githubusercontent.com/yezooz/dotfiles/main/bootstrap.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/yezooz/dotfiles/master/bootstrap.sh)
 ```
 
 ---
@@ -290,7 +290,7 @@ Changes will be reflected immediately since these files are symlinked.
 ### Update dotfiles
 ```bash
 cd ~/.dotfiles
-git pull origin main
+git pull origin master
 ```
 
 ### Update Homebrew packages
