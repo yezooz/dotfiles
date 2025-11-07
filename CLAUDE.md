@@ -56,7 +56,14 @@ This is a personal dotfiles repository that configures development environments 
 - `init/wizard.sh` - Interactive setup wizard for collecting user preferences
   - Prompts for git user name and email
   - Offers installation profiles (minimal, developer, full)
-  - Allows selection of optional components (Homebrew packages, dev tools, desktop apps)
+  - Allows selection of optional components:
+    - Homebrew packages (GNU utilities, modern CLI tools)
+    - Development tools (languages, cloud, databases)
+    - Desktop applications (GUI apps)
+    - NPM global packages (@openai/codex, @playwright/mcp, yarn)
+    - UV Python tools (llm, poetry, scrapy, etc.)
+    - SSH key generation
+    - macOS system defaults (macOS only)
   - Saves configuration to `.install-config` file
   - Supports reusing existing configuration
 - `init/verify.sh` - Post-installation verification
@@ -68,9 +75,37 @@ This is a personal dotfiles repository that configures development environments 
   - Reports installation status with pass/fail/warning counts
 
 **Optional Installation Scripts**:
-- `init/dev_tools.sh` - Development tools (languages, databases, cloud tools, containers)
+- `init/dev_tools.sh` - Development tools organized by tiers:
+  - **Core**: git, gh, glab, curl, wget, tree
+  - **Developer**: Programming languages (Go, Rust, Python, Node.js, Ruby, PHP, Lua), package managers (mise, composer, yarn), utilities (direnv, pre-commit, cloc, jq)
+  - **Cloud/DevOps**: AWS tools (awscli, aws-vault, eksctl), containers (podman, kind, docker-completion), Kubernetes (kubectl, helm, k9s, kubectx), IaC (terraform, terragrunt, ansible)
+  - **Database**: mysql-client, postgresql, redis, sqlite, duckdb, pgcli
+  - **GUI Apps**: adoptopenjdk, mysqlworkbench, postman
+  - **JetBrains IDEs**: datagrip, phpstorm, pycharm (Pro), webstorm, goland
+  - **Code Editors**: jupyterlab-app, typora
 - `init/desktop_tools.sh` - Desktop applications (browsers, productivity, media)
-- `brew.sh` - Additional Homebrew packages (GNU utilities, modern tools)
+  - Browsers: Chrome, Brave Browser, Tor Browser
+  - Productivity: Alfred, 1Password, Karabiner Elements, Anki, Dictionaries, Kindle
+  - Communication: Slack, Signal, Zoom
+  - Media: VLC, Spotify, Pocket Casts, Transmission
+  - Utilities: balenaEtcher, Focusrite Control 2
+  - Mac App Store apps (via `mas`)
+  - Manual installs: iTerm2, VS Code, Docker Desktop, Wispr Flow, Flow
+- `init/npm_packages.sh` - NPM global packages
+  - @openai/codex, @playwright/mcp, yarn
+  - Configures npm to use `~/.npm-global` directory
+- `init/uv_tools.sh` - UV Python tools
+  - AI/LLM: llm
+  - Development: poetry, pre-commit
+  - Web Scraping: scrapy
+  - Git: git-filter-repo
+  - Text Processing: strip-tags, ttok
+  - Auto-installs UV if not present
+- `brew.sh` - Additional Homebrew packages (GNU utilities, modern CLI tools)
+  - Core utilities: coreutils, moreutils, findutils, gnu-sed
+  - Modern CLI tools: tmux, fzf, bat, ripgrep, fd, delta, btop, eza, jq
+  - Development: git, git-lfs, gnupg, vim, grep, php
+  - Utilities: wget, tree, rename, mas, quicklook plugins
 - `mac/macos_defaults.sh` - macOS system preferences configuration
 - `ssh.sh` - SSH key generation script (Ed25519 keys)
 
@@ -130,14 +165,20 @@ cd ~/.dotfiles
 
 **Optional Components**:
 ```bash
-# Install additional Homebrew packages
+# Install additional Homebrew packages (GNU utils, modern CLI tools)
 /bin/bash ~/.dotfiles/brew.sh
 
-# Install development tools
+# Install development tools (languages, cloud, databases)
 /bin/bash ~/.dotfiles/init/dev_tools.sh
 
 # Install desktop applications
 /bin/bash ~/.dotfiles/init/desktop_tools.sh
+
+# Install NPM global packages
+/bin/bash ~/.dotfiles/init/npm_packages.sh
+
+# Install UV Python tools
+/bin/bash ~/.dotfiles/init/uv_tools.sh
 
 # LazyVim will auto-install plugins on first run of nvim
 nvim
@@ -182,7 +223,14 @@ reload
 The interactive wizard (`init/wizard.sh`) saves user preferences to `.install-config` file, which includes:
 - User name and email for git commits
 - Installation profile (minimal/developer/full)
-- Optional component selections (Homebrew packages, dev tools, desktop apps, SSH key, macOS defaults)
+- Optional component selections:
+  - Homebrew packages (GNU utilities, modern CLI tools like tmux, fzf, bat, ripgrep, fd, delta, btop)
+  - Development tools (programming languages, cloud tools, databases)
+  - Desktop applications (browsers, productivity, communication, media)
+  - NPM global packages (@openai/codex, @playwright/mcp, yarn)
+  - UV Python tools (llm, poetry, pre-commit, scrapy, git-filter-repo, strip-tags, ttok)
+  - SSH key generation
+  - macOS system defaults
 - This file is gitignored and can be reused for updates or reconfiguration
 
 Installation profiles:
@@ -267,3 +315,251 @@ To export individual profiles or color schemes:
 - Install [Powerline fonts](https://github.com/powerline/fonts) or MesloLGM Nerd Font
 - Restart iTerm2 after installation to load all settings
 - Color schemes and profiles will be automatically available
+
+## Installed Packages Reference
+
+This section documents all packages installed by the dotfiles, organized by installation source.
+
+### Homebrew Packages (brew.sh)
+
+**Core Utilities**:
+- coreutils, moreutils, findutils, gnu-sed - GNU utilities
+- bash, bash-completion2 - Modern Bash shell
+- wget, curl - Download tools
+- gnupg - PGP signing
+- grep, openssh, screen - System tools
+
+**Modern CLI Tools**:
+- tmux - Terminal multiplexer
+- fzf - Fuzzy finder
+- bat - Better cat with syntax highlighting
+- ripgrep - Fast grep alternative
+- fd - Better find alternative
+- delta - Better git diff viewer
+- btop - Interactive process viewer
+- eza - Modern ls replacement
+- jq - JSON processor
+- tree - Directory tree viewer
+
+**Development Tools**:
+- git, git-lfs - Version control
+- vim - Text editor
+- ack - Code search tool
+- cloc - Code line counter
+
+**Utilities**:
+- rename, p7zip, pigz, pv, zopfli - File utilities
+- mas - Mac App Store CLI
+- Quicklook plugins (qlcolorcode, qlstephen, qlmarkdown, etc.)
+
+### Development Tools (init/dev_tools.sh)
+
+**Programming Languages**:
+- go (v1.25+) - Go programming language
+- rust - Rust with cargo
+- python@3.14 - Latest Python
+- node@20 - Node.js LTS
+- ruby - Ruby programming language
+- php (v8.4+) - PHP programming language
+- lua - Lua scripting language
+
+**Version Control & Code Tools**:
+- git, git-lfs - Version control
+- gh - GitHub CLI
+- glab - GitLab CLI
+
+**Package Managers & Build Tools**:
+- mise - Modern runtime manager
+- composer - PHP package manager
+- yarn - Node.js package manager
+- direnv - Environment variable manager
+- pre-commit - Git pre-commit hooks
+
+**Cloud Tools - AWS**:
+- awscli (v2) - AWS command-line interface
+- aws-vault - AWS credential manager
+- aws-iam-authenticator - AWS IAM for Kubernetes
+- eksctl - Amazon EKS CLI
+
+**Container Tools**:
+- podman - Container engine (Docker alternative)
+- kind - Kubernetes in Docker
+- docker-completion, docker-compose-completion
+
+**Kubernetes Tools**:
+- kubectl - Kubernetes CLI
+- helm - Kubernetes package manager
+- k9s - Kubernetes TUI
+- kubectx - Context/namespace switcher
+
+**Infrastructure as Code**:
+- terraform - Infrastructure provisioning
+- terragrunt - Terraform wrapper
+- terraform_landscape - Terraform output formatter
+- ansible - Configuration management
+
+**Database Clients**:
+- mysql-client - MySQL CLI
+- postgresql (libpq) - PostgreSQL client library
+- redis - Redis CLI
+- sqlite - SQLite database
+- duckdb - DuckDB analytical database
+- pgcli - PostgreSQL CLI with autocomplete
+
+**Additional Tools**:
+- nmap - Network scanner
+- readline - Terminal line editing
+- cloc - Code line counter
+
+**GUI Development Tools**:
+- adoptopenjdk - Java JDK
+- mysqlworkbench - MySQL GUI
+- postman - API testing
+
+**JetBrains IDEs**:
+- datagrip - Database IDE
+- phpstorm - PHP IDE
+- pycharm - Python IDE (Professional edition)
+- webstorm - JavaScript/TypeScript IDE
+- goland - Go IDE
+
+**Code Editors & Notebooks**:
+- jupyterlab-app - Jupyter notebook environment
+- typora - Markdown editor (WYSIWYG)
+
+### Desktop Applications (init/desktop_tools.sh)
+
+**Browsers**:
+- google-chrome - Google Chrome browser
+- brave-browser - Privacy-focused browser
+- tor-browser - Tor Browser
+
+**Productivity & Utilities**:
+- alfred - Application launcher
+- 1password - Password manager
+- karabiner-elements - Keyboard customization
+- anki - Flashcard learning app
+- dictionaries - Dictionary application
+- kindle - Amazon Kindle eBook reader
+
+**Communication**:
+- slack - Team communication
+- signal - Private messaging
+- zoom - Video conferencing
+
+**Development GUI Tools**:
+- postman - API testing
+- mysqlworkbench - MySQL GUI
+- datagrip - JetBrains Database IDE
+- phpstorm - JetBrains PHP IDE
+- pycharm - JetBrains Python IDE (Professional)
+- webstorm - JetBrains JavaScript/TypeScript IDE
+- goland - JetBrains Go IDE
+- jupyterlab-app - Jupyter notebook environment
+- typora - Markdown editor (WYSIWYG)
+
+**Media & Entertainment**:
+- vlc - Media player
+- spotify - Music streaming
+- pocket-casts - Podcast player
+- transmission - BitTorrent client
+- yt-dlp - YouTube downloader (CLI)
+
+**System Utilities**:
+- balenaetcher - USB/SD card flasher
+- focusrite-control-2 - Focusrite audio interface control software
+
+**Mac App Store Apps** (installed via mas):
+- Color Picker (1545870783)
+- WhatsApp (1147396723)
+- SnippetsLab (1006087419) - Code snippets manager
+- Moom (419330170) - Window manager
+- NextDNS (1464122853) - DNS manager
+- rcmd (1596283165) - App switcher
+- Unarchiver (425424353) - Archive utility
+- MeetingBar (1532419400) - Calendar in menu bar
+- Boop (1518425043) - Text transformer
+- Tomito (1526042938) - Pomodoro timer
+- Gestimer (990588172) - Simple timer
+- Things (904280696) - Task manager
+
+**Manually Installed Apps** (not available via Homebrew):
+- iTerm2 - Terminal emulator (https://iterm2.com/)
+- Visual Studio Code - Code editor (https://code.visualstudio.com/)
+- Docker Desktop - Container platform (https://www.docker.com/products/docker-desktop)
+- Wispr Flow - AI transcription/dictation (https://wispr.ai/)
+- Flow - Task/project manager (install manually)
+
+### NPM Global Packages (init/npm_packages.sh)
+
+Installed to `~/.npm-global/`:
+- @openai/codex - OpenAI Codex CLI
+- @playwright/mcp - Playwright MCP server
+- yarn - Alternative package manager
+- npm (latest) - Node package manager
+
+### UV Python Tools (init/uv_tools.sh)
+
+Installed via UV tool manager:
+- llm - Simon Willison's LLM CLI interface
+- poetry - Python dependency management
+- pre-commit - Git pre-commit hooks
+- scrapy - Web scraping framework
+- git-filter-repo - Git repository rewriting tool
+- strip-tags - HTML tag stripper
+- ttok - Token counter for LLMs
+
+### Go Binaries (~/go/bin)
+
+Installed via `go install`:
+- dbtpl - Database template tool
+- expvarmon - Expvar monitoring
+- goimports - Go import management
+- golangci-lint - Go linter aggregator
+- gopls - Go language server
+- govulncheck - Go vulnerability checker
+- hey - HTTP load generator
+- migrate - Database migration tool
+- staticcheck - Go static analysis
+
+### Ruby Gems
+
+Notable gems (349 total):
+- rails - Ruby on Rails framework
+- bundler - Ruby dependency manager
+- bundler-audit - Security auditing
+- puma - Ruby web server
+- sidekiq - Background job processing
+- devise - Authentication solution
+- jwt - JSON Web Token
+- rubocop - Ruby linter/formatter (with plugins)
+
+### Custom Scripts (bin/)
+
+**Git Helper Scripts**:
+- git-ca, git-churn, git-co-pr, git-create-branch, git-ctags
+- git-current-branch, git-delete-branch, git-merge-branch
+- git-pr, git-rename-branch, git-up
+
+**Infrastructure Tools**:
+- terraform (v1.12.2)
+- terragrunt (v0.63.1)
+
+**Utility Scripts**:
+- dotfiles - Main utility script
+- murder - Kill process by name
+- rename, replace - Text utilities
+- running - Check running processes
+- ssid, wifi - WiFi utilities
+- tat - Tmux attach helper
+
+### Package Manager Summary
+
+- **Homebrew**: Primary package manager (macOS/Linux)
+- **NPM/Yarn**: Node.js packages
+- **UV**: Python tools (isolated environments)
+- **Go**: Go binaries via `go install`
+- **Cargo**: Rust packages (installed but not actively used)
+- **Gem**: Ruby packages (heavily used)
+- **Composer**: PHP packages (installed but not actively used)
+- **mas**: Mac App Store applications
