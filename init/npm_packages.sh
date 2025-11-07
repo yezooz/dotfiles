@@ -11,7 +11,7 @@ set -e
 
 # Source the dotfiles script for helper functions
 DOTFILES_DIR="${HOME}/.dotfiles"
-source "${DOTFILES_DIR}/bin/dotfiles"
+source "${DOTFILES_DIR}/bin/dotfiles" "source"
 
 # Check if npm is installed
 if ! command -v npm &> /dev/null; then

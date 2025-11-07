@@ -10,7 +10,7 @@ set -e
 
 # Source the dotfiles script for helper functions
 DOTFILES_DIR="${HOME}/.dotfiles"
-source "${DOTFILES_DIR}/bin/dotfiles"
+source "${DOTFILES_DIR}/bin/dotfiles" "source"
 
 # Ensure Homebrew is in PATH
 if is_macos && [[ -z "$(type -P brew)" ]]; then

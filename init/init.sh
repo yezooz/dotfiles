@@ -9,9 +9,11 @@
 
 set -e
 
+# Set DOTFILES directory
+DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+
 # Load dotfiles functions and environment
-# source $DOTFILES/bin/dotfiles "source"
-source ~/.dotfiles/bin/dotfiles
+source "$DOTFILES/bin/dotfiles" "source"
 
 # Load installation config if it exists
 CONFIG_FILE="${DOTFILES}/.install-config"

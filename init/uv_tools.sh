@@ -11,7 +11,7 @@ set -e
 
 # Source the dotfiles script for helper functions
 DOTFILES_DIR="${HOME}/.dotfiles"
-source "${DOTFILES_DIR}/bin/dotfiles"
+source "${DOTFILES_DIR}/bin/dotfiles" "source"
 
 # Check if uv is installed, if not install it
 if ! command -v uv &> /dev/null; then
