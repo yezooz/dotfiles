@@ -45,3 +45,10 @@ export HOMEBREW_NO_ANALYTICS=1
 # export BREW_PREFIX=$(brew --prefix)
 
 # export DOCKER_HOST='unix:///var/folders/36/0h73z8ws6xld1c38dxbh4_2h0000gn/T/podman/podman-machine-default-api.sock'
+
+# Git configuration - Set your email address here
+# This will be used by Git for commits and authoring
+# Uncomment and set your email address:
+# export USER_EMAIL="your.email@example.com"
+# export GIT_AUTHOR_EMAIL="$USER_EMAIL"
+# export GIT_COMMITTER_EMAIL="$USER_EMAIL"
