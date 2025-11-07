@@ -252,4 +252,13 @@ else
     e_success "~/.git_template already symlinked"
 fi
 
+[[ ! -L ~/.gitconfig ]] && ln -s $DOTFILES/git/gitconfig ~/.gitconfig
+[[ ! -L ~/.gitignore ]] && ln -s $DOTFILES/git/gitignore ~/.gitignore
+[[ ! -L ~/.git_template ]] && ln -s $DOTFILES/git/git_template ~/.git_template
+
+e_header "Configure iTerm to load preferences from dotfiles directory"
+# This ensures all themes, profiles, key bindings, and settings are version controlled
+defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$DOTFILES/iterm"
+defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
+
 e_success "macOS installation complete!"
