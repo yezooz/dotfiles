@@ -321,51 +321,38 @@ else
 	e_warning "Failed to install some Ruby dependencies"
 fi
 
-# Install Vim
-if [[ ! "$(type -P vim)" ]]; then
-	e_header "Installing Vim"
-	add_repo_and_install ppa:jonathonf/vim vim
-	e_success "Vim installed"
+# Install Neovim
+if [[ ! "$(type -P nvim)" ]]; then
+	e_header "Installing Neovim"
+	# Install latest stable neovim from PPA
+	add_repo_and_install ppa:neovim-ppa/stable neovim
+	e_success "Neovim installed"
 else
-	e_success "Vim already installed"
+	e_success "Neovim already installed"
 fi
 
-# Install Vundle (Vim plugin manager)
-e_header "Setting up Vim"
+# Install LazyVim
+if [[ ! -d ~/.config/nvim ]]; then
+	e_header "Installing LazyVim"
+	e_arrow "This will install the LazyVim starter configuration"
 
-[[ ! -d ~/.vim/bundle ]] && mkdir -p ~/.vim/bundle
+	# Backup existing neovim config if it exists
+	[[ -d ~/.config/nvim ]] && mv ~/.config/nvim ~/.config/nvim.backup.$(date +%Y%m%d_%H%M%S)
+	[[ -d ~/.local/share/nvim ]] && mv ~/.local/share/nvim ~/.local/share/nvim.backup.$(date +%Y%m%d_%H%M%S)
+	[[ -d ~/.local/state/nvim ]] && mv ~/.local/state/nvim ~/.local/state/nvim.backup.$(date +%Y%m%d_%H%M%S)
+	[[ -d ~/.cache/nvim ]] && mv ~/.cache/nvim ~/.cache/nvim.backup.$(date +%Y%m%d_%H%M%S)
 
-if [[ ! -d ~/.vim/bundle/Vundle.vim ]]; then
-	e_arrow "Installing Vundle..."
-	if git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim; then
-		e_success "Vundle installed"
+	# Clone LazyVim starter
+	if git clone https://github.com/LazyVim/starter ~/.config/nvim; then
+		# Remove .git folder so it's not a submodule
+		rm -rf ~/.config/nvim/.git
+		e_success "LazyVim installed"
+		e_arrow "Run 'nvim' to complete the installation"
 	else
-		e_error "Failed to install Vundle"
+		e_error "Failed to install LazyVim"
 	fi
 else
-	e_success "Vundle already installed"
-fi
-
-# Create Vim symlinks
-if [[ ! -L ~/.vimrc ]]; then
-	mv ~/.vimrc ~/.vimrc.old 2>/dev/null
-	if ln -s $DOTFILES/vimrc ~/.vimrc; then
-		e_success "Symlinked ~/.vimrc"
-	else
-		e_error "Failed to symlink ~/.vimrc"
-	fi
-else
-	e_success "~/.vimrc already symlinked"
-fi
-
-if [[ ! -L ~/.vim/colors ]]; then
-	if ln -s $DOTFILES/vim/colors ~/.vim/colors; then
-		e_success "Symlinked ~/.vim/colors"
-	else
-		e_error "Failed to symlink ~/.vim/colors"
-	fi
-else
-	e_success "~/.vim/colors already symlinked"
+	e_success "Neovim config already exists at ~/.config/nvim"
 fi
 
 # Install Tmux
