@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a personal dotfiles repository that configures development environments for both macOS and Linux (Ubuntu) systems. The setup includes shell configuration (Zsh with Oh-My-Zsh and Powerlevel10k), terminal tools (Tmux), editor config (Vim), Git configuration, and various development tools.
+This is a personal dotfiles repository that configures development environments for both macOS and Linux (Ubuntu) systems. The setup includes shell configuration (Zsh with Oh-My-Zsh and Powerlevel10k), terminal tools (Tmux), editor config (Neovim/LazyVim), Git configuration, and various development tools.
 
 ## Architecture
 
@@ -82,9 +82,14 @@ Symlinks are created from `~/.dotfiles/` to `~/`:
 - `git/gitconfig` → `~/.gitconfig`
 - `git/gitignore` → `~/.gitignore`
 - `git/git_template` → `~/.git_template`
-- `vimrc` → `~/.vimrc`
 - `tmux.conf` → `~/.tmux.conf`
 - `bashrc` → `~/.bashrc`
+
+**Neovim Configuration**:
+LazyVim is installed to `~/.config/nvim/` during setup:
+- Uses the official [LazyVim starter](https://github.com/LazyVim/starter) configuration
+- Provides modern Neovim setup with sensible defaults and plugin management
+- Configuration is stored in `~/.config/nvim/` (not in dotfiles repo)
 
 **iTerm2 Configuration (macOS)**:
 The `iterm/` directory contains iTerm2 preferences that are automatically loaded:
@@ -134,8 +139,8 @@ cd ~/.dotfiles
 # Install desktop applications
 /bin/bash ~/.dotfiles/init/desktop_tools.sh
 
-# Install Vim plugins
-vim +PluginInstall +qall
+# LazyVim will auto-install plugins on first run of nvim
+nvim
 
 # Generate SSH key
 /bin/bash ~/.dotfiles/ssh.sh your-email@example.com
@@ -155,8 +160,8 @@ brew update && brew upgrade
 # Update Oh-My-Zsh
 omz update
 
-# Update Vim plugins
-vim +PluginUpdate +qall
+# Update LazyVim plugins (from within nvim)
+# Press <leader>L (Lazy) to open plugin manager, then 'U' to update
 
 # Reload shell configuration
 reload  # alias for: clear && exec zsh
@@ -181,7 +186,7 @@ The interactive wizard (`init/wizard.sh`) saves user preferences to `.install-co
 - This file is gitignored and can be reused for updates or reconfiguration
 
 Installation profiles:
-- **Minimal**: Shell + Git + Vim + Tmux (recommended for servers)
+- **Minimal**: Shell + Git + Neovim + Tmux (recommended for servers)
 - **Developer**: Minimal + Development tools + Docker + Kubernetes
 - **Full**: Developer + Desktop applications
 
