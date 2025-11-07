@@ -86,11 +86,34 @@ function bumpdeps() {
 }
 
 # Load .env file into shell session for environment variables
+# Safely parses .env files without executing arbitrary code
 function envup() {
   if [ -f .env ]; then
-    export $(sed '/^ *#/ d' .env)
+    # Parse .env file line by line, validating each entry
+    while IFS= read -r line || [ -n "$line" ]; do
+      # Skip empty lines and comments
+      [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+
+      # Validate line format (KEY=VALUE)
+      if [[ "$line" =~ ^[[:space:]]*([A-Za-z_][A-Za-z0-9_]*)[[:space:]]*=[[:space:]]*(.*)$ ]]; then
+        local key="${BASH_REMATCH[1]}"
+        local value="${BASH_REMATCH[2]}"
+
+        # Remove surrounding quotes if present
+        value="${value%\"}"
+        value="${value#\"}"
+        value="${value%\'}"
+        value="${value#\'}"
+
+        # Export the variable safely
+        export "$key=$value"
+      else
+        echo "⚠️  Skipping invalid line: $line" 1>&2
+      fi
+    done < .env
+    echo "✓ Environment variables loaded from .env"
   else
-    echo 'No .env file found' 1>&2
+    echo '✗ No .env file found' 1>&2
     return 1
   fi
 }

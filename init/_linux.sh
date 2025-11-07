@@ -17,7 +17,8 @@ release_name=$(lsb_release -c | awk '{print $2}')
 
 function add_ppa() {
   apt_source_texts+=($1)
-  IFS=':/' eval 'local parts=($1)'
+  # Parse PPA string safely without eval (e.g., "ppa:user/repo")
+  IFS=':/' read -ra parts <<< "$1"
   apt_source_files+=("${parts[1]}-ubuntu-${parts[2]}-$release_name")
 }
 
