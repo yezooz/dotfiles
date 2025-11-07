@@ -110,10 +110,12 @@ prompt_profile() {
             ;;
         2)
             INSTALL_PROFILE="developer"
+            INSTALL_BREW_PACKAGES="yes"
             INSTALL_DEV_TOOLS="yes"
             ;;
         3)
             INSTALL_PROFILE="full"
+            INSTALL_BREW_PACKAGES="yes"
             INSTALL_DEV_TOOLS="yes"
             INSTALL_DESKTOP_APPS="yes"
             ;;
