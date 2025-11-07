@@ -177,9 +177,6 @@ e_header "Installing essential CLI tools"
 tools=(
     "eza"
     "chroma"
-    "docker-completion"
-    "docker-compose"
-    "docker-compose-completion"
 )
 
 for tool in "${tools[@]}"; do
