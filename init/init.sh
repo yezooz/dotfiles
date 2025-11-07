@@ -10,8 +10,7 @@
 set -e
 
 # Load dotfiles functions and environment
-# source $DOTFILES/bin/dotfiles "source"
-source ~/.dotfiles/bin/dotfiles
+source ~/.dotfiles/bin/dotfiles "source"
 
 # Load installation config if it exists
 CONFIG_FILE="${DOTFILES}/.install-config"
