@@ -63,7 +63,16 @@ if [[ ! "$(type -P zsh)" ]]; then
 	sudo apt install -y zsh
 	chsh -s $(which zsh)
 
-	sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+	# Install Oh-My-Zsh manually (safer than curl | sh)
+	if [[ ! -d ~/.oh-my-zsh ]]; then
+		echo "Installing Oh-My-Zsh..."
+		git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
+		# Note: Not running the install script to avoid remote code execution
+		# The zshrc from dotfiles will configure Oh-My-Zsh
+	else
+		echo "Oh-My-Zsh already installed"
+	fi
+
 	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
 	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 	git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
