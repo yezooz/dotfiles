@@ -1,8 +1,23 @@
 #!/usr/bin/env bash
 
+################################################################################
+# macOS Installation Script
+################################################################################
+# Installs and configures all macOS-specific components
+################################################################################
+
+set -e
+
 DOTFILES=~/.dotfiles
 if [[ ! -d $DOTFILES ]]; then
-	git clone https://github.com/yezooz/dotfiles.git $DOTFILES
+	e_error "Dotfiles directory not found at $DOTFILES"
+	exit 1
+fi
+
+# Load config if available
+CONFIG_FILE="${DOTFILES}/.install-config"
+if [[ -f "$CONFIG_FILE" ]]; then
+	source "$CONFIG_FILE"
 fi
 
 function backup_and_link() {
@@ -18,19 +33,31 @@ function add_path() {
 
 # Homebrew
 if [[ ! "$(type -P brew)" ]]; then
-    echo "Installing Homebrew..."
-    echo "⚠️  WARNING: This will download and execute the official Homebrew install script."
-    echo "⚠️  Review the script at: https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+    e_header "Installing Homebrew"
+    e_arrow "This will download and execute the official Homebrew install script"
+    e_arrow "Review the script at: https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
     echo ""
-    read -p "Continue with Homebrew installation? (y/N) " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    # Check if in non-interactive mode
+    if [[ -z "${DOTFILES_NONINTERACTIVE}" ]]; then
+        read -p "Continue with Homebrew installation? (y/N) " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            e_error "Homebrew installation cancelled"
+            echo "Install manually with:"
+            echo "  /bin/bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+            exit 1
+        fi
+    fi
+
+    if /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
+        e_success "Homebrew installed successfully"
     else
-        echo "Skipping Homebrew installation. Install manually with:"
-        echo "  /bin/bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+        e_error "Homebrew installation failed"
         exit 1
     fi
+else
+    e_success "Homebrew already installed"
 fi
 
 # brew install git openssh fzf tree openssl python cmake wget freetype htop
@@ -38,34 +65,116 @@ fi
 
 # Zsh
 if [[ ! "$(type -P zsh)" ]]; then
-    brew install zsh
-
-    # Install Oh-My-Zsh manually (safer than curl | sh)
-    if [[ ! -d ~/.oh-my-zsh ]]; then
-        echo "Installing Oh-My-Zsh..."
-        git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
-        # Note: Not running the install script to avoid remote code execution
-        # The zshrc from dotfiles will configure Oh-My-Zsh
+    e_header "Installing Zsh"
+    if brew install zsh; then
+        e_success "Zsh installed successfully"
     else
-        echo "Oh-My-Zsh already installed"
+        e_error "Failed to install Zsh"
+        exit 1
     fi
-
-    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
-
-	git clone https://github.com/TamCore/autoupdate-oh-my-zsh-plugins.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autoupdate
-	git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autocomplete
-	git clone https://github.com/olets/zsh-window-title.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-window-title
-	git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-	# git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
+else
+    e_success "Zsh already installed"
 fi
 
-# Zsh extensions
-[[ ! -L ~/.zshrc ]] && ln -s $DOTFILES/zsh/zshrc ~/.zshrc
-[[ ! -L ~/.p10k.zsh ]] && ln -s $DOTFILES/zsh/p10k.zsh ~/.p10k.zsh
+# Install Oh-My-Zsh manually (safer than curl | sh)
+if [[ ! -d ~/.oh-my-zsh ]]; then
+    e_header "Installing Oh-My-Zsh"
+    if git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh; then
+        e_success "Oh-My-Zsh installed"
+        e_arrow "The zshrc from dotfiles will configure Oh-My-Zsh"
+    else
+        e_error "Failed to install Oh-My-Zsh"
+        exit 1
+    fi
+else
+    e_success "Oh-My-Zsh already installed"
+fi
 
-brew install exa chroma
-brew install docker-completion docker-compose docker-compose-completion
+# Install Powerlevel10k theme
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k ]]; then
+    e_header "Installing Powerlevel10k theme"
+    if git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k; then
+        e_success "Powerlevel10k installed"
+    else
+        e_error "Failed to install Powerlevel10k"
+    fi
+else
+    e_success "Powerlevel10k already installed"
+fi
+
+# Install Zsh plugins
+e_header "Installing Zsh plugins"
+
+plugins=(
+    "TamCore/autoupdate-oh-my-zsh-plugins:autoupdate"
+    "marlonrichert/zsh-autocomplete:zsh-autocomplete:--depth 1"
+    "olets/zsh-window-title:zsh-window-title"
+    "zsh-users/zsh-autosuggestions:zsh-autosuggestions"
+    "zsh-users/zsh-syntax-highlighting:zsh-syntax-highlighting"
+)
+
+for plugin_info in "${plugins[@]}"; do
+    IFS=':' read -r repo plugin_name extra_flags <<< "$plugin_info"
+    plugin_dir="${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/$plugin_name"
+
+    if [[ ! -d "$plugin_dir" ]]; then
+        e_arrow "Installing $plugin_name..."
+        if git clone $extra_flags "https://github.com/$repo.git" "$plugin_dir"; then
+            e_success "$plugin_name installed"
+        else
+            e_error "Failed to install $plugin_name"
+        fi
+    else
+        e_success "$plugin_name already installed"
+    fi
+done
+
+# Create symlinks for Zsh config files
+e_header "Creating Zsh config symlinks"
+
+if [[ ! -L ~/.zshrc ]]; then
+    if ln -s $DOTFILES/zsh/zshrc ~/.zshrc; then
+        e_success "Symlinked ~/.zshrc"
+    else
+        e_error "Failed to symlink ~/.zshrc"
+    fi
+else
+    e_success "~/.zshrc already symlinked"
+fi
+
+if [[ ! -L ~/.p10k.zsh ]]; then
+    if ln -s $DOTFILES/zsh/p10k.zsh ~/.p10k.zsh; then
+        e_success "Symlinked ~/.p10k.zsh"
+    else
+        e_error "Failed to symlink ~/.p10k.zsh"
+    fi
+else
+    e_success "~/.p10k.zsh already symlinked"
+fi
+
+# Install essential CLI tools
+e_header "Installing essential CLI tools"
+
+tools=(
+    "exa"
+    "chroma"
+    "docker-completion"
+    "docker-compose"
+    "docker-compose-completion"
+)
+
+for tool in "${tools[@]}"; do
+    if ! brew list "$tool" &> /dev/null; then
+        e_arrow "Installing $tool..."
+        if brew install "$tool"; then
+            e_success "$tool installed"
+        else
+            e_error "Failed to install $tool"
+        fi
+    else
+        e_success "$tool already installed"
+    fi
+done
 
 # https://github.com/ryanoasis/nerd-fonts
 # cd ~/Library/Fonts && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
@@ -110,7 +219,37 @@ brew install docker-completion docker-compose docker-compose-completion
 # 	--with-openssl-dir="$(brew --prefix openssl)"
 # fi
 
-# Git
-[[ ! -L ~/.gitconfig ]] && ln -s $DOTFILES/git/gitconfig ~/.gitconfig
-[[ ! -L ~/.gitignore ]] && ln -s $DOTFILES/git/gitignore ~/.gitignore
-[[ ! -L ~/.git_template ]] && ln -s $DOTFILES/git/git_template ~/.git_template
+# Create symlinks for Git config files
+e_header "Creating Git config symlinks"
+
+if [[ ! -L ~/.gitconfig ]]; then
+    if ln -s $DOTFILES/git/gitconfig ~/.gitconfig; then
+        e_success "Symlinked ~/.gitconfig"
+    else
+        e_error "Failed to symlink ~/.gitconfig"
+    fi
+else
+    e_success "~/.gitconfig already symlinked"
+fi
+
+if [[ ! -L ~/.gitignore ]]; then
+    if ln -s $DOTFILES/git/gitignore ~/.gitignore; then
+        e_success "Symlinked ~/.gitignore"
+    else
+        e_error "Failed to symlink ~/.gitignore"
+    fi
+else
+    e_success "~/.gitignore already symlinked"
+fi
+
+if [[ ! -L ~/.git_template ]]; then
+    if ln -s $DOTFILES/git/git_template ~/.git_template; then
+        e_success "Symlinked ~/.git_template"
+    else
+        e_error "Failed to symlink ~/.git_template"
+    fi
+else
+    e_success "~/.git_template already symlinked"
+fi
+
+e_success "macOS installation complete!"
