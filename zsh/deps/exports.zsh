@@ -35,10 +35,11 @@ export MANPAGER="less -X"
 # https://stackoverflow.com/a/42265848/96656
 # export GPG_TTY=$(tty)
 
-# Hide the “default interactive shell is now zsh” warning on macOS.
+# Hide the "default interactive shell is now zsh" warning on macOS.
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
-export SSH_KEY_PATH="$HOME/.ssh/dsa_id"
+# SSH key path - use Ed25519 keys (more secure than deprecated DSA/RSA)
+# export SSH_KEY_PATH="$HOME/.ssh/id_ed25519"
 
 export HOMEBREW_NO_ANALYTICS=1
 # export BREW_PREFIX=$(brew --prefix)
