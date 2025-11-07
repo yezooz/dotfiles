@@ -114,3 +114,9 @@ brew install docker-completion docker-compose docker-compose-completion
 [[ ! -L ~/.gitconfig ]] && ln -s $DOTFILES/git/gitconfig ~/.gitconfig
 [[ ! -L ~/.gitignore ]] && ln -s $DOTFILES/git/gitignore ~/.gitignore
 [[ ! -L ~/.git_template ]] && ln -s $DOTFILES/git/git_template ~/.git_template
+
+# iTerm2
+# Configure iTerm to load preferences from dotfiles directory
+# This ensures all themes, profiles, key bindings, and settings are version controlled
+defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$DOTFILES/iterm"
+defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
