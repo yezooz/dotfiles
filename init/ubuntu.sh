@@ -406,7 +406,7 @@ fi
 e_header "Installing essential CLI tools"
 
 tools=(
-	"exa"
+	"eza"
 	"chroma"
 	"docker-completion"
 	"docker-compose"

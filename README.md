@@ -76,7 +76,7 @@ If you prefer manual installation or want to customize the process:
    - Install Homebrew (if not present)
    - Install Zsh and Oh-My-Zsh with plugins (Powerlevel10k, autosuggestions, syntax highlighting, etc.)
    - Set up symbolic links for configuration files (.zshrc, .gitconfig, etc.)
-   - Install essential command-line tools (exa, chroma, docker-completion)
+   - Install essential command-line tools (eza, chroma, docker-completion)
 
 3. **Install additional Homebrew packages** (optional):
    ```bash
@@ -200,7 +200,7 @@ If you prefer manual installation or want to customize the process:
    - Set up symbolic links for configuration files
    - Install and configure Vim with Vundle
    - Install and configure Tmux
-   - Install additional tools (fzf, goto, exa, chroma)
+   - Install additional tools (fzf, goto, eza, chroma)
    - Download and install Nerd Fonts
 
 3. **Add yourself to the docker group** (requires logout/login):
