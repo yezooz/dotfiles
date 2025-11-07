@@ -73,6 +73,21 @@ brew install zopfli
 brew install mas
 brew install qlcolorcode qlstephen qlmarkdown quicklook-json qlimagesize suspicious-package apparency quicklookase qlvideo
 
+# Install modern CLI tools
+brew install tmux           # Terminal multiplexer
+brew install fzf            # Fuzzy finder
+brew install bat            # Better cat with syntax highlighting
+brew install ripgrep        # Fast grep alternative
+brew install fd             # Better find alternative
+brew install delta          # Better git diff viewer
+brew install btop           # Interactive process viewer
+
+# Install eza (modern ls replacement) if not already installed
+brew install eza
+
+# Install jq (JSON processor) if not already installed
+brew install jq
+
 brew install --cask 1password/tap/1password-cli
 
 # Remove outdated versions from the cellar.
