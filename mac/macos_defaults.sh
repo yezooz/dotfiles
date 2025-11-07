@@ -28,6 +28,9 @@ sudo nvram SystemAudioVolume=" "
 # Disable transparency in the menu bar and elsewhere on Yosemite
 defaults write com.apple.universalaccess reduceTransparency -bool true
 
+# Enable automatic dark mode switching based on time of day
+defaults write NSGlobalDomain AppleInterfaceStyleSwitchesAutomatically -bool true
+
 # Set highlight color to green
 defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600"
 
@@ -119,6 +122,37 @@ defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 #rm -rf ~/Library/Application Support/Dock/desktoppicture.db
 #sudo rm -rf /System/Library/CoreServices/DefaultDesktop.jpg
 #sudo ln -s /path/to/your/image /System/Library/CoreServices/DefaultDesktop.jpg
+
+###############################################################################
+# Menu Bar                                                                    #
+###############################################################################
+
+# Menu bar clock: Show seconds
+defaults write com.apple.menuextra.clock ShowSeconds -bool true
+
+# Menu bar clock: Show day of week
+defaults write com.apple.menuextra.clock ShowDayOfWeek -bool true
+
+# Menu bar clock: Show AM/PM
+defaults write com.apple.menuextra.clock ShowAMPM -bool true
+
+# Menu bar clock: Don't show date (day number)
+defaults write com.apple.menuextra.clock ShowDate -int 0
+
+# Control Center: Show battery in menu bar
+defaults write com.apple.controlcenter "NSStatusItem Visible Battery" -bool true
+
+# Control Center: Show Bluetooth in menu bar
+defaults write com.apple.controlcenter "NSStatusItem Visible Bluetooth" -bool true
+
+# Control Center: Show sound in menu bar
+defaults write com.apple.controlcenter "NSStatusItem Visible Sound" -bool true
+
+# Control Center: Hide Focus Modes from menu bar
+defaults write com.apple.controlcenter "NSStatusItem Visible FocusModes" -bool false
+
+# Control Center: Hide screen mirroring from menu bar
+defaults write com.apple.controlcenter "NSStatusItem Visible ScreenMirroring" -bool false
 
 ###############################################################################
 # Trackpad, mouse, keyboard, Bluetooth accessories, and input                 #
@@ -262,7 +296,7 @@ defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
 
 # Finder: show hidden files by default
-#defaults write com.apple.finder AppleShowAllFiles -bool true
+defaults write com.apple.finder AppleShowAllFiles -bool true
 
 # Finder: show all filename extensions
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
@@ -362,6 +396,10 @@ defaults write com.apple.finder FXInfoPanesExpanded -dict \
 # Enable highlight hover effect for the grid view of a stack (Dock)
 defaults write com.apple.dock mouse-over-hilite-stack -bool true
 
+# Position the Dock on the left side of the screen
+# Options: "left", "bottom", "right"
+defaults write com.apple.dock orientation -string "left"
+
 # Set the icon size of Dock items to 36 pixels
 defaults write com.apple.dock tilesize -int 36
 
@@ -455,6 +493,9 @@ defaults write com.apple.dock wvous-tr-modifier -int 0
 # Bottom left screen corner → Start screen saver
 defaults write com.apple.dock wvous-bl-corner -int 5
 defaults write com.apple.dock wvous-bl-modifier -int 0
+# Bottom right screen corner → Quick Note
+defaults write com.apple.dock wvous-br-corner -int 14
+defaults write com.apple.dock wvous-br-modifier -int 0
 
 ###############################################################################
 # Safari & WebKit                                                             #
@@ -916,6 +957,7 @@ for app in "Activity Monitor" \
 	"Calendar" \
 	"cfprefsd" \
 	"Contacts" \
+	"ControlCenter" \
 	"Dock" \
 	"Finder" \
 	"Google Chrome Canary" \

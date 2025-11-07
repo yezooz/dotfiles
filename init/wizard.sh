@@ -48,9 +48,12 @@ USER_NAME=""
 INSTALL_PROFILE="minimal"
 GENERATE_SSH="no"
 APPLY_MACOS_DEFAULTS="no"
+CONFIGURE_DOCK="no"
 INSTALL_BREW_PACKAGES="no"
 INSTALL_DEV_TOOLS="no"
 INSTALL_DESKTOP_APPS="no"
+INSTALL_NPM_PACKAGES="no"
+INSTALL_UV_TOOLS="no"
 
 # Check if configuration already exists
 load_existing_config() {
@@ -172,6 +175,24 @@ prompt_macos_defaults() {
     fi
 }
 
+# Prompt for Dock configuration (macOS only)
+prompt_dock_config() {
+    if [[ "$OSTYPE" =~ ^darwin ]]; then
+        log_question "Configure macOS Dock?"
+        echo "  (Position, size, auto-hide, and applications)"
+        echo -n "  [y/N]: "
+        read -r -n 1 input
+        echo ""
+
+        if [[ "$input" =~ ^[Yy]$ ]]; then
+            CONFIGURE_DOCK="yes"
+            log_success "Will configure Dock"
+        else
+            CONFIGURE_DOCK="no"
+        fi
+    fi
+}
+
 # Save configuration
 save_config() {
     log_info "Saving configuration..."
@@ -190,9 +211,12 @@ INSTALL_PROFILE="$INSTALL_PROFILE"
 # Optional Components
 GENERATE_SSH="$GENERATE_SSH"
 APPLY_MACOS_DEFAULTS="$APPLY_MACOS_DEFAULTS"
+CONFIGURE_DOCK="$CONFIGURE_DOCK"
 INSTALL_BREW_PACKAGES="$INSTALL_BREW_PACKAGES"
 INSTALL_DEV_TOOLS="$INSTALL_DEV_TOOLS"
 INSTALL_DESKTOP_APPS="$INSTALL_DESKTOP_APPS"
+INSTALL_NPM_PACKAGES="$INSTALL_NPM_PACKAGES"
+INSTALL_UV_TOOLS="$INSTALL_UV_TOOLS"
 EOF
 
     log_success "Configuration saved to: $CONFIG_FILE"
@@ -212,8 +236,13 @@ display_summary() {
     echo "  • Homebrew packages: $INSTALL_BREW_PACKAGES"
     echo "  • Development tools: $INSTALL_DEV_TOOLS"
     echo "  • Desktop apps:      $INSTALL_DESKTOP_APPS"
+    echo "  • NPM packages:      $INSTALL_NPM_PACKAGES"
+    echo "  • UV Python tools:   $INSTALL_UV_TOOLS"
     echo "  • SSH key:           $GENERATE_SSH"
-    [[ "$OSTYPE" =~ ^darwin ]] && echo "  • macOS defaults:    $APPLY_MACOS_DEFAULTS"
+    if [[ "$OSTYPE" =~ ^darwin ]]; then
+        echo "  • macOS defaults:    $APPLY_MACOS_DEFAULTS"
+        echo "  • Dock config:       $CONFIGURE_DOCK"
+    fi
     echo ""
 }
 
@@ -281,7 +310,40 @@ main() {
     prompt_ssh
     echo ""
 
+    # Prompt for NPM packages
+    if command -v npm &> /dev/null || [[ "$INSTALL_DEV_TOOLS" == "yes" ]]; then
+        log_question "Install NPM global packages?"
+        echo "  (@openai/codex, @playwright/mcp, yarn)"
+        echo -n "  [y/N]: "
+        read -r -n 1 input
+        echo ""
+        if [[ "$input" =~ ^[Yy]$ ]]; then
+            INSTALL_NPM_PACKAGES="yes"
+            log_success "Will install NPM global packages"
+        else
+            INSTALL_NPM_PACKAGES="no"
+        fi
+        echo ""
+    fi
+
+    # Prompt for UV Python tools
+    log_question "Install UV Python tools?"
+    echo "  (llm, poetry, pre-commit, scrapy, git-filter-repo)"
+    echo -n "  [y/N]: "
+    read -r -n 1 input
+    echo ""
+    if [[ "$input" =~ ^[Yy]$ ]]; then
+        INSTALL_UV_TOOLS="yes"
+        log_success "Will install UV Python tools"
+    else
+        INSTALL_UV_TOOLS="no"
+    fi
+    echo ""
+
     prompt_macos_defaults
+    echo ""
+
+    prompt_dock_config
     echo ""
 
     # Save and display configuration
