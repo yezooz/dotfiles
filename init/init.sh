@@ -10,30 +10,8 @@
 set -e
 
 # Load dotfiles functions and environment
-# We need to source without "source" param to get functions, but prevent duplicate installation
-# The bin/dotfiles script will be sourced and should only define functions
-DOTFILES="${HOME}/.dotfiles"
-export DOTFILES
-
-# Define utility functions inline to avoid issues
-function e_header()   { echo -e "\n\033[1m$@\033[0m"; }
-function e_success()  { echo -e " \033[1;32m✔\033[0m  $@"; }
-function e_error()    { echo -e " \033[1;31m✖\033[0m  $@"; }
-function e_arrow()    { echo -e " \033[1;34m➜\033[0m  $@"; }
-
-# OS detection functions
-function is_macos() {
-  [[ "$OSTYPE" =~ ^darwin ]] || return 1
-}
-function is_linux() {
-  [[ "$OSTYPE" =~ ^linux ]] || return 1
-}
-function is_ubuntu() {
-  [[ "$(cat /etc/issue 2> /dev/null)" =~ Ubuntu ]] || return 1
-}
-function is_ubuntu_desktop() {
-  dpkg -l ubuntu-desktop >/dev/null 2>&1 || return 1
-}
+# source $DOTFILES/bin/dotfiles "source"
+source ~/.dotfiles/bin/dotfiles
 
 # Load installation config if it exists
 CONFIG_FILE="${DOTFILES}/.install-config"
