@@ -13,6 +13,15 @@ set -e
 DOTFILES_DIR="${HOME}/.dotfiles"
 source "${DOTFILES_DIR}/bin/dotfiles"
 
+# Ensure Homebrew is in PATH
+if is_macos && [[ -z "$(type -P brew)" ]]; then
+    if [[ -f "/opt/homebrew/bin/brew" ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [[ -f "/usr/local/bin/brew" ]]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
+fi
+
 if is_macos; then
     e_header "Installing Development Tools (macOS)"
 

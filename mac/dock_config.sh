@@ -15,6 +15,15 @@ if [[ -f "${DOTFILES_DIR}/bin/dotfiles" ]]; then
     source "${DOTFILES_DIR}/bin/dotfiles"
 fi
 
+# Ensure Homebrew is in PATH
+if [[ -z "$(type -P brew)" ]]; then
+    if [[ -f "/opt/homebrew/bin/brew" ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [[ -f "/usr/local/bin/brew" ]]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
+fi
+
 # Check if running on macOS
 if [[ "$OSTYPE" != "darwin"* ]]; then
     echo "This script is only for macOS"
