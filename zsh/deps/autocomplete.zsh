@@ -25,7 +25,9 @@ if is_macos; then
   fi
 
   if [ -x "$(command -v op)" ]; then
-    eval "$(op completion zsh)"; compdef _op op
+    if [[ -n "$ZSH_VERSION" ]]; then
+      eval "$(op completion zsh)"; compdef _op op
+    fi
   fi
 
   # if [ -e "$HOME/.ssh/config" ]; then
