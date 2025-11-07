@@ -24,9 +24,18 @@ This is a personal dotfiles repository that configures development environments 
 
 **Traditional Installation**:
 - `init/init.sh` - Core installation script that:
-  - Sources `bin/dotfiles` for core functions and OS detection
-  - Detects the OS (macOS/Ubuntu) and runs platform-specific installation scripts
-  - Loads Zsh dependencies from `zsh/deps/` directory
+  - Loads `.install-config` file (if exists) with user preferences
+  - Exports configuration variables for child scripts
+  - Detects the OS (macOS/Ubuntu) and runs platform-specific base installation
+  - Automatically installs all optional components based on config:
+    - Additional Homebrew packages (if `INSTALL_BREW_PACKAGES=yes`)
+    - Development tools (if `INSTALL_DEV_TOOLS=yes`)
+    - Desktop applications (if `INSTALL_DESKTOP_APPS=yes`)
+    - NPM global packages (if `INSTALL_NPM_PACKAGES=yes`)
+    - UV Python tools (if `INSTALL_UV_TOOLS=yes`)
+    - SSH key generation (if `GENERATE_SSH=yes`)
+    - macOS system defaults (if `APPLY_MACOS_DEFAULTS=yes`)
+    - Dock configuration (if `CONFIGURE_DOCK=yes`)
   - Can be run standalone or via bootstrap.sh
 
 ### Core Components
@@ -56,7 +65,7 @@ This is a personal dotfiles repository that configures development environments 
 - `init/wizard.sh` - Interactive setup wizard for collecting user preferences
   - Prompts for git user name and email
   - Offers installation profiles (minimal, developer, full)
-  - Allows selection of optional components:
+  - Allows selection of optional components (all installed automatically):
     - Homebrew packages (GNU utilities, modern CLI tools)
     - Development tools (languages, cloud, databases)
     - Desktop applications (GUI apps)
@@ -64,8 +73,10 @@ This is a personal dotfiles repository that configures development environments 
     - UV Python tools (llm, poetry, scrapy, etc.)
     - SSH key generation
     - macOS system defaults (macOS only)
+    - Dock configuration (macOS only)
   - Saves configuration to `.install-config` file
   - Supports reusing existing configuration
+  - All selected components are installed automatically by init.sh
 - `init/verify.sh` - Post-installation verification
   - Validates symlinks for all config files
   - Checks that required binaries are installed (zsh, git, brew, etc.)
@@ -168,7 +179,10 @@ cd ~/.dotfiles
 /bin/bash init/wizard.sh
 ```
 
-**Optional Components**:
+**Optional Components** (automatically installed if selected in wizard):
+
+If you run the wizard, selected components install automatically. To add components later manually:
+
 ```bash
 # Install additional Homebrew packages (GNU utils, modern CLI tools)
 /bin/bash ~/.dotfiles/brew.sh
@@ -185,17 +199,20 @@ cd ~/.dotfiles
 # Install UV Python tools
 /bin/bash ~/.dotfiles/init/uv_tools.sh
 
-# LazyVim will auto-install plugins on first run of nvim
-nvim
-
 # Generate SSH key
 /bin/bash ~/.dotfiles/ssh.sh your-email@example.com
 
 # Configure macOS Dock (position, size, apps)
 /bin/bash ~/.dotfiles/mac/dock_config.sh
 
+# LazyVim will auto-install plugins on first run of nvim
+nvim
+
 # Verify installation
 /bin/bash ~/.dotfiles/init/verify.sh
+
+# Re-run wizard to change configuration
+/bin/bash ~/.dotfiles/init/wizard.sh
 ```
 
 ### Maintenance
@@ -231,7 +248,7 @@ reload
 The interactive wizard (`init/wizard.sh`) saves user preferences to `.install-config` file, which includes:
 - User name and email for git commits
 - Installation profile (minimal/developer/full)
-- Optional component selections:
+- Optional component selections (automatically installed by init.sh):
   - Homebrew packages (GNU utilities, modern CLI tools like tmux, fzf, bat, ripgrep, fd, delta, btop)
   - Development tools (programming languages, cloud tools, databases)
   - Desktop applications (browsers, productivity, communication, media)
@@ -239,7 +256,9 @@ The interactive wizard (`init/wizard.sh`) saves user preferences to `.install-co
   - UV Python tools (llm, poetry, pre-commit, scrapy, git-filter-repo, strip-tags, ttok)
   - SSH key generation
   - macOS system defaults
+  - Dock configuration (position, size, auto-hide, applications)
 - This file is gitignored and can be reused for updates or reconfiguration
+- **Important**: All selected components are automatically installed by `init.sh` - no manual script execution needed!
 
 Installation profiles:
 - **Minimal**: Shell + Git + Neovim + Tmux (recommended for servers)
