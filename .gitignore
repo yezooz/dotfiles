@@ -11,3 +11,9 @@ tags
 tmp/**/*
 !tmp/cache/.keep
 *.pyc
+
+# Installation configuration (user-specific)
+.install-config
+
+# Cache directories
+caches/

@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+################################################################################
+# Ubuntu Installation Script
+################################################################################
+# Installs and configures all Ubuntu-specific components
+################################################################################
+
+set -e
+
 function backup_and_link() {
 	[[ -L ~/.$1 ]] && unlink ~/.$1 && echo "unlink ~/.$1"
 	[[ -f ~/.$1 ]] && mv ~/.$1 ~/.$1.old 2>/dev/null && echo "mv ~/.$1 ~/.$1.old"
@@ -12,145 +20,423 @@ function add_path() {
 }
 
 function add_repo_and_install() {
+	e_arrow "Adding repository: $1"
 	sudo add-apt-repository -y $1
-	sudo apt update
+	sudo apt update -qq
+	e_arrow "Installing: $2"
 	sudo apt install -y $2
 }
 
 export DOTFILES=~/.dotfiles
 
+if [[ ! -d $DOTFILES ]]; then
+	e_error "Dotfiles directory not found at $DOTFILES"
+	exit 1
+fi
+
+# Load config if available
+CONFIG_FILE="${DOTFILES}/.install-config"
+if [[ -f "$CONFIG_FILE" ]]; then
+	source "$CONFIG_FILE"
+fi
+
 add_path $DOTFILES/bin
 
-sudo apt-get -qq update && sudo apt-get -qq dist-upgrade
-sudo apt install -y git ssh build-essential curl file screen mc tree curl wget htop xclip software-properties-common gcc make libpq-dev python-dev apt-transport-https ca-certificates gnupg-agent gnupg2 build-essential jq silversearcher-ag tree fonts-powerline pipx
+# Update system packages
+e_header "Updating system packages"
+if sudo apt-get -qq update && sudo apt-get -qq dist-upgrade -y; then
+	e_success "System packages updated"
+else
+	e_error "Failed to update system packages"
+	exit 1
+fi
+
+# Install essential packages
+e_header "Installing essential packages"
+essential_packages="git ssh build-essential curl file screen mc tree wget htop xclip software-properties-common gcc make libpq-dev python3-dev apt-transport-https ca-certificates gnupg-agent gnupg2 jq silversearcher-ag fonts-powerline pipx"
+
+if sudo apt install -y $essential_packages; then
+	e_success "Essential packages installed"
+else
+	e_error "Failed to install essential packages"
+	exit 1
+fi
 
 # Docker
 if [[ ! "$(type -P docker)" ]]; then
-	echo "Installing Docker"
+	e_header "Installing Docker"
 
-	sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
-	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+	if sudo apt install -y apt-transport-https ca-certificates curl software-properties-common; then
+		e_success "Docker prerequisites installed"
+	else
+		e_error "Failed to install Docker prerequisites"
+		exit 1
+	fi
+
+	e_arrow "Adding Docker GPG key..."
+	if curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -; then
+		e_success "Docker GPG key added"
+	else
+		e_error "Failed to add Docker GPG key"
+		exit 1
+	fi
+
+	e_arrow "Adding Docker repository..."
 	sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-	sudo apt install -y docker-ce docker-compose
-	sudo addgroup --system docker
+
+	e_arrow "Installing Docker CE and Docker Compose..."
+	if sudo apt install -y docker-ce docker-compose; then
+		e_success "Docker installed successfully"
+	else
+		e_error "Failed to install Docker"
+		exit 1
+	fi
+
+	e_arrow "Adding user to docker group..."
+	sudo groupadd docker 2>/dev/null || true
 	sudo usermod -aG docker ${USER}
+	e_success "User added to docker group (logout/login required)"
 else
-	echo "Docker already installed"
+	e_success "Docker already installed"
 fi
 
 # Homebrew
 if [[ ! -d ~/.linuxbrew/Homebrew ]]; then
-	echo "Installing Homebrew"
+	e_header "Installing Homebrew for Linux"
 
-	git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew
-	mkdir ~/.linuxbrew/bin
-	ln -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin
-	~/.linuxbrew/bin/brew
+	e_arrow "Cloning Homebrew repository..."
+	if git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew; then
+		e_success "Homebrew cloned"
+	else
+		e_error "Failed to clone Homebrew"
+		exit 1
+	fi
+
+	mkdir -p ~/.linuxbrew/bin
+	ln -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin/brew
+
+	if ~/.linuxbrew/bin/brew --version &> /dev/null; then
+		e_success "Homebrew installed successfully"
+	else
+		e_error "Homebrew installation failed"
+		exit 1
+	fi
 else
-	echo "Homebrew already installed"
+	e_success "Homebrew already installed"
 fi
 
 add_path ~/.linuxbrew/bin
 
-# Git
-[[ ! -L ~/.gitconfig ]] && ln -s $DOTFILES/git/gitconfig ~/.gitconfig
-[[ ! -L ~/.gitignore ]] && ln -s $DOTFILES/git/gitignore ~/.gitignore
+# Create symlinks for Git config files
+e_header "Creating Git config symlinks"
+
+if [[ ! -L ~/.gitconfig ]]; then
+	if ln -s $DOTFILES/git/gitconfig ~/.gitconfig; then
+		e_success "Symlinked ~/.gitconfig"
+	else
+		e_error "Failed to symlink ~/.gitconfig"
+	fi
+else
+	e_success "~/.gitconfig already symlinked"
+fi
+
+if [[ ! -L ~/.gitignore ]]; then
+	if ln -s $DOTFILES/git/gitignore ~/.gitignore; then
+		e_success "Symlinked ~/.gitignore"
+	else
+		e_error "Failed to symlink ~/.gitignore"
+	fi
+else
+	e_success "~/.gitignore already symlinked"
+fi
 
 # Zsh
 if [[ ! "$(type -P zsh)" ]]; then
-	echo "Installing zsh"
+	e_header "Installing Zsh"
 
-	sudo apt install -y zsh
-	chsh -s $(which zsh)
+	if sudo apt install -y zsh; then
+		e_success "Zsh installed"
 
-	# Install Oh-My-Zsh manually (safer than curl | sh)
-	if [[ ! -d ~/.oh-my-zsh ]]; then
-		echo "Installing Oh-My-Zsh..."
-		git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
-		# Note: Not running the install script to avoid remote code execution
-		# The zshrc from dotfiles will configure Oh-My-Zsh
+		e_arrow "Changing default shell to zsh..."
+		if chsh -s $(which zsh); then
+			e_success "Default shell changed to zsh"
+		else
+			e_warning "Failed to change shell automatically, run: chsh -s \$(which zsh)"
+		fi
 	else
-		echo "Oh-My-Zsh already installed"
+		e_error "Failed to install zsh"
+		exit 1
 	fi
-
-	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
-	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-	git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-	git clone https://github.com/olets/zsh-window-title.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-window-title
 else
-	echo "zsh already installed"
+	e_success "Zsh already installed"
 fi
 
-# Zsh extensions
-[[ ! -L ~/.zshrc ]] && ln -s $DOTFILES/zsh/zshrc ~/.zshrc
-[[ ! -L ~/.p10k.zsh ]] && ln -s $DOTFILES/zsh/p10k.zsh ~/.p10k.zsh
-[[ ! -L ~/.zfunc ]] && ln -s $DOTFILES/zsh/zfunc ~/.zfunc
+# Install Oh-My-Zsh manually (safer than curl | sh)
+if [[ ! -d ~/.oh-my-zsh ]]; then
+	e_header "Installing Oh-My-Zsh"
+	if git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh; then
+		e_success "Oh-My-Zsh installed"
+		e_arrow "The zshrc from dotfiles will configure Oh-My-Zsh"
+	else
+		e_error "Failed to install Oh-My-Zsh"
+		exit 1
+	fi
+else
+	e_success "Oh-My-Zsh already installed"
+fi
 
+# Install Powerlevel10k theme
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k ]]; then
+	e_header "Installing Powerlevel10k theme"
+	if git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k; then
+		e_success "Powerlevel10k installed"
+	else
+		e_error "Failed to install Powerlevel10k"
+	fi
+else
+	e_success "Powerlevel10k already installed"
+fi
+
+# Install Zsh plugins
+e_header "Installing Zsh plugins"
+
+plugins=(
+	"zsh-users/zsh-syntax-highlighting:zsh-syntax-highlighting"
+	"zsh-users/zsh-autosuggestions:zsh-autosuggestions"
+	"olets/zsh-window-title:zsh-window-title"
+)
+
+for plugin_info in "${plugins[@]}"; do
+	IFS=':' read -r repo plugin_name <<< "$plugin_info"
+	plugin_dir="${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/$plugin_name"
+
+	if [[ ! -d "$plugin_dir" ]]; then
+		e_arrow "Installing $plugin_name..."
+		if git clone "https://github.com/$repo.git" "$plugin_dir"; then
+			e_success "$plugin_name installed"
+		else
+			e_error "Failed to install $plugin_name"
+		fi
+	else
+		e_success "$plugin_name already installed"
+	fi
+done
+
+# Create symlinks for Zsh config files
+e_header "Creating Zsh config symlinks"
+
+if [[ ! -L ~/.zshrc ]]; then
+	if ln -s $DOTFILES/zsh/zshrc ~/.zshrc; then
+		e_success "Symlinked ~/.zshrc"
+	else
+		e_error "Failed to symlink ~/.zshrc"
+	fi
+else
+	e_success "~/.zshrc already symlinked"
+fi
+
+if [[ ! -L ~/.p10k.zsh ]]; then
+	if ln -s $DOTFILES/zsh/p10k.zsh ~/.p10k.zsh; then
+		e_success "Symlinked ~/.p10k.zsh"
+	else
+		e_error "Failed to symlink ~/.p10k.zsh"
+	fi
+else
+	e_success "~/.p10k.zsh already symlinked"
+fi
+
+if [[ ! -L ~/.zfunc ]]; then
+	if ln -s $DOTFILES/zsh/zfunc ~/.zfunc; then
+		e_success "Symlinked ~/.zfunc"
+	else
+		e_error "Failed to symlink ~/.zfunc"
+	fi
+else
+	e_success "~/.zfunc already symlinked"
+fi
+
+# Create additional bash symlinks
+e_arrow "Creating bash config symlinks..."
 backup_and_link bashrc bash
 backup_and_link bash_profile bash
-backup_and_link zshrc zsh
-backup_and_link p10k.zsh zsh
 
+# Verify brew is available
 if [[ ! "$(type -P brew)" ]]; then
-	echo "brew still not installed"
+	e_error "Homebrew not found in PATH"
 	exit 1
+else
+	e_success "Homebrew is available"
 fi
 
-# fzf
+# Install fzf
 if [[ ! "$(type -P fzf)" ]]; then
-	brew install fzf
-	$BREW_PREFIX/opt/fzf/install
+	e_header "Installing fzf"
+	if brew install fzf && $BREW_PREFIX/opt/fzf/install --all --no-fish; then
+		e_success "fzf installed"
+	else
+		e_error "Failed to install fzf"
+	fi
+else
+	e_success "fzf already installed"
 fi
 
-# https://github.com/iridakos/goto
+# Install goto (directory bookmarking tool)
 if [[ ! "$(type -P goto)" ]]; then
-    brew install goto
-    echo -e "\$include /etc/inputrc\nset colored-completion-prefix on" >> ~/.inputrc
+	e_header "Installing goto"
+	if brew install goto; then
+		e_success "goto installed"
+		[[ ! -f ~/.inputrc ]] && echo -e "\$include /etc/inputrc\nset colored-completion-prefix on" >> ~/.inputrc
+	else
+		e_error "Failed to install goto"
+	fi
+else
+	e_success "goto already installed"
 fi
 
-# https://github.com/ryanoasis/nerd-fonts
+# Download Nerd Fonts
+e_header "Installing Nerd Fonts"
 [[ ! -d ~/.local/share/fonts ]] && mkdir -p ~/.local/share/fonts
-cd ~/.local/share/fonts && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
 
-# https://github.com/rvm/ubuntu_rvm
-add_repo_and_install ppa:rael-gc/rvm rvm
+if [[ ! -f ~/.local/share/fonts/"Droid Sans Mono for Powerline Nerd Font Complete.otf" ]]; then
+	e_arrow "Downloading Droid Sans Mono Nerd Font..."
+	if (cd ~/.local/share/fonts && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf); then
+		e_success "Nerd Font downloaded"
+		fc-cache -f ~/.local/share/fonts 2>/dev/null || true
+	else
+		e_error "Failed to download Nerd Font"
+	fi
+else
+	e_success "Nerd Font already installed"
+fi
 
-# https://github.com/rbenv/ruby-build/wiki
-sudo apt install -y autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev libncurses5-dev libffi-dev libgdbm-dev zlib1g-dev
+# Install RVM (optional, commented out by default)
+# e_header "Installing RVM"
+# add_repo_and_install ppa:rael-gc/rvm rvm
 
-# https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-ansible-on-ubuntu-16-04
-# add_repo_and_install ppa:ansible/ansible ansible
+# Ruby build dependencies
+e_header "Installing Ruby build dependencies"
+if sudo apt install -y autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev libncurses5-dev libffi-dev libgdbm-dev zlib1g-dev; then
+	e_success "Ruby dependencies installed"
+else
+	e_warning "Failed to install some Ruby dependencies"
+fi
 
-# http://tipsonubuntu.com/2016/09/13/vim-8-0-released-install-ubuntu-16-04/
+# Install Vim
 if [[ ! "$(type -P vim)" ]]; then
-    add_repo_and_install ppa:jonathonf/vim vim
+	e_header "Installing Vim"
+	add_repo_and_install ppa:jonathonf/vim vim
+	e_success "Vim installed"
+else
+	e_success "Vim already installed"
 fi
+
+# Install Vundle (Vim plugin manager)
+e_header "Setting up Vim"
+
 [[ ! -d ~/.vim/bundle ]] && mkdir -p ~/.vim/bundle
-[[ ! -d ~/.vim/bundle/Vundle.vim ]] && git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
+if [[ ! -d ~/.vim/bundle/Vundle.vim ]]; then
+	e_arrow "Installing Vundle..."
+	if git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim; then
+		e_success "Vundle installed"
+	else
+		e_error "Failed to install Vundle"
+	fi
+else
+	e_success "Vundle already installed"
+fi
+
+# Create Vim symlinks
 if [[ ! -L ~/.vimrc ]]; then
-    mv ~/.vimrc ~/.vimrc.old 2>/dev/null
-    ln -s $DOTFILES/vimrc ~/.vimrc
+	mv ~/.vimrc ~/.vimrc.old 2>/dev/null
+	if ln -s $DOTFILES/vimrc ~/.vimrc; then
+		e_success "Symlinked ~/.vimrc"
+	else
+		e_error "Failed to symlink ~/.vimrc"
+	fi
+else
+	e_success "~/.vimrc already symlinked"
 fi
-[[ ! -L ~/.vim/colors ]] && ln -s $DOTFILES/vim/colors ~/.vim/colors
 
+if [[ ! -L ~/.vim/colors ]]; then
+	if ln -s $DOTFILES/vim/colors ~/.vim/colors; then
+		e_success "Symlinked ~/.vim/colors"
+	else
+		e_error "Failed to symlink ~/.vim/colors"
+	fi
+else
+	e_success "~/.vim/colors already symlinked"
+fi
+
+# Install Tmux
 if [[ ! "$(type -P tmux)" ]]; then
-    sudo apt install -y tmux
+	e_header "Installing Tmux"
+	if sudo apt install -y tmux; then
+		e_success "Tmux installed"
+	else
+		e_error "Failed to install Tmux"
+	fi
+else
+	e_success "Tmux already installed"
 fi
 
-[[ ! -L ~/.tmux.conf ]] && ln -s $DOTFILES/tmux.conf ~/.tmux.conf
+# Setup Tmux configuration
+e_header "Setting up Tmux"
+
+if [[ ! -L ~/.tmux.conf ]]; then
+	if ln -s $DOTFILES/tmux.conf ~/.tmux.conf; then
+		e_success "Symlinked ~/.tmux.conf"
+	else
+		e_error "Failed to symlink ~/.tmux.conf"
+	fi
+else
+	e_success "~/.tmux.conf already symlinked"
+fi
+
 [[ ! -d ~/.tmux/plugins ]] && mkdir -p ~/.tmux/plugins
-[[ ! -d ~/.tmux/plugins/tpm ]] && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
-# https://github.com/greymd/tmux-xpanes
-if [[ ! "$(type -P tmux-xpanes)" ]]; then
-    add_repo_and_install ppa:greymd/tmux-xpanes tmux-xpanes
+if [[ ! -d ~/.tmux/plugins/tpm ]]; then
+	e_arrow "Installing Tmux Plugin Manager..."
+	if git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm; then
+		e_success "TPM installed"
+	else
+		e_error "Failed to install TPM"
+	fi
+else
+	e_success "TPM already installed"
 fi
 
-brew install exa chroma
-brew install docker-completion docker-compose docker-compose-completion
+# Install tmux-xpanes (optional)
+if [[ ! "$(type -P tmux-xpanes)" ]]; then
+	e_header "Installing tmux-xpanes"
+	add_repo_and_install ppa:greymd/tmux-xpanes tmux-xpanes
+	e_success "tmux-xpanes installed"
+else
+	e_success "tmux-xpanes already installed"
+fi
 
-# K8s
-# brew install kubectl eksctl k9s helm kubectx
+# Install essential CLI tools
+e_header "Installing essential CLI tools"
 
-echo "DONE!"
+tools=(
+	"exa"
+	"chroma"
+	"docker-completion"
+	"docker-compose"
+	"docker-compose-completion"
+)
+
+for tool in "${tools[@]}"; do
+	if ! brew list "$tool" &> /dev/null; then
+		e_arrow "Installing $tool..."
+		if brew install "$tool"; then
+			e_success "$tool installed"
+		else
+			e_error "Failed to install $tool"
+		fi
+	else
+		e_success "$tool already installed"
+	fi
+done
+
+e_success "Ubuntu installation complete!"
