@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 completions=(goto.sh exa kubectx kubens)
 for completion in "${completions[@]}"; do
@@ -15,7 +15,10 @@ done
 # fi
 
 if is_macos; then
-  setopt completealiases
+  # Only run setopt if we're in a Zsh shell (not during Bash installation)
+  if [[ -n "$ZSH_VERSION" ]]; then
+    setopt completealiases
+  fi
 
   if [ -x "$(command -v vault)" ]; then
     complete -o nospace -C /usr/local/bin/vault vault
