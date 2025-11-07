@@ -105,8 +105,13 @@ This is a personal dotfiles repository that configures development environments 
   - Core utilities: coreutils, moreutils, findutils, gnu-sed
   - Modern CLI tools: tmux, fzf, bat, ripgrep, fd, delta, btop, eza, jq
   - Development: git, git-lfs, gnupg, vim, grep, php
+  - macOS utilities: dockutil (Dock management)
   - Utilities: wget, tree, rename, mas, quicklook plugins
 - `mac/macos_defaults.sh` - macOS system preferences configuration
+- `mac/dock_config.sh` - macOS Dock configuration
+  - Dock appearance: position, size, magnification, auto-hide
+  - Dock applications: programmatically add/remove apps
+  - Requires dockutil (installed via brew.sh)
 - `ssh.sh` - SSH key generation script (Ed25519 keys)
 
 ### Configuration Files
@@ -185,6 +190,9 @@ nvim
 
 # Generate SSH key
 /bin/bash ~/.dotfiles/ssh.sh your-email@example.com
+
+# Configure macOS Dock (position, size, apps)
+/bin/bash ~/.dotfiles/mac/dock_config.sh
 
 # Verify installation
 /bin/bash ~/.dotfiles/init/verify.sh
@@ -274,6 +282,51 @@ PATH is configured in `zsh/deps/path.zsh` and includes:
 - Local bin directories
 - Go, Ruby, Python, Node.js paths
 - Custom scripts from `~/.dotfiles/bin`
+
+### Dock Configuration (macOS)
+
+**Managing Dock Settings**:
+
+The `mac/dock_config.sh` script allows you to configure the Dock via terminal:
+
+```bash
+# Configure Dock appearance and applications
+/bin/bash ~/.dotfiles/mac/dock_config.sh
+```
+
+**Dock Settings** (configured via `defaults write`):
+- Position: left, bottom, or right
+- Icon size: 49 pixels (customizable)
+- Magnification: enabled with 64px max size
+- Auto-hide: enabled with minimal delay
+- Minimize effect: scale (or genie/suck)
+- Don't show recent applications
+
+**Dock Applications** (managed via `dockutil`):
+- Programmatically add/remove apps
+- Maintain consistent Dock across machines
+- Customize the app list in the script
+
+**To customize**:
+1. Edit `mac/dock_config.sh`
+2. Modify the `add_to_dock` function calls
+3. Add/remove apps as needed
+4. Run the script to apply changes
+
+**Manual Dock management**:
+```bash
+# Add an app
+dockutil --add /Applications/AppName.app
+
+# Remove an app
+dockutil --remove "AppName"
+
+# Remove all apps
+dockutil --remove all
+
+# List current Dock items
+dockutil --list
+```
 
 ### iTerm2 Configuration (macOS)
 

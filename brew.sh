@@ -88,6 +88,9 @@ brew install eza
 # Install jq (JSON processor) if not already installed
 brew install jq
 
+# Install macOS utilities
+brew install dockutil        # Dock management tool
+
 brew install --cask 1password/tap/1password-cli
 
 # Remove outdated versions from the cellar.
