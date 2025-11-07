@@ -101,7 +101,7 @@ if is_macos; then
     # GUI APPLICATIONS (Optional)
     # ========================================
     e_arrow "Development GUI Applications"
-    brew install --cask adoptopenjdk   # Java JDK
+    brew install openjdk@21            # Java JDK (LTS)
     brew install --cask mysqlworkbench # MySQL GUI
     brew install --cask postman        # API testing
 
