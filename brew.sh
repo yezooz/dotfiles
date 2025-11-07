@@ -2,6 +2,14 @@
 
 # Install command-line tools using Homebrew.
 
+# Don't exit on error - continue installing other packages even if one fails
+set +e
+
+echo "=================================================="
+echo "Starting Homebrew packages installation"
+echo "This may take 10-15 minutes..."
+echo "=================================================="
+
 # Ensure Homebrew is in PATH
 if [[ -z "$(type -P brew)" ]]; then
     if [[ -f "/opt/homebrew/bin/brew" ]]; then
@@ -17,14 +25,17 @@ if [[ -z "$(type -P brew)" ]]; then
 fi
 
 # Make sure we're using the latest Homebrew.
+echo "[1/8] Updating Homebrew..."
 brew update
 
-# Upgrade any already-installed formulae.
-brew upgrade
+# Upgrade any already-installed formulae (commented out - can take very long).
+# Run manually if needed: brew upgrade
+# brew upgrade
 
-# Save Homebrew’s installed location.
+# Save Homebrew's installed location.
 BREW_PREFIX=$(brew --prefix)
 
+echo "[2/8] Installing GNU core utilities..."
 # Install GNU core utilities (those that come with macOS are outdated).
 # Don't forget to add `$(brew --prefix coreutils)/libexec/gnubin` to `$PATH`.
 brew install coreutils
@@ -64,12 +75,14 @@ brew install screen
 brew install php@8.1
 brew install gmp
 
+echo "[3/8] Installing font tools..."
 # Install font tools.
 brew tap bramstein/webfonttools
 brew install sfnt2woff
 brew install sfnt2woff-zopfli
 brew install woff2
 
+echo "[4/8] Installing useful binaries..."
 # Install other useful binaries.
 brew install ack
 #brew install exiv2
@@ -91,6 +104,7 @@ brew install zopfli
 brew install mas
 brew install qlcolorcode qlstephen qlmarkdown quicklook-json suspicious-package apparency quicklookase qlvideo
 
+echo "[5/8] Installing modern CLI tools..."
 # Install modern CLI tools
 brew install tmux           # Terminal multiplexer
 brew install fzf            # Fuzzy finder
@@ -100,16 +114,23 @@ brew install fd             # Better find alternative
 brew install delta          # Better git diff viewer
 brew install btop           # Interactive process viewer
 
+echo "[6/8] Installing eza and jq..."
 # Install eza (modern ls replacement) if not already installed
 brew install eza
 
 # Install jq (JSON processor) if not already installed
 brew install jq
 
+echo "[7/8] Installing macOS utilities..."
 # Install macOS utilities
 brew install dockutil        # Dock management tool
 
 brew install --cask 1password/tap/1password-cli
 
+echo "[8/8] Cleaning up..."
 # Remove outdated versions from the cellar.
 brew cleanup
+
+echo "=================================================="
+echo "Homebrew packages installation complete!"
+echo "=================================================="
