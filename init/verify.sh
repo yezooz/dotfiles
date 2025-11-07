@@ -101,12 +101,12 @@ check_symlinks() {
         log_fail "Not a valid symlink"
     fi
 
-    # Vim files
-    log_check "~/.vimrc symlink"
-    if [[ -L "$HOME/.vimrc" ]] && [[ -f "$HOME/.vimrc" ]]; then
+    # Neovim config
+    log_check "~/.config/nvim directory"
+    if [[ -d "$HOME/.config/nvim" ]]; then
         log_pass
     else
-        log_warning "Vim config not symlinked (may not be installed)"
+        log_warning "Neovim config not found (may not be installed)"
     fi
 
     # Tmux files
@@ -156,9 +156,11 @@ check_binaries() {
         log_warning "Not installed (ls alias may not work)"
     fi
 
-    log_check "vim"
-    if command -v vim &> /dev/null; then
-        log_pass
+    log_check "nvim"
+    if command -v nvim &> /dev/null; then
+        VERSION=$(nvim --version | head -n1 | awk '{print $2}')
+        echo -e "${GREEN}✓${NC} (v$VERSION)"
+        ((PASSED++))
     else
         log_warning "Not installed"
     fi
@@ -291,12 +293,12 @@ check_optional() {
         fi
     fi
 
-    # Check Vim plugins
-    log_check "Vim Vundle"
-    if [[ -d "$HOME/.vim/bundle/Vundle.vim" ]]; then
+    # Check LazyVim
+    log_check "LazyVim config"
+    if [[ -d "$HOME/.config/nvim" ]] && [[ -f "$HOME/.config/nvim/init.lua" ]]; then
         log_pass
     else
-        log_warning "Not installed (run: vim +PluginInstall +qall)"
+        log_warning "Not installed (run installation script)"
     fi
 
     # Check Tmux plugins
