@@ -196,15 +196,41 @@ done
 #     ln -sf ${dotfiledir}/.${file} ${homedir}/.${file}
 # done
 
-# Vim
-# if [[ ! "$(type -P vim)" ]]; then
-# 	brew install vim
-# 	git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-# 	pip3 install pynvim
-# 	mv ~/.vimrc ~/.vimrc.old 2>/dev/null
-# 	ln -s ~/dotfiles/vimrc ~/.vimrc
-# 	ln -s ~/dotfiles/vim/colors ~/.vim/colors
-# fi
+# Install Neovim
+if [[ ! "$(type -P nvim)" ]]; then
+	e_header "Installing Neovim"
+	if brew install neovim; then
+		e_success "Neovim installed successfully"
+	else
+		e_error "Failed to install Neovim"
+	fi
+else
+	e_success "Neovim already installed"
+fi
+
+# Install LazyVim
+if [[ ! -d ~/.config/nvim ]]; then
+	e_header "Installing LazyVim"
+	e_arrow "This will install the LazyVim starter configuration"
+
+	# Backup existing neovim config if it exists
+	[[ -d ~/.config/nvim ]] && mv ~/.config/nvim ~/.config/nvim.backup.$(date +%Y%m%d_%H%M%S)
+	[[ -d ~/.local/share/nvim ]] && mv ~/.local/share/nvim ~/.local/share/nvim.backup.$(date +%Y%m%d_%H%M%S)
+	[[ -d ~/.local/state/nvim ]] && mv ~/.local/state/nvim ~/.local/state/nvim.backup.$(date +%Y%m%d_%H%M%S)
+	[[ -d ~/.cache/nvim ]] && mv ~/.cache/nvim ~/.cache/nvim.backup.$(date +%Y%m%d_%H%M%S)
+
+	# Clone LazyVim starter
+	if git clone https://github.com/LazyVim/starter ~/.config/nvim; then
+		# Remove .git folder so it's not a submodule
+		rm -rf ~/.config/nvim/.git
+		e_success "LazyVim installed"
+		e_arrow "Run 'nvim' to complete the installation"
+	else
+		e_error "Failed to install LazyVim"
+	fi
+else
+	e_success "Neovim config already exists at ~/.config/nvim"
+fi
 
 # Ruby
 # if [[ ! "$(type -P ruby)" ]]; then
