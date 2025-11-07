@@ -10,9 +10,12 @@ set -e
 
 DOTFILES=~/.dotfiles
 if [[ ! -d $DOTFILES ]]; then
-	e_error "Dotfiles directory not found at $DOTFILES"
+	echo "Error: Dotfiles directory not found at $DOTFILES"
 	exit 1
 fi
+
+# Load dotfiles functions
+source "$DOTFILES/bin/dotfiles" "source"
 
 # Load config if available
 CONFIG_FILE="${DOTFILES}/.install-config"
