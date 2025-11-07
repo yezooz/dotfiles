@@ -13,7 +13,7 @@ This is a personal dotfiles repository that configures development environments 
 **New One-Click Installation System**:
 - `bootstrap.sh` - Primary installation entry point that can be run directly from GitHub:
   ```bash
-  bash <(curl -fsSL https://raw.githubusercontent.com/yezooz/dotfiles/main/bootstrap.sh)
+  bash <(curl -fsSL https://raw.githubusercontent.com/yezooz/dotfiles/master/bootstrap.sh)
   ```
   - Clones the repository to `~/.dotfiles` if it doesn't exist
   - Runs preflight checks to validate system requirements
@@ -160,10 +160,10 @@ The `bin/` directory contains custom git helper scripts (prefix `git-*`) that be
 **Recommended: One-Click Installation** (with interactive wizard):
 ```bash
 # Run directly from GitHub - includes preflight checks, wizard, and verification
-bash <(curl -fsSL https://raw.githubusercontent.com/yezooz/dotfiles/main/bootstrap.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/yezooz/dotfiles/master/bootstrap.sh)
 
 # Non-interactive mode (uses defaults)
-DOTFILES_NONINTERACTIVE=1 bash <(curl -fsSL https://raw.githubusercontent.com/yezooz/dotfiles/main/bootstrap.sh)
+DOTFILES_NONINTERACTIVE=1 bash <(curl -fsSL https://raw.githubusercontent.com/yezooz/dotfiles/master/bootstrap.sh)
 ```
 
 **Manual Installation** (if repository already cloned):
@@ -218,7 +218,7 @@ nvim
 ### Maintenance
 ```bash
 # Update dotfiles from git
-cd ~/.dotfiles && git pull origin main
+cd ~/.dotfiles && git pull origin master
 
 # Update Homebrew packages
 brew update && brew upgrade
