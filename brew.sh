@@ -12,9 +12,13 @@ brew upgrade
 BREW_PREFIX=$(brew --prefix)
 
 # Install GNU core utilities (those that come with macOS are outdated).
-# Don’t forget to add `$(brew --prefix coreutils)/libexec/gnubin` to `$PATH`.
+# Don't forget to add `$(brew --prefix coreutils)/libexec/gnubin` to `$PATH`.
 brew install coreutils
-ln -s "${BREW_PREFIX}/bin/gsha256sum" "${BREW_PREFIX}/bin/sha256sum"
+
+# Create sha256sum symlink only if gsha256sum exists and symlink doesn't already exist
+if [[ -f "${BREW_PREFIX}/bin/gsha256sum" ]] && [[ ! -e "${BREW_PREFIX}/bin/sha256sum" ]]; then
+  ln -s "${BREW_PREFIX}/bin/gsha256sum" "${BREW_PREFIX}/bin/sha256sum"
+fi
 
 # Install some other useful utilities like `sponge`.
 brew install moreutils
