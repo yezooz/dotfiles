@@ -89,7 +89,7 @@ brew install tree
 brew install vbindiff
 brew install zopfli
 brew install mas
-brew install qlcolorcode qlstephen qlmarkdown quicklook-json qlimagesize suspicious-package apparency quicklookase qlvideo
+brew install qlcolorcode qlstephen qlmarkdown quicklook-json suspicious-package apparency quicklookase qlvideo
 
 # Install modern CLI tools
 brew install tmux           # Terminal multiplexer
