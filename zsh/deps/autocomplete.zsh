@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-completions=(goto.sh exa kubectx kubens)
+completions=(goto.sh eza kubectx kubens)
 for completion in "${completions[@]}"; do
   c="$BREW_PREFIX/etc/bash_completion.d/${completion}"
   [[ -r "${c}" ]] && source "${c}";
