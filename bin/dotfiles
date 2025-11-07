@@ -147,7 +147,57 @@ fi
 # Create caches dir and init subdir, if they don't already exist.
 mkdir -p "$DOTFILES/caches/init"
 
-# ZPLUG
+# Load config to check for optional installations
+CONFIG_FILE="${DOTFILES}/.install-config"
+if [[ -f "$CONFIG_FILE" ]]; then
+  source "$CONFIG_FILE"
+fi
+
+# Optional: Install additional Homebrew packages
+if [[ "${INSTALL_BREW_PACKAGES}" == "yes" ]] && [[ -f "$DOTFILES/brew.sh" ]]; then
+  e_header "Installing additional Homebrew packages"
+  /bin/bash "$DOTFILES/brew.sh"
+  e_success "Homebrew packages installed"
+fi
+
+# Optional: Install development tools
+if [[ "${INSTALL_DEV_TOOLS}" == "yes" ]] && [[ -f "$DOTFILES/init/dev_tools.sh" ]]; then
+  e_header "Installing development tools"
+  /bin/bash "$DOTFILES/init/dev_tools.sh"
+  e_success "Development tools installed"
+fi
+
+# Optional: Install desktop applications
+if [[ "${INSTALL_DESKTOP_APPS}" == "yes" ]] && [[ -f "$DOTFILES/init/desktop_tools.sh" ]]; then
+  e_header "Installing desktop applications"
+  /bin/bash "$DOTFILES/init/desktop_tools.sh"
+  e_success "Desktop applications installed"
+fi
+
+# Optional: Generate SSH key
+if [[ "${GENERATE_SSH}" == "yes" ]] && [[ -f "$DOTFILES/ssh.sh" ]]; then
+  if [[ ! -f "$HOME/.ssh/id_ed25519" ]]; then
+    e_header "Generating SSH key"
+    if [[ -n "${USER_EMAIL}" ]]; then
+      /bin/bash "$DOTFILES/ssh.sh" "${USER_EMAIL}"
+      e_success "SSH key generated"
+      e_arrow "Public key location: $HOME/.ssh/id_ed25519.pub"
+    else
+      e_error "USER_EMAIL not set, skipping SSH key generation"
+    fi
+  else
+    e_arrow "SSH key already exists, skipping generation"
+  fi
+fi
+
+# Optional: Apply macOS defaults
+if [[ "${APPLY_MACOS_DEFAULTS}" == "yes" ]] && is_macos && [[ -f "$DOTFILES/mac/macos_defaults.sh" ]]; then
+  e_header "Applying macOS system defaults"
+  /bin/bash "$DOTFILES/mac/macos_defaults.sh"
+  e_success "macOS defaults applied"
+fi
+
+# ZPLUG (commented out, kept for reference)
 
 # export ZPLUG_HOME=$HOME/.zplug
 # [ ! -d "$ZPLUG_HOME" ] && mkdir -p "$ZPLUG_HOME"
