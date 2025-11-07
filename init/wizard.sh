@@ -54,6 +54,7 @@ INSTALL_DEV_TOOLS="no"
 INSTALL_DESKTOP_APPS="no"
 INSTALL_NPM_PACKAGES="no"
 INSTALL_UV_TOOLS="no"
+INSTALL_FONTS="no"
 
 # Check if configuration already exists
 load_existing_config() {
@@ -219,6 +220,7 @@ INSTALL_DEV_TOOLS="$INSTALL_DEV_TOOLS"
 INSTALL_DESKTOP_APPS="$INSTALL_DESKTOP_APPS"
 INSTALL_NPM_PACKAGES="$INSTALL_NPM_PACKAGES"
 INSTALL_UV_TOOLS="$INSTALL_UV_TOOLS"
+INSTALL_FONTS="$INSTALL_FONTS"
 EOF
 
     log_success "Configuration saved to: $CONFIG_FILE"
@@ -240,6 +242,7 @@ display_summary() {
     echo "  • Desktop apps:      $INSTALL_DESKTOP_APPS"
     echo "  • NPM packages:      $INSTALL_NPM_PACKAGES"
     echo "  • UV Python tools:   $INSTALL_UV_TOOLS"
+    echo "  • Custom fonts:      $INSTALL_FONTS"
     echo "  • SSH key:           $GENERATE_SSH"
     if [[ "$OSTYPE" =~ ^darwin ]]; then
         echo "  • macOS defaults:    $APPLY_MACOS_DEFAULTS"
@@ -346,6 +349,20 @@ main() {
     echo ""
 
     prompt_dock_config
+    echo ""
+
+    # Prompt for fonts
+    log_question "Install custom fonts?"
+    echo "  (Powerline and programming fonts)"
+    echo -n "  [y/N]: "
+    read -r -n 1 input
+    echo ""
+    if [[ "$input" =~ ^[Yy]$ ]]; then
+        INSTALL_FONTS="yes"
+        log_success "Will install custom fonts"
+    else
+        INSTALL_FONTS="no"
+    fi
     echo ""
 
     # Save and display configuration
