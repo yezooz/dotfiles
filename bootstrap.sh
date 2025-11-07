@@ -4,7 +4,7 @@
 # Bootstrap Script for Dotfiles Installation
 ################################################################################
 # This script can be run directly from GitHub:
-# bash <(curl -fsSL https://raw.githubusercontent.com/yezooz/dotfiles/main/bootstrap.sh)
+# bash <(curl -fsSL https://raw.githubusercontent.com/yezooz/dotfiles/master/bootstrap.sh)
 ################################################################################
 
 set -e
@@ -87,7 +87,7 @@ main() {
             if [[ $REPLY =~ ^[Yy]$ ]]; then
                 log_info "Updating dotfiles repository..."
                 cd "$DOTFILES_DIR"
-                git pull origin main || log_warning "Failed to update repository"
+                git pull origin master || log_warning "Failed to update repository"
             fi
         fi
     else
