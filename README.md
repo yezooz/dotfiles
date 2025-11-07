@@ -119,9 +119,36 @@ If you prefer manual installation or want to customize the process:
 
 ### Post-Installation (macOS)
 
-- **iTerm2 Setup**:
-  - Install [Powerline fonts](https://github.com/powerline/fonts)
-  - Import color schemes from [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes)
+- **iTerm2 Configuration**:
+
+  The installation script automatically configures iTerm2 to load preferences from the `~/.dotfiles/iterm` directory. This ensures all your themes, profiles, key bindings, and settings are version controlled and backed up.
+
+  **Initial Setup:**
+  - Install [Powerline fonts](https://github.com/powerline/fonts) or use MesloLGM Nerd Font
+  - Restart iTerm2 to load settings from dotfiles
+  - Your color scheme (dark.json) and other profiles will be automatically available
+
+  **Backing Up Your Settings:**
+
+  To manually export your current iTerm2 preferences:
+  1. Open iTerm2 → Preferences → General → Preferences
+  2. Check "Load preferences from a custom folder or URL"
+  3. Set path to: `/Users/YOUR_USERNAME/.dotfiles/iterm`
+  4. Check "Save changes to folder when iTerm2 quits"
+
+  This creates `com.googlecode.iterm2.plist` in the `iterm/` directory with ALL your settings.
+
+  **Exporting Individual Profiles:**
+  - Profiles: Preferences → Profiles → Other Actions → Save Profile as JSON
+  - Color schemes: Preferences → Profiles → Colors → Color Presets → Export
+
+  After exporting, commit and push changes:
+  ```bash
+  cd ~/.dotfiles
+  git add iterm/
+  git commit -m "Update iTerm2 configuration"
+  git push
+  ```
 
 - **Fix Home/End Keys**: Follow [this guide](https://mwholt.blogspot.be/2012/09/fix-home-and-end-keys-on-mac-os-x.html)
 
