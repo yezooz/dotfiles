@@ -13,7 +13,39 @@ Personal development environment configuration files (dotfiles) for Mac and Linu
 
 ---
 
-## macOS Setup
+## 🚀 Quick Start (One-Click Installation)
+
+Install everything with a single command:
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/yezooz/dotfiles/main/bootstrap.sh)
+```
+
+This will:
+1. Run system preflight checks
+2. Guide you through an interactive setup wizard
+3. Install all components based on your preferences
+4. Verify the installation
+
+### Non-Interactive Installation
+
+For automated setups (CI/CD, provisioning scripts):
+
+```bash
+DOTFILES_NONINTERACTIVE=1 \
+DOTFILES_PROFILE=minimal \
+USER_EMAIL="your.email@example.com" \
+USER_NAME="Your Name" \
+bash <(curl -fsSL https://raw.githubusercontent.com/yezooz/dotfiles/main/bootstrap.sh)
+```
+
+---
+
+## 📋 Manual Installation
+
+If you prefer manual installation or want to customize the process:
+
+### macOS Setup
 
 ### Prerequisites
 
@@ -248,6 +280,69 @@ omz update
 ```bash
 vim +PluginUpdate +qall
 ```
+
+---
+
+## 📦 Installation Profiles
+
+The interactive wizard offers three installation profiles:
+
+### 1. Minimal (Recommended for Servers)
+- Zsh with Oh-My-Zsh and Powerlevel10k
+- Git configuration
+- Vim with Vundle
+- Tmux with plugins
+- Essential CLI tools
+
+### 2. Developer
+- Everything in Minimal, plus:
+- Programming languages (Go, Node.js, Ruby, PHP, etc.)
+- Databases (MySQL client, PostgreSQL client)
+- Cloud tools (AWS CLI, Terraform, Terragrunt)
+- Containers (Docker, Kubernetes tools)
+
+### 3. Full
+- Everything in Developer, plus:
+- Desktop applications (browsers, editors, productivity tools)
+- Communication tools (Slack, Discord)
+- Media applications (Spotify, VLC)
+
+### Configuration File
+
+Your preferences are saved in `~/.dotfiles/.install-config` and can be edited manually:
+
+```bash
+# Example configuration
+USER_EMAIL="your.email@example.com"
+USER_NAME="Your Name"
+INSTALL_PROFILE="developer"
+GENERATE_SSH="yes"
+INSTALL_DEV_TOOLS="yes"
+```
+
+To re-run the wizard with different settings:
+
+```bash
+cd ~/.dotfiles
+/bin/bash init/wizard.sh
+/bin/bash init/init.sh
+```
+
+## 🔍 Verification
+
+After installation, verify everything is working:
+
+```bash
+cd ~/.dotfiles
+/bin/bash init/verify.sh
+```
+
+This will check:
+- All symlinks are created correctly
+- Required binaries are in PATH
+- Oh-My-Zsh and plugins are installed
+- Git configuration is set
+- Shell can start without errors
 
 ---
 
