@@ -92,7 +92,7 @@ This is a personal dotfiles repository that configures development environments 
   - **Developer**: Programming languages (Go, Rust, Python, Node.js, Ruby, PHP, Lua), package managers (mise, composer, yarn), utilities (direnv, pre-commit, cloc, jq)
   - **Cloud/DevOps**: AWS tools (awscli, aws-vault, eksctl), containers (podman, kind, docker-completion), Kubernetes (kubectl, helm, k9s, kubectx), IaC (terraform, terragrunt, ansible)
   - **Database**: mysql-client, postgresql, redis, sqlite, duckdb, pgcli
-  - **GUI Apps**: adoptopenjdk, mysqlworkbench, postman
+  - **GUI Apps**: openjdk@21 (Java LTS), mysqlworkbench, postman
   - **JetBrains IDEs**: datagrip, phpstorm, pycharm (Pro), webstorm, goland
   - **Code Editors**: jupyterlab-app, typora
 - `init/desktop_tools.sh` - Desktop applications (browsers, productivity, media)
@@ -494,7 +494,7 @@ This section documents all packages installed by the dotfiles, organized by inst
 - cloc - Code line counter
 
 **GUI Development Tools**:
-- adoptopenjdk - Java JDK
+- openjdk@21 - Java JDK (LTS version 21)
 - mysqlworkbench - MySQL GUI
 - postman - API testing
 
