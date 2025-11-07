@@ -71,6 +71,7 @@ This is a personal dotfiles repository that configures development environments 
     - Desktop applications (GUI apps)
     - NPM global packages (@openai/codex, @playwright/mcp, yarn)
     - UV Python tools (llm, poetry, scrapy, etc.)
+    - Custom fonts (Powerline and programming fonts)
     - SSH key generation
     - macOS system defaults (macOS only)
     - Dock configuration (macOS only)
@@ -112,6 +113,12 @@ This is a personal dotfiles repository that configures development environments 
   - Git: git-filter-repo
   - Text Processing: strip-tags, ttok
   - Auto-installs UV if not present
+- `init/fonts.sh` - Custom font installation
+  - Installs fonts from `fonts/` directory to system fonts folder
+  - Supports both macOS (`~/Library/Fonts`) and Linux (`~/.local/share/fonts`)
+  - Skips already-installed fonts, updates changed fonts
+  - Currently includes 114 Powerline and programming fonts
+  - Refreshes font cache on Linux systems
 - `brew.sh` - Additional Homebrew packages (GNU utilities, modern CLI tools)
   - Core utilities: coreutils, moreutils, findutils, gnu-sed
   - Modern CLI tools: tmux, fzf, bat, ripgrep, fd, delta, btop, eza, jq
@@ -198,6 +205,9 @@ If you run the wizard, selected components install automatically. To add compone
 
 # Install UV Python tools
 /bin/bash ~/.dotfiles/init/uv_tools.sh
+
+# Install custom fonts (Powerline and programming fonts)
+/bin/bash ~/.dotfiles/init/fonts.sh
 
 # Generate SSH key
 /bin/bash ~/.dotfiles/ssh.sh your-email@example.com

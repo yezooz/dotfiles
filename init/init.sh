@@ -111,6 +111,16 @@ if [[ "$INSTALL_UV_TOOLS" == "yes" ]]; then
     fi
 fi
 
+# Custom fonts
+if [[ "$INSTALL_FONTS" == "yes" ]]; then
+    e_header "Installing custom fonts"
+    if /bin/bash "${DOTFILES}/init/fonts.sh"; then
+        e_success "Custom fonts installed"
+    else
+        e_error "Font installation failed (non-fatal, continuing...)"
+    fi
+fi
+
 # SSH key generation
 if [[ "$GENERATE_SSH" == "yes" ]]; then
     e_header "Generating SSH key"

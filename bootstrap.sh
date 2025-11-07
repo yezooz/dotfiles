@@ -162,6 +162,7 @@ main() {
     echo "  • Desktop apps: /bin/bash ~/.dotfiles/init/desktop_tools.sh"
     echo "  • NPM packages: /bin/bash ~/.dotfiles/init/npm_packages.sh"
     echo "  • UV Python tools: /bin/bash ~/.dotfiles/init/uv_tools.sh"
+    echo "  • Custom fonts: /bin/bash ~/.dotfiles/init/fonts.sh"
     echo "  • Dock configuration: /bin/bash ~/.dotfiles/mac/dock_config.sh"
     echo ""
 }
