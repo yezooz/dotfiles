@@ -149,8 +149,8 @@ check_binaries() {
         log_fail "Not installed"
     fi
 
-    log_check "exa"
-    if command -v exa &> /dev/null; then
+    log_check "eza"
+    if command -v eza &> /dev/null; then
         log_pass
     else
         log_warning "Not installed (ls alias may not work)"
