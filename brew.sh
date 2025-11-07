@@ -2,7 +2,21 @@
 
 # Install command-line tools using Homebrew.
 
-# Make sure we’re using the latest Homebrew.
+# Ensure Homebrew is in PATH
+if [[ -z "$(type -P brew)" ]]; then
+    if [[ -f "/opt/homebrew/bin/brew" ]]; then
+        # Apple Silicon
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [[ -f "/usr/local/bin/brew" ]]; then
+        # Intel Mac
+        eval "$(/usr/local/bin/brew shellenv)"
+    else
+        echo "Error: Homebrew not found. Please install Homebrew first."
+        exit 1
+    fi
+fi
+
+# Make sure we're using the latest Homebrew.
 brew update
 
 # Upgrade any already-installed formulae.

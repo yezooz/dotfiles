@@ -52,12 +52,31 @@ if [[ ! "$(type -P brew)" ]]; then
 
     if /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
         e_success "Homebrew installed successfully"
+
+        # Add Homebrew to PATH for the current script session
+        if [[ -f "/opt/homebrew/bin/brew" ]]; then
+            # Apple Silicon
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        elif [[ -f "/usr/local/bin/brew" ]]; then
+            # Intel Mac
+            eval "$(/usr/local/bin/brew shellenv)"
+        fi
+        e_arrow "Homebrew added to PATH for this session"
     else
         e_error "Homebrew installation failed"
         exit 1
     fi
 else
     e_success "Homebrew already installed"
+fi
+
+# Ensure Homebrew is in PATH (in case it was already installed)
+if [[ -z "$(type -P brew)" ]]; then
+    if [[ -f "/opt/homebrew/bin/brew" ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [[ -f "/usr/local/bin/brew" ]]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
 fi
 
 # brew install git openssh fzf tree openssl python cmake wget freetype htop
