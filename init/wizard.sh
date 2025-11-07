@@ -48,6 +48,7 @@ USER_NAME=""
 INSTALL_PROFILE="minimal"
 GENERATE_SSH="no"
 APPLY_MACOS_DEFAULTS="no"
+CONFIGURE_DOCK="no"
 INSTALL_BREW_PACKAGES="no"
 INSTALL_DEV_TOOLS="no"
 INSTALL_DESKTOP_APPS="no"
@@ -174,6 +175,24 @@ prompt_macos_defaults() {
     fi
 }
 
+# Prompt for Dock configuration (macOS only)
+prompt_dock_config() {
+    if [[ "$OSTYPE" =~ ^darwin ]]; then
+        log_question "Configure macOS Dock?"
+        echo "  (Position, size, auto-hide, and applications)"
+        echo -n "  [y/N]: "
+        read -r -n 1 input
+        echo ""
+
+        if [[ "$input" =~ ^[Yy]$ ]]; then
+            CONFIGURE_DOCK="yes"
+            log_success "Will configure Dock"
+        else
+            CONFIGURE_DOCK="no"
+        fi
+    fi
+}
+
 # Save configuration
 save_config() {
     log_info "Saving configuration..."
@@ -192,6 +211,7 @@ INSTALL_PROFILE="$INSTALL_PROFILE"
 # Optional Components
 GENERATE_SSH="$GENERATE_SSH"
 APPLY_MACOS_DEFAULTS="$APPLY_MACOS_DEFAULTS"
+CONFIGURE_DOCK="$CONFIGURE_DOCK"
 INSTALL_BREW_PACKAGES="$INSTALL_BREW_PACKAGES"
 INSTALL_DEV_TOOLS="$INSTALL_DEV_TOOLS"
 INSTALL_DESKTOP_APPS="$INSTALL_DESKTOP_APPS"
@@ -219,7 +239,10 @@ display_summary() {
     echo "  • NPM packages:      $INSTALL_NPM_PACKAGES"
     echo "  • UV Python tools:   $INSTALL_UV_TOOLS"
     echo "  • SSH key:           $GENERATE_SSH"
-    [[ "$OSTYPE" =~ ^darwin ]] && echo "  • macOS defaults:    $APPLY_MACOS_DEFAULTS"
+    if [[ "$OSTYPE" =~ ^darwin ]]; then
+        echo "  • macOS defaults:    $APPLY_MACOS_DEFAULTS"
+        echo "  • Dock config:       $CONFIGURE_DOCK"
+    fi
     echo ""
 }
 
@@ -318,6 +341,9 @@ main() {
     echo ""
 
     prompt_macos_defaults
+    echo ""
+
+    prompt_dock_config
     echo ""
 
     # Save and display configuration

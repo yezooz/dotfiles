@@ -144,17 +144,26 @@ main() {
     echo ""
     log_success "Your dotfiles have been installed successfully!"
     echo ""
-    echo "Next steps:"
-    echo "  1. Restart your terminal or run: exec zsh"
-    echo "  2. Optional: Install additional packages with: /bin/bash ~/.dotfiles/brew.sh"
-    echo "  3. Optional: Install dev tools with: /bin/bash ~/.dotfiles/init/dev_tools.sh"
-    echo "  4. Optional: Install desktop apps with: /bin/bash ~/.dotfiles/init/desktop_tools.sh"
-    echo ""
 
     if [[ -f "$HOME/.dotfiles/.install-config" ]]; then
-        echo "Your configuration has been saved to: ~/.dotfiles/.install-config"
+        log_success "All selected components have been installed automatically"
+        echo ""
+        echo "Your configuration is saved in: ~/.dotfiles/.install-config"
         echo ""
     fi
+
+    echo "Next steps:"
+    echo "  1. Restart your terminal or run: exec zsh"
+    echo "  2. To modify settings, re-run: /bin/bash ~/.dotfiles/init/wizard.sh"
+    echo ""
+    echo "Optional: To manually install additional components later:"
+    echo "  • Additional packages: /bin/bash ~/.dotfiles/brew.sh"
+    echo "  • Development tools: /bin/bash ~/.dotfiles/init/dev_tools.sh"
+    echo "  • Desktop apps: /bin/bash ~/.dotfiles/init/desktop_tools.sh"
+    echo "  • NPM packages: /bin/bash ~/.dotfiles/init/npm_packages.sh"
+    echo "  • UV Python tools: /bin/bash ~/.dotfiles/init/uv_tools.sh"
+    echo "  • Dock configuration: /bin/bash ~/.dotfiles/mac/dock_config.sh"
+    echo ""
 }
 
 main "$@"
