@@ -86,7 +86,14 @@ if [ -f "/Applications/Cursor.app/Contents/MacOS/Cursor" ]; then
     alias cursor="/Applications/Cursor.app/Contents/MacOS/Cursor"
 fi
 
-# Work
-alias av='aws-vault exec --duration=1h assertis_Admin --mfa-token=$(op item get "AWS" --otp)'
+# AWS Vault - configurable via environment variables
+# Set these in your ~/.zshrc.local or environment:
+#   export AWS_VAULT_PROFILE="your_profile_name"
+#   export AWS_VAULT_1P_ITEM="AWS"  # 1Password item name for OTP
+if command -v aws-vault &> /dev/null && command -v op &> /dev/null; then
+    if [[ -n "$AWS_VAULT_PROFILE" ]]; then
+        alias av="aws-vault exec --duration=1h ${AWS_VAULT_PROFILE} --mfa-token=\$(op item get \"${AWS_VAULT_1P_ITEM:-AWS}\" --otp)"
+    fi
+fi
 
 alias docker=podman

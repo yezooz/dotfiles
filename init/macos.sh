@@ -18,7 +18,19 @@ function add_path() {
 
 # Homebrew
 if [[ ! "$(type -P brew)" ]]; then
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    echo "Installing Homebrew..."
+    echo "⚠️  WARNING: This will download and execute the official Homebrew install script."
+    echo "⚠️  Review the script at: https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+    echo ""
+    read -p "Continue with Homebrew installation? (y/N) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    else
+        echo "Skipping Homebrew installation. Install manually with:"
+        echo "  /bin/bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+        exit 1
+    fi
 fi
 
 # brew install git openssh fzf tree openssl python cmake wget freetype htop
@@ -27,7 +39,17 @@ fi
 # Zsh
 if [[ ! "$(type -P zsh)" ]]; then
     brew install zsh
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+    # Install Oh-My-Zsh manually (safer than curl | sh)
+    if [[ ! -d ~/.oh-my-zsh ]]; then
+        echo "Installing Oh-My-Zsh..."
+        git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
+        # Note: Not running the install script to avoid remote code execution
+        # The zshrc from dotfiles will configure Oh-My-Zsh
+    else
+        echo "Oh-My-Zsh already installed"
+    fi
+
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
 
 	git clone https://github.com/TamCore/autoupdate-oh-my-zsh-plugins.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autoupdate

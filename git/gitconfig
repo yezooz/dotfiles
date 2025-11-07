@@ -46,7 +46,10 @@
 	tree = log --graph --decorate --pretty=oneline --abbrev-commit --all
 	hist = !tig
 	myhist = !git log --author=\"$(git config user.name)\" --format=%H |xargs git show --name-only --format=-------------%n%Cred%s%Creset%n%Cblue%h%Creset
-	trim = !git remote prune origin && git repack && git prune-packed && git reflog expire --expire=1.month.ago && git gc --aggressive && git branch | grep -v -E 'master|main|development|integration|production' | xargs git branch -D
+	# Safe cleanup: prunes remote branches and deletes merged local branches only
+	# Use 'trim-force' if you need to delete unmerged branches (dangerous!)
+	trim = !git remote prune origin && git repack && git prune-packed && git reflog expire --expire=1.month.ago && git gc --aggressive && git branch --merged | grep -v -E '\\*|master|main|development|integration|production' | xargs -r git branch -d
+	trim-force = !echo "⚠️  WARNING: This will FORCE DELETE unmerged branches!" && read -p "Continue? (y/N): " confirm && [ \"$confirm\" = "y" ] && git remote prune origin && git repack && git prune-packed && git reflog expire --expire=1.month.ago && git gc --aggressive && git branch | grep -v -E '\\*|master|main|development|integration|production' | xargs -r git branch -D
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
