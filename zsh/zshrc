@@ -64,7 +64,6 @@ plugins=(
   zsh-syntax-highlighting
   zsh-autosuggestions
   zsh-interactive-cd
-  zsh-window-title
   # python
   # zsh-nvm
   # aws
