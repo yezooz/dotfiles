@@ -41,7 +41,7 @@ if is_macos; then
     brew install --cask karabiner-elements  # Keyboard customization
     brew install --cask anki            # Flashcard learning app
     brew install --cask dictionaries    # Dictionary app
-    brew install --cask kindle          # eBook reader
+    # Kindle is installed via Mac App Store (see MAC APP STORE APPS section below)
 
     # ========================================
     # COMMUNICATION
@@ -70,30 +70,19 @@ if is_macos; then
     brew install yt-dlp                 # YouTube downloader
     brew install mas                    # Mac App Store CLI
 
-    # ========================================
-    # MAC APP STORE APPS
-    # ========================================
-    e_arrow "Installing Mac App Store Apps"
-    mas install 1545870783 # Color Picker
-    mas install 1147396723 # WhatsApp
-    mas install 1006087419 # SnippetsLab (code snippets)
-    mas install 419330170  # Moom (window manager)
-    mas install 1464122853 # NextDNS
-    mas install 1596283165 # rcmd (app switcher)
-    mas install 425424353  # Unarchiver
-    mas install 1532419400 # MeetingBar (calendar in menu bar)
-    mas install 1518425043 # Boop (text transformer)
-    mas install 1526042938 # Tomito (Pomodoro timer)
-    mas install 990588172  # Gestimer (simple timer)
-    mas install 904280696  # Things (task manager)
-
     e_success "Desktop applications installation complete!"
 
     echo ""
-    e_arrow "Note: The following apps are not available via Homebrew and must be installed manually:"
+    e_arrow "Note: The following apps are not available via Homebrew:"
+    echo ""
+    echo "Mac App Store apps (if 'mas install' failed above):"
+    echo "  Open the Mac App Store and search for these apps, or use these direct links:"
+    echo "  • Kindle, Color Picker, WhatsApp, SnippetsLab, Moom, NextDNS,"
+    echo "  • rcmd, Unarchiver, MeetingBar, Boop, Tomito, Gestimer, Things"
+    echo ""
+    echo "Other apps to install manually:"
     echo "  • iTerm.app - https://iterm2.com/"
     echo "  • Visual Studio Code.app - https://code.visualstudio.com/"
-    echo "  • Docker.app - https://www.docker.com/products/docker-desktop"
     echo "  • Wispr Flow.app - https://wispr.ai/"
     echo "  • Flow.app (Task manager) - Install manually"
 

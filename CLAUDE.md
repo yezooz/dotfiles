@@ -97,11 +97,11 @@ This is a personal dotfiles repository that configures development environments 
   - **Code Editors**: jupyterlab-app, typora
 - `init/desktop_tools.sh` - Desktop applications (browsers, productivity, media)
   - Browsers: Chrome, Brave Browser, Tor Browser
-  - Productivity: Alfred, 1Password, Karabiner Elements, Anki, Dictionaries, Kindle
+  - Productivity: Alfred, 1Password, Karabiner Elements, Anki, Dictionaries
   - Communication: Slack, Signal, Zoom
   - Media: VLC, Spotify, Pocket Casts, Transmission
   - Utilities: balenaEtcher, Focusrite Control 2
-  - Mac App Store apps (via `mas`)
+  - Mac App Store apps (attempted via `mas`, often fails - manual install required)
   - Manual installs: iTerm2, VS Code, Docker Desktop, Wispr Flow, Flow
 - `init/npm_packages.sh` - NPM global packages
   - @openai/codex, @playwright/mcp, yarn
@@ -250,6 +250,22 @@ source ~/.zshrc
 # or
 reload
 ```
+
+### Troubleshooting
+
+**Mac App Store Installation Issues**:
+
+The `mas` (Mac App Store CLI) tool frequently fails on modern macOS versions due to Apple's restrictions. If you see installation errors:
+
+1. **Expected behavior**: The script will attempt `mas install` but won't fail completely if it doesn't work
+2. **Solution**: Install apps manually from the Mac App Store GUI
+3. **App IDs**: The script displays all App Store app IDs - you can search for them in the Mac App Store or try `mas install <ID>` individually
+4. **Alternative**: Use the App Store app directly - search by name (Kindle, Moom, Things, etc.)
+
+Common `mas` errors:
+- `Error Domain=PKInstallErrorDomain Code=201` - Install via GUI instead
+- Authentication failures - Sign in to App Store, then retry
+- "Could not establish connection" - Use GUI installation
 
 ## Important Configuration Details
 
@@ -522,7 +538,6 @@ This section documents all packages installed by the dotfiles, organized by inst
 - karabiner-elements - Keyboard customization
 - anki - Flashcard learning app
 - dictionaries - Dictionary application
-- kindle - Amazon Kindle eBook reader
 
 **Communication**:
 - slack - Team communication
@@ -551,7 +566,11 @@ This section documents all packages installed by the dotfiles, organized by inst
 - balenaetcher - USB/SD card flasher
 - focusrite-control-2 - Focusrite audio interface control software
 
-**Mac App Store Apps** (installed via mas):
+**Mac App Store Apps** (manual installation recommended - `mas install` often fails):
+
+Note: The script attempts to install these via `mas`, but this frequently fails on modern macOS versions. Install manually from the Mac App Store if needed:
+
+- Kindle (302584613) - eBook reader
 - Color Picker (1545870783)
 - WhatsApp (1147396723)
 - SnippetsLab (1006087419) - Code snippets manager
@@ -565,7 +584,7 @@ This section documents all packages installed by the dotfiles, organized by inst
 - Gestimer (990588172) - Simple timer
 - Things (904280696) - Task manager
 
-**Manually Installed Apps** (not available via Homebrew):
+**Other Manually Installed Apps**:
 - iTerm2 - Terminal emulator (https://iterm2.com/)
 - Visual Studio Code - Code editor (https://code.visualstudio.com/)
 - Docker Desktop - Container platform (https://www.docker.com/products/docker-desktop)
