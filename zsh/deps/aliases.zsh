@@ -64,6 +64,8 @@ alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.ar
 # Lock the screen (when going AFK)
 alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 
+alias claude-yolo="claude --allow-dangerously-skip-permissions"
+
 # Kube
 if [ -x "$(command -v kubectl)" ]; then
     alias k="kubectl"
@@ -79,11 +81,6 @@ fi
 # dstask
 if [ -x "$(command -v dstask)" ]; then
     alias t="dstask"
-fi
-
-# Cursor
-if [ -f "/Applications/Cursor.app/Contents/MacOS/Cursor" ]; then
-    alias cursor="/Applications/Cursor.app/Contents/MacOS/Cursor"
 fi
 
 # AWS Vault - configurable via environment variables
