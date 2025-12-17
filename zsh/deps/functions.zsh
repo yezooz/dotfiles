@@ -20,6 +20,18 @@ function g() {
   fi
 }
 
+function gwr() {
+  git worktree remove "$1" && git branch -D "$1"
+}
+
+function gwrf() {
+  git worktree remove --force "$1" && git branch -D "$1"
+}
+
+function gwa() {
+  git worktree add "$1" ${2:+"$2"}
+}
+
 # Sync forked git repo
 function sync() {
   if [[ ! -d .git ]]; then
@@ -31,28 +43,6 @@ function sync() {
   git checkout master && \
   git merge upstream/master && \
   git push
-}
-
-function clone() {
-  if [[ $# -eq 0 ]]; then
-    echo "Usage: git clone <repo>"
-    return 1
-  fi
-
-  git clone "$@"
-}
-
-# Pull git repo (stash local changes)
-function pull() {
-  if [[ ! -d .git ]]; then
-    echo "Not a git repository."
-    return 1
-  fi
-  
-  git stash push --include-untracked --quiet && \
-  git pull --rebase && \
-  git remote prune origin && \
-  git stash pop --quiet
 }
 
 # Install Node and PHP dependencies
