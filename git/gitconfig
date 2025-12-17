@@ -25,6 +25,7 @@
 [pager]
 	status = true
 	show-branch = true
+	branch = false
 [format]
 	numbered = auto
 [alias]
