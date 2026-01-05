@@ -49,17 +49,34 @@ deps=(path.zsh exports.zsh aliases.zsh functions.zsh autocomplete.zsh bindkeys.z
 is_macos && deps+=(macos.zsh)
 is_linux && deps+=(linux.zsh)
 
-[[ -n $DEBUG ]] && e_header "Sourcing zsh files from dotfiles..."
+if [[ -n $DEBUG ]]; then
+  e_header "Sourcing zsh files from dotfiles..."
+  # Start timer (milliseconds)
+  local start_time=$(($(date +%s%N)/1000000))
+fi
 
 # Load the shell dotfiles, and then some:
 for file in "${deps[@]}"; do
   f="$DOTFILES/zsh/deps/$file"
+
+  if [[ -n $DEBUG ]]; then
+    local file_start=$(($(date +%s%N)/1000000))
+  fi
+
 	[[ -f $f ]] && source $f || e_error "File not found: $f"
 
-  [[ -n $DEBUG ]] && e_arrow "$f done"
+  if [[ -n $DEBUG ]]; then
+    local file_end=$(($(date +%s%N)/1000000))
+    local file_duration=$((file_end - file_start))
+    e_arrow "$file done (${file_duration}ms)"
+  fi
 done;
 
-[[ -n $DEBUG ]] && e_success "Done."
+if [[ -n $DEBUG ]]; then
+  local end_time=$(($(date +%s%N)/1000000))
+  local total_duration=$((end_time - start_time))
+  e_success "All files sourced in ${total_duration}ms"
+fi
 
 fpath+="$DOTFILES/zsh/zfunc"
 fpath+="$BREW_PREFIX/share/zsh/site-functions"
@@ -73,58 +90,21 @@ fi
 # If this file was being sourced, exit now.
 [[ "$1" == "source" ]] && return
 
-# Copy files.
-# function copy_header() { e_header "Copying files into home directory"; }
-# function copy_test() {
-#   if [[ -e "$2" && ! "$(cmp "$1" "$2" 2> /dev/null)" ]]; then
-#     echo "same file"
-#   elif [[ "$1" -ot "$2" ]]; then
-#     echo "destination file newer"
-#   fi
-# }
-# function copy_do() {
-#   e_success "Copying ~/$1."
-#   cp "$2" ~/
-# }
-
-# Link files.
-# function link_header() { e_header "Linking files into home directory"; }
-# function link_test() {
-#   [[ "$1" -ef "$2" ]] && echo "same file"
-# }
-# function link_do() {
-#   e_success "Linking ~/$1."
-#   ln -sf ${2#$HOME/} ~/
-# }
-
-# Link config files.
-# function config_header() { e_header "Linking files into ~/.config directory"; }
-# function config_dest() {
-#   echo "$HOME/.config/$base"
-# }
-# function config_test() {
-#   [[ "$1" -ef "$2" ]] && echo "same file"
-# }
-# function config_do() {
-#   e_success "Linking ~/.config/$1."
-#   ln -sf ../${2#$HOME/} ~/.config/
-# }
-
 # Ensure that we can actually, like, compile anything.
-if [[ ! "$(type -P gcc)" ]] && is_macos; then
+if ! command -v gcc &>/dev/null && is_macos; then
   e_error "XCode or the Command Line Tools for XCode must be installed first."
   exit 1
 fi
 
 # If Git is not installed, install it (Ubuntu only, since Git comes standard
 # with recent XCode or CLT)
-if [[ ! "$(type -P git)" ]] && is_ubuntu; then
+if ! command -v git &>/dev/null && is_ubuntu; then
   e_header "Installing Git"
   sudo apt-get -qq install git-core
 fi
 
 # If Git isn't installed by now, something exploded. We gots to quit!
-if [[ ! "$(type -P git)" ]]; then
+if ! command -v git &>/dev/null; then
   e_error "Git should be installed. It isn't. Aborting."
   exit 1
 fi
@@ -196,33 +176,6 @@ if [[ "${APPLY_MACOS_DEFAULTS}" == "yes" ]] && is_macos && [[ -f "$DOTFILES/mac/
   /bin/bash "$DOTFILES/mac/macos_defaults.sh"
   e_success "macOS defaults applied"
 fi
-
-# ZPLUG (commented out, kept for reference)
-
-# export ZPLUG_HOME=$HOME/.zplug
-# [ ! -d "$ZPLUG_HOME" ] && mkdir -p "$ZPLUG_HOME"
-# export ZPLUG_BIN=$ZPLUG_HOME/bin
-# [ ! -d "$ZPLUG_BIN" ] && mkdir -p "$ZPLUG_BIN"
-
-# export ZPLUG_HOME=$BREW_PREFIX/opt/zplug
-# export ZPLUG_USE_CACHE=false
-
-# source $ZPLUG_HOME/init.zsh
-
-# source $DOTFILES/zsh/files/zplug.zsh
-
-# Install plugins if there are plugins that have not been installed
-# if ! zplug check --verbose; then
-#     printf "Install? [y/N]: "
-#     if read -q; then
-#         echo; zplug install
-#     fi
-# fi
-# zplug check || zplug install
-
-# Then, source plugins and add commands to $PATH
-# zplug load --verbose
-# zplug load
 
 # All done!
 e_header "All done!"

@@ -1,0 +1,62 @@
+# Local Zsh Configuration (machine-specific)
+# Copy this file to ~/.zshrc.local and customize for your machine
+# This file is NOT version controlled - safe for secrets and personal settings
+
+# ========================================
+# Work-specific settings
+# ========================================
+
+# AWS Vault configuration
+# export AWS_VAULT_PROFILE="your_profile_name"
+# export AWS_VAULT_1P_ITEM="AWS"  # 1Password item name for OTP
+
+# ========================================
+# User settings
+# ========================================
+
+# Override default user for prompt (hides user@hostname when matching)
+# export DEFAULT_USER="yourname"
+
+# ========================================
+# Machine-specific paths
+# ========================================
+
+# Add custom directories to PATH
+# path=(/custom/bin /another/path $path)
+
+# ========================================
+# Machine-specific aliases
+# ========================================
+
+# Project shortcuts
+# alias work="cd ~/work/important-project"
+# alias personal="cd ~/personal/side-project"
+
+# ========================================
+# Override environment variables
+# ========================================
+
+# Override default editor
+# export EDITOR="nano"
+# export VISUAL="code"
+
+# Node.js settings (if not using NVM)
+# export NODE_OPTIONS="--max-old-space-size=4096"
+
+# ========================================
+# Development environment overrides
+# ========================================
+
+# Database connection strings (never commit these!)
+# export DATABASE_URL="postgresql://localhost/mydb"
+
+# API keys (never commit these!)
+# export OPENAI_API_KEY="sk-..."
+
+# ========================================
+# NVM settings
+# ========================================
+
+# Disable NVM lazy loading (load immediately on shell startup)
+# Uncomment if you need Node.js available immediately
+# export NVM_LAZY_LOAD=0

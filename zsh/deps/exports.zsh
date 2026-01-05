@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#     export EDITOR="vim"
-# else
-#     export EDITOR="subl -w"
-# fi
-
 export EDITOR="vim"
 export COLORTERM="truecolor"
 export MANPATH="/usr/local/man:$MANPATH"
@@ -28,23 +21,20 @@ export LC_ALL="en_US.UTF-8"
 # Highlight section titles in manual pages.
 export LESS_TERMCAP_md="${yellow}"
 
-# Don’t clear the screen after quitting a manual page.
+# Don't clear the screen after quitting a manual page.
 export MANPAGER="less -X"
-
-# Avoid issues with `gpg` as installed via Homebrew.
-# https://stackoverflow.com/a/42265848/96656
-# export GPG_TTY=$(tty)
 
 # Hide the "default interactive shell is now zsh" warning on macOS.
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
-# SSH key path - use Ed25519 keys (more secure than deprecated DSA/RSA)
-# export SSH_KEY_PATH="$HOME/.ssh/id_ed25519"
-
 export HOMEBREW_NO_ANALYTICS=1
-# export BREW_PREFIX=$(brew --prefix)
 
-# export DOCKER_HOST='unix:///var/folders/36/0h73z8ws6xld1c38dxbh4_2h0000gn/T/podman/podman-machine-default-api.sock'
+# Default user for Powerlevel10k prompt (hides user@hostname when matching)
+# Override in ~/.zshrc.local if needed
+export DEFAULT_USER="${DEFAULT_USER:-$USER}"
+
+# AWS Vault profile - Override in ~/.zshrc.local for work profiles
+# export AWS_VAULT_PROFILE="${AWS_VAULT_PROFILE:-default}"
 
 # Git configuration - Set your email address here
 # This will be used by Git for commits and authoring
@@ -53,6 +43,33 @@ export HOMEBREW_NO_ANALYTICS=1
 # export GIT_AUTHOR_EMAIL="$USER_EMAIL"
 # export GIT_COMMITTER_EMAIL="$USER_EMAIL"
 
+# NVM (Node Version Manager) - Lazy Loaded for Performance
+# Loading NVM synchronously adds ~300-500ms to shell startup.
+# We use lazy loading: NVM initializes only when you first run
+# node, npm, npx, or nvm commands, providing instant shell startup.
+# To force immediate load: nvm --version
+# To disable lazy loading: export NVM_LAZY_LOAD=0
 export NVM_DIR="$HOME/.nvm"
-    [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-    [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+# Check if lazy loading is disabled
+if [[ "${NVM_LAZY_LOAD:-1}" == "0" ]]; then
+  # Load NVM immediately (old behavior)
+  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
+  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+else
+  # Lazy load NVM on first use (~300-500ms savings)
+  _load_nvm() {
+    # Remove wrapper functions
+    unset -f node npm npx nvm _load_nvm
+
+    # Load NVM
+    [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
+    [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+  }
+
+  # Wrapper functions that trigger NVM loading on first use
+  node() { _load_nvm && node "$@" }
+  npm() { _load_nvm && npm "$@" }
+  npx() { _load_nvm && npx "$@" }
+  nvm() { _load_nvm && nvm "$@" }
+fi

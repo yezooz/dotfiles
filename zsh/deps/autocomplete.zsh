@@ -1,5 +1,13 @@
 #!/usr/bin/env zsh
 
+# Optimize completion loading - only regenerate compdump once per day
+autoload -Uz compinit
+if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C  # Skip security check if cache is fresh
+fi
+
 completions=(goto.sh eza kubectx kubens)
 for completion in "${completions[@]}"; do
   c="$BREW_PREFIX/etc/bash_completion.d/${completion}"
@@ -20,11 +28,11 @@ if is_macos; then
     setopt completealiases
   fi
 
-  if [ -x "$(command -v vault)" ]; then
+  if command -v vault &>/dev/null; then
     complete -o nospace -C /usr/local/bin/vault vault
   fi
 
-  if [ -x "$(command -v op)" ]; then
+  if command -v op &>/dev/null; then
     if [[ -n "$ZSH_VERSION" ]]; then
       eval "$(op completion zsh)"; compdef _op op
     fi

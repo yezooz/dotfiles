@@ -15,5 +15,9 @@ tmp/**/*
 # Installation configuration (user-specific)
 .install-config
 
+# Local overrides (machine-specific settings, not version controlled)
+*.local
+.zshrc.local
+
 # Cache directories
 caches/

@@ -21,7 +21,7 @@ alias path='echo $PATH | tr -s ":" "\n"'
 command -v vim > /dev/null && alias vi="$(which vim)"
 
 # alias ll="ls -lahF --color=auto"
-if [ -x "$(command -v eza)" ]; then
+if command -v eza &>/dev/null; then
     alias ls="eza --icons --group-directories-first --all"
     alias ll="eza --icons --group-directories-first --long --all"
     alias lt="eza --tree --long --all --header --group"
@@ -34,10 +34,15 @@ alias ln="ln -v"
 alias mkdir="mkdir -p"
 alias mk="mkdir -p "$@" && cd "$@""
 
-# Enable aliases to be sudo’ed
+# Enable aliases to be sudo'ed
 alias sudo="sudo "
 alias dotfiles="cd $DOTFILES"
 alias reload="clear && exec zsh"
+
+# Performance monitoring
+alias zsh-benchmark='for i in {1..10}; do time zsh -i -c exit; done'
+alias zsh-profile='PROFILE_ZSH=1 zsh -i -c exit'
+alias zsh-debug='DEBUG=1 source ~/.zshrc'
 
 alias g='git'
 alias gs='git status'
@@ -85,19 +90,19 @@ alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resource
 alias claude-yolo="claude --allow-dangerously-skip-permissions"
 
 # Kube
-if [ -x "$(command -v kubectl)" ]; then
+if command -v kubectl &>/dev/null; then
     alias k="kubectl"
 fi
 
 # youtube-dl
-if [ -x "$(command -v yt-dlp)" ]; then
+if command -v yt-dlp &>/dev/null; then
     alias yt='yt-dlp -ciw -v -o "%(title)s.%(ext)s" --restrict-filenames'
     alias yt-mp3='yt-dlp -ciw -v -o "%(title)s.%(ext)s" --extract-audio --audio-format mp3 --audio-quality 0 --restrict-filenames'
     alias yt-mp4='yt-dlp -ciw -v -o "%(title)s.%(ext)s" --merge-output-format mp4 --restrict-filenames'
 fi
 
 # dstask
-if [ -x "$(command -v dstask)" ]; then
+if command -v dstask &>/dev/null; then
     alias t="dstask"
 fi
 
