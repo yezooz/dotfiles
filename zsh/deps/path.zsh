@@ -11,14 +11,14 @@ if is_macos; then
 
   # Go
   if [ -x "$(command -v go)" ]; then
-    export GOROOT="/usr/local/opt/go/libexec"
+    export GOROOT="/opt/homebrew/opt/go/libexec"
     export GOPATH="$HOME/go"
   fi
-    
+  
   # Node
-  if [ -d "/usr/local/opt/node@20/bin" ]; then
-    p+="/usr/local/opt/node@20/bin"
-  fi
+  # if [ -d "/opt/homebrew/opt/node@22/bin" ]; then
+  #   p+="/opt/homebrew/opt/node@22/bin"
+  # fi
   
   # Ruby
   if [ -d "/opt/homebrew/opt/ruby/bin" ]; then
@@ -30,8 +30,8 @@ if is_macos; then
     p+="/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
   fi
 
-  if [ -f "/usr/local/opt/mysql-client/bin/mysql" ]; then
-    p+="/usr/local/opt/mysql-client/bin"
+  if [ -f "/opt/homebrew/opt/mysql-client/bin/mysql" ]; then
+    p+="/opt/homebrew/opt/mysql-client/bin"
   fi
   
   if [ -f "/usr/local/opt/sqlite/bin/sqlite3" ]; then
