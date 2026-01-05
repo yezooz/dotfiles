@@ -74,12 +74,13 @@ function gwa() {
   fi
 
   # Verify source files exist
-  local creds_pattern="${source_worktree}/config/credentials/development.*"
+  local creds_dir="${source_worktree}/config/credentials"
   local master_key="${source_worktree}/config/master.key"
 
-  # Check for development credentials (at least one file matching pattern)
-  if ! ls ${creds_pattern} 1> /dev/null 2>&1; then
-    e_error "Development credentials not found: ${creds_pattern}"
+  # Check for development credentials (both key and encrypted file)
+  if [[ ! -f "$creds_dir/development.key" ]] || [[ ! -f "$creds_dir/development.yml.enc" ]]; then
+    e_error "Development credentials not found in: $creds_dir"
+    e_error "Expected: development.key and development.yml.enc"
     return 1
   fi
 
@@ -91,7 +92,7 @@ function gwa() {
 
   # Copy development credentials
   e_arrow "Copying development credentials from ${source_worktree}..."
-  if ! cp ${creds_pattern} config/credentials/; then
+  if ! cp "$creds_dir"/development.* config/credentials/; then
     e_error "Failed to copy development credentials"
     return 1
   fi
