@@ -54,7 +54,7 @@ alias gfa='git fetch --all'
 
 alias gw='git worktree'
 alias gwl='git worktree list'
-alias gwa='git worktree add'
+# alias gwa='git worktree add' # Removed - function in functions.zsh provides enhanced functionality
 alias gwr='git worktree remove'
 
 # IP addresses
