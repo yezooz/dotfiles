@@ -6,6 +6,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 DEFAULT_USER="marek"
+AWS_VAULT_PROFILE="assertis_Admin"
 
 export ZSH="$HOME/.oh-my-zsh"
 # export ZSH_CUSTOM="$ZSH/custom"
@@ -86,10 +87,5 @@ source $DOTFILES/bin/dotfiles "source"
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
 is_linux && return
-
-# add-zsh-hook -Uz chpwd(){ source <(tea -Eds) }  #tea
-
-# npm global path
-export PATH="/Users/marek/.npm-global/bin:$PATH"
 
 . "$HOME/.local/bin/env"
