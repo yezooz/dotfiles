@@ -29,7 +29,91 @@ function gwrf() {
 }
 
 function gwa() {
-  git worktree add "$1" ${2:+"$2"}
+  # Validate arguments
+  if [[ $# -eq 0 ]]; then
+    e_error "Usage: gwa <path> [<branch>]"
+    return 1
+  fi
+
+  local worktree_path="$1"
+  local branch_arg="${2}"
+
+  # Create the worktree
+  e_arrow "Creating worktree at: $worktree_path"
+  if ! git worktree add "$worktree_path" ${branch_arg:+"$branch_arg"}; then
+    e_error "Failed to create worktree"
+    return 1
+  fi
+
+  e_success "Worktree created successfully"
+
+  # Navigate to the new worktree
+  cd "$worktree_path" || {
+    e_error "Failed to navigate to worktree directory: $worktree_path"
+    return 1
+  }
+
+  # Check if this is a Rails project
+  if [[ ! -d "config/credentials" ]]; then
+    e_arrow "Not a Rails project (no config/credentials/), skipping Rails setup"
+    return 0
+  fi
+
+  e_arrow "Rails project detected, setting up credentials and MCP..."
+
+  # Determine source worktree (prefer master, fallback to main)
+  local source_worktree=""
+  if [[ -d "../master/config" ]]; then
+    source_worktree="../master"
+  elif [[ -d "../main/config" ]]; then
+    source_worktree="../main"
+  else
+    e_error "Could not find source worktree (checked ../master and ../main)"
+    e_error "Please ensure you have a 'master' or 'main' worktree with credentials"
+    return 1
+  fi
+
+  # Verify source files exist
+  local creds_pattern="${source_worktree}/config/credentials/development.*"
+  local master_key="${source_worktree}/config/master.key"
+
+  # Check for development credentials (at least one file matching pattern)
+  if ! ls ${creds_pattern} 1> /dev/null 2>&1; then
+    e_error "Development credentials not found: ${creds_pattern}"
+    return 1
+  fi
+
+  # Check for master key
+  if [[ ! -f "$master_key" ]]; then
+    e_error "Master key not found: $master_key"
+    return 1
+  fi
+
+  # Copy development credentials
+  e_arrow "Copying development credentials from ${source_worktree}..."
+  if ! cp ${creds_pattern} config/credentials/; then
+    e_error "Failed to copy development credentials"
+    return 1
+  fi
+  e_success "Development credentials copied"
+
+  # Copy master key
+  e_arrow "Copying master.key from ${source_worktree}..."
+  if ! cp "$master_key" config/; then
+    e_error "Failed to copy master.key"
+    return 1
+  fi
+  e_success "Master key copied"
+
+  # Add playwright MCP server
+  e_arrow "Adding Playwright MCP server..."
+  if ! claude mcp add playwright npx @playwright/mcp@latest; then
+    e_error "Failed to add Playwright MCP server"
+    return 1
+  fi
+  e_success "Playwright MCP server added"
+
+  e_success "Rails worktree setup complete!"
 }
 
 # Sync forked git repo
