@@ -43,7 +43,7 @@ if is_macos; then
     p+="/usr/local/opt/libpq/bin"
   fi
 
-  p+="/Users/marek/.npm-global/bin"
+  p+="$HOME/.npm-global/bin"
 
   path=($p $path)
 fi

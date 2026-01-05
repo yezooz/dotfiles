@@ -133,7 +133,7 @@ function sync() {
 # Install Node and PHP dependencies
 function installdeps() {
   if [ -f "package.json" ]; then
-    if [ -x "$(command -v yarn)" ]; then
+    if command -v yarn &>/dev/null; then
       yarn install
     else
       npm install
@@ -148,7 +148,7 @@ function installdeps() {
 # Bump Node and PHP dependencies
 function bumpdeps() {
   if [ -f "package.json" ]; then
-    if [ -x "$(command -v yarn)" ]; then
+    if command -v yarn &>/dev/null; then
       yarn update
     else
       npm update
@@ -204,30 +204,30 @@ function upgrade() {
   fi
 
   # Update Homebrew (Cask) & packages
-  if [ -x "$(command -v brew)" ]; then
+  if command -v brew &>/dev/null; then
     brew update
     brew upgrade
   fi
-  
+
   # Update npm & packages
-  if [ -x "$(command -v npm)" ]; then
+  if command -v npm &>/dev/null; then
     npm install npm@latest -g
     npm update -g
   fi
-  
+
   # Update Ruby & gems
-  if [ -x "$(command -v gem)" ]; then
+  if command -v gem &>/dev/null; then
     gem update —system
     gem update
   fi
-  
+
   # Update Composer packages
-  if [ -x "$(command -v composer)" ]; then
+  if command -v composer &>/dev/null; then
     composer global update
   fi
 
   # Update uv tools
-  if [ -x "$(command -v uv)" ]; then
+  if command -v uv &>/dev/null; then
     uv tool upgrade --all
   fi
 
