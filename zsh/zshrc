@@ -3,6 +3,13 @@ if [[ -n "$PROFILE_ZSH" ]]; then
   zmodload zsh/zprof
 fi
 
+# Loading sequence:
+#   1. P10k instant prompt (fast, minimal UI)
+#   2. Oh-My-Zsh initialization
+#   3. Dotfiles (via bin/dotfiles "source")
+#   4. P10k full configuration
+#   5. Local overrides (~/.zshrc.local)
+#
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.

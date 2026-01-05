@@ -110,6 +110,76 @@ When modifying installation scripts:
 - Be idempotent (safe to run multiple times)
 - Check for existing installations before installing
 
+## Performance Optimizations
+
+### Startup Time Targets
+- **Target:** ~150-200ms shell startup time
+- **Current:** ~230ms (measured via `zsh-benchmark`)
+- **Baseline (before optimizations):** ~500ms
+
+### Key Optimizations
+
+**NVM Lazy Loading** (~300-500ms savings)
+- Defers NVM initialization until first Node command (`node`, `npm`, `npx`, `nvm`)
+- Provides instant shell startup while preserving all functionality
+- Disable lazy loading: `export NVM_LAZY_LOAD=0` in `~/.zshrc.local`
+- Implementation: `zsh/deps/exports.zsh`
+
+**Completion Caching** (~20-40ms savings)
+- Caches completion dump for 24 hours
+- Skips `compinit` security check when cache is fresh (< 24h old)
+- Automatically regenerates when stale
+- Implementation: `zsh/deps/autocomplete.zsh`
+
+**P10k Prompt Optimization** (~50-100ms savings)
+- Reduced right prompt from 21 to 8 essential segments
+- Removed redundant version managers (nodenv, nodeenv, node_version)
+- Removed rarely-used segments (toolbox, vim_shell, midnight_commander, terraform, etc.)
+- Kept essential: status, timing, jobs, virtualenv, nvm, k8s, aws, context
+- Re-enable specific segments by uncommenting in `zsh/p10k.zsh`
+
+**Command Existence Check Optimization** (~10-20ms savings)
+- Standardized on fast `command -v foo &>/dev/null` pattern
+- Replaced slower `[ -x "$(command -v foo)" ]` and `type -P` patterns
+- Optimized 21+ checks across configuration files
+
+### Performance Testing
+
+```bash
+# Benchmark average startup time (10 runs)
+zsh-benchmark
+
+# Profile to identify bottlenecks
+zsh-profile
+
+# Debug file loading times
+DEBUG=1 source ~/.zshrc
+
+# Health check
+dotfiles-health  # or: dfh
+```
+
+### Performance Regression Prevention
+- Always test startup time before/after configuration changes
+- Keep P10k right prompt under 10 segments
+- Lazy-load heavy tools (NVM, RVM, pyenv, etc.) when possible
+- Avoid synchronous network calls during shell startup
+- Use completion caching for large completion sets
+
+### Local Overrides
+
+Machine-specific settings that don't belong in version control:
+- Create `~/.zshrc.local` for personal/work-specific configuration
+- Template available at `zsh/zshrc.local.example`
+- Already gitignored - safe for secrets and API keys
+- Loaded last in sequence, can override any setting
+
+Example use cases:
+- Work AWS profiles: `export AWS_VAULT_PROFILE="work_profile"`
+- Machine-specific paths
+- Personal aliases and functions
+- API keys and tokens
+
 ## Important Details
 
 ### Installation Configuration
