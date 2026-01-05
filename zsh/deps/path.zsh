@@ -2,6 +2,7 @@
 
 path=($DOTFILES/bin $path $HOME/.local/bin)
 
+
 if is_macos; then
   p=("/usr/local/sbin")
 
@@ -41,6 +42,8 @@ if is_macos; then
   if [ -f "/usr/local/opt/libpq/bin" ]; then
     p+="/usr/local/opt/libpq/bin"
   fi
+
+  p+="/Users/marek/.npm-global/bin"
 
   path=($p $path)
 fi
