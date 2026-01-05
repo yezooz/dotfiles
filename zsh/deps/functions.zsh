@@ -28,6 +28,7 @@ function gwrf() {
   git worktree remove --force "$1" && git branch -D "$1"
 }
 
+# Git worktree add with automatic project setup
 function gwa() {
   # Validate arguments
   if [[ $# -eq 0 ]]; then
@@ -53,13 +54,29 @@ function gwa() {
     return 1
   }
 
-  # Check if this is a Rails project
-  if [[ ! -d "config/credentials" ]]; then
-    e_arrow "Not a Rails project (no config/credentials/), skipping Rails setup"
-    return 0
-  fi
+  # Auto-detect project type and run setup
+  _worktree_auto_setup
+}
 
-  e_arrow "Rails project detected, setting up credentials and MCP..."
+# Auto-detect and run project-specific setup
+function _worktree_auto_setup() {
+  if _is_rails_project; then
+    _worktree_setup_rails
+  fi
+  # Add more project types here as needed:
+  # elif _is_node_project; then
+  #   _worktree_setup_node
+  # fi
+}
+
+# Check if current directory is a Rails project
+function _is_rails_project() {
+  [[ -d "config/credentials" ]] && [[ -f "Gemfile" ]]
+}
+
+# Rails-specific worktree setup
+function _worktree_setup_rails() {
+  e_arrow "Rails project detected, setting up credentials..."
 
   # Determine source worktree (prefer master, fallback to main)
   local source_worktree=""
@@ -106,15 +123,22 @@ function gwa() {
   fi
   e_success "Master key copied"
 
-  # Add playwright MCP server
-  e_arrow "Adding Playwright MCP server..."
-  if ! claude mcp add playwright npx @playwright/mcp@latest; then
-    e_error "Failed to add Playwright MCP server"
-    return 1
-  fi
-  e_success "Playwright MCP server added"
+  # Optional: Add MCP server (only if claude CLI exists)
+  _worktree_setup_mcp
 
   e_success "Rails worktree setup complete!"
+}
+
+# MCP setup (optional, only runs if claude CLI exists)
+function _worktree_setup_mcp() {
+  if command -v claude &>/dev/null; then
+    e_arrow "Adding Playwright MCP server..."
+    if claude mcp add playwright npx @playwright/mcp@latest 2>/dev/null; then
+      e_success "Playwright MCP server added"
+    else
+      e_arrow "MCP server setup skipped (non-critical)"
+    fi
+  fi
 }
 
 # Sync forked git repo
@@ -241,7 +265,7 @@ function colormap() {
   for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\n'}; done
 }
 
-# Boop; plays a happy sound if the previous command exited successfully 
+# Boop; plays a happy sound if the previous command exited successfully
 # (i.e., exited with status code 0) and a sad sound otherwise.
 function boop () {
    local last="$?"
@@ -252,3 +276,101 @@ function boop () {
    fi
    $(exit "$last")
 }
+
+# Check dotfiles health and configuration
+function dotfiles-health() {
+  e_header "Dotfiles Health Check"
+
+  local errors=0
+
+  # Check DOTFILES directory
+  if [[ -d "$DOTFILES" ]]; then
+    e_success "DOTFILES directory: $DOTFILES"
+  else
+    e_error "DOTFILES directory not found: $DOTFILES"
+    ((errors++))
+  fi
+
+  # Check if all dependency files exist
+  local missing_deps=()
+  for dep in path.zsh exports.zsh aliases.zsh functions.zsh autocomplete.zsh bindkeys.zsh; do
+    if [[ ! -f "$DOTFILES/zsh/deps/$dep" ]]; then
+      missing_deps+="$dep"
+    fi
+  done
+
+  if [[ ${#missing_deps} -eq 0 ]]; then
+    e_success "All dependency files present (6 files)"
+  else
+    e_error "Missing dependency files: ${missing_deps[*]}"
+    ((errors++))
+  fi
+
+  # Check for local overrides
+  if [[ -f ~/.zshrc.local ]]; then
+    e_success "Local overrides: ~/.zshrc.local found"
+  else
+    e_arrow "Local overrides: None (create ~/.zshrc.local for machine-specific settings)"
+  fi
+
+  # Check Oh-My-Zsh
+  if [[ -d "$ZSH" ]]; then
+    e_success "Oh-My-Zsh: $ZSH"
+  else
+    e_error "Oh-My-Zsh not found: $ZSH"
+    ((errors++))
+  fi
+
+  # Check Powerlevel10k theme
+  if [[ -f "$ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme" ]]; then
+    e_success "Powerlevel10k theme installed"
+  else
+    e_error "Powerlevel10k theme not found"
+    ((errors++))
+  fi
+
+  # Check critical tools
+  local tools=(git vim tmux)
+  is_macos && tools+=(brew)
+
+  for tool in "${tools[@]}"; do
+    if command -v "$tool" &>/dev/null; then
+      e_success "Tool: $tool ($(command -v $tool))"
+    else
+      e_error "Tool not found: $tool"
+      ((errors++))
+    fi
+  done
+
+  # Check NVM
+  if [[ -d "$NVM_DIR" ]]; then
+    e_success "NVM directory: $NVM_DIR"
+    if [[ "${NVM_LAZY_LOAD:-1}" == "1" ]]; then
+      e_arrow "NVM lazy loading: Enabled (for performance)"
+    else
+      e_arrow "NVM lazy loading: Disabled (loads on shell startup)"
+    fi
+  else
+    e_arrow "NVM not installed (optional)"
+  fi
+
+  # Performance check
+  echo
+  e_header "Performance"
+  e_arrow "Run 'zsh-benchmark' to measure shell startup time"
+  e_arrow "Run 'zsh-profile' to profile startup performance"
+  e_arrow "Target: < 300ms startup time"
+
+  # Summary
+  echo
+  if [[ $errors -eq 0 ]]; then
+    e_success "Health check passed! No issues found."
+    return 0
+  else
+    e_error "Health check failed with $errors error(s)"
+    return 1
+  fi
+}
+
+# Shorter alias
+alias dfh='dotfiles-health'

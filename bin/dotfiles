@@ -45,6 +45,14 @@ if [[ ! -d $DOTFILES ]]; then
   e_success "Done."
 fi
 
+# Dependencies loaded in specific order:
+#   1. path.zsh         - Set up PATH before other scripts need commands
+#   2. exports.zsh      - Environment variables needed by aliases/functions
+#   3. aliases.zsh      - Command shortcuts
+#   4. functions.zsh    - Shell functions
+#   5. autocomplete.zsh - Tab completion setup
+#   6. bindkeys.zsh     - Key bindings (depends on functions)
+#   7. macos.zsh/linux.zsh - OS-specific configs (loaded last)
 deps=(path.zsh exports.zsh aliases.zsh functions.zsh autocomplete.zsh bindkeys.zsh)
 is_macos && deps+=(macos.zsh)
 is_linux && deps+=(linux.zsh)
