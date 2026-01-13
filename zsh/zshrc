@@ -90,15 +90,15 @@ typeset -aU path fpath
 
 export DOTFILES=~/.dotfiles
 
-source $DOTFILES/bin/dotfiles "source"
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
-
 # Load local overrides (not version controlled)
 # Use ~/.zshrc.local for machine-specific settings, secrets, work configs
 # See zsh/zshrc.local.example for template
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+source $DOTFILES/bin/dotfiles "source"
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
 is_linux && return
 
