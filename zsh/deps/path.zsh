@@ -24,7 +24,7 @@ if is_macos; then
   # Ruby
   if [ -d "/opt/homebrew/opt/ruby/bin" ]; then
     p+="/opt/homebrew/opt/ruby/bin"
-    p+="/opt/homebrew/lib/ruby/gems/3.4.0/bin"
+    p+="/opt/homebrew/lib/ruby/gems/4.0.0/bin"
   fi
 
   if [ -f "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" ]; then
