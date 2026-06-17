@@ -39,9 +39,36 @@ function gwa() {
   local worktree_path="$1"
   local branch_arg="${2}"
 
+  # Resolve the branch into a ref `git worktree add` can use.
+  # `git worktree add <path> <branch>` only accepts a branch the local repo
+  # already knows, so resolve cheaply (local -> remote-tracking) before falling
+  # back to the network (exists on origin but not fetched), and error if the
+  # branch exists nowhere.
+  local -a wt_args
+  if [[ -z "$branch_arg" ]]; then
+    wt_args=("$worktree_path")
+  elif git show-ref --verify --quiet "refs/heads/$branch_arg"; then
+    wt_args=("$worktree_path" "$branch_arg")
+  elif git show-ref --verify --quiet "refs/remotes/origin/$branch_arg"; then
+    wt_args=(-b "$branch_arg" "$worktree_path" "origin/$branch_arg")
+  elif git ls-remote --exit-code --heads origin "$branch_arg" >/dev/null 2>&1; then
+    e_arrow "Fetching $branch_arg from origin..."
+    # Fetch with an explicit refspec so the remote-tracking ref is created even
+    # when origin has no configured fetch refspec (otherwise only FETCH_HEAD is
+    # written and `origin/$branch_arg` stays unresolvable).
+    if ! git fetch origin "${branch_arg}:refs/remotes/origin/${branch_arg}"; then
+      e_error "Failed to fetch $branch_arg"
+      return 1
+    fi
+    wt_args=(-b "$branch_arg" "$worktree_path" "origin/$branch_arg")
+  else
+    e_error "Branch '$branch_arg' not found locally or on origin"
+    return 1
+  fi
+
   # Create the worktree
   e_arrow "Creating worktree at: $worktree_path"
-  if ! git worktree add "$worktree_path" ${branch_arg:+"$branch_arg"}; then
+  if ! git worktree add "${wt_args[@]}"; then
     e_error "Failed to create worktree"
     return 1
   fi
