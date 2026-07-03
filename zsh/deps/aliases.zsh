@@ -115,7 +115,7 @@ fi
 #   export AWS_VAULT_1P_ITEM="AWS"  # 1Password item name for OTP
 if command -v aws-vault &> /dev/null && command -v op &> /dev/null; then
     if [[ -n "$AWS_VAULT_PROFILE" ]]; then
-        alias av="aws-vault exec --duration=1h ${AWS_VAULT_PROFILE} --mfa-token=\$(op item get \"${AWS_VAULT_1P_ITEM:-AWS}\" --otp)"
+        alias av="aws-vault exec --duration=12h ${AWS_VAULT_PROFILE} --mfa-token=\$(op item get \"${AWS_VAULT_1P_ITEM:-AWS}\" --otp)"
     fi
     if [[ -n "$AWS_VAULT_ADMIN_PROFILE" ]]; then
         alias aav="aws-vault exec --duration=1h ${AWS_VAULT_ADMIN_PROFILE} --mfa-token=\$(op item get \"${AWS_VAULT_1P_ITEM:-AWS}\" --otp)"
