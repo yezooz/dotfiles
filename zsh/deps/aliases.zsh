@@ -88,6 +88,8 @@ alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.ar
 alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 
 alias claude-yolo="claude --allow-dangerously-skip-permissions"
+alias claude-work="CLAUDE_CONFIG_DIR=~/.claude-work claude"
+alias claude-work-yolo="CLAUDE_CONFIG_DIR=~/.claude-work claude --allow-dangerously-skip-permissions"
 
 # Kube
 if command -v kubectl &>/dev/null; then
@@ -108,10 +110,14 @@ fi
 
 # AWS Vault - configurable via environment variables
 # Set these in your ~/.zshrc.local or environment:
-#   export AWS_VAULT_PROFILE="your_profile_name"
+#   export AWS_VAULT_PROFILE="your_profile_name"        # base profile -> `av`
+#   export AWS_VAULT_ADMIN_PROFILE="your_admin_profile" # admin profile -> `aav`
 #   export AWS_VAULT_1P_ITEM="AWS"  # 1Password item name for OTP
 if command -v aws-vault &> /dev/null && command -v op &> /dev/null; then
     if [[ -n "$AWS_VAULT_PROFILE" ]]; then
         alias av="aws-vault exec --duration=1h ${AWS_VAULT_PROFILE} --mfa-token=\$(op item get \"${AWS_VAULT_1P_ITEM:-AWS}\" --otp)"
+    fi
+    if [[ -n "$AWS_VAULT_ADMIN_PROFILE" ]]; then
+        alias aav="aws-vault exec --duration=1h ${AWS_VAULT_ADMIN_PROFILE} --mfa-token=\$(op item get \"${AWS_VAULT_1P_ITEM:-AWS}\" --otp)"
     fi
 fi
