@@ -110,8 +110,9 @@ fi
 
 # AWS Vault - configurable via environment variables
 # Set these in your ~/.zshrc.local or environment:
-#   export AWS_VAULT_PROFILE="your_profile_name"        # base profile -> `av`
+#   export AWS_VAULT_PROFILE="your_profile_name"        # base profile  -> `av`
 #   export AWS_VAULT_ADMIN_PROFILE="your_admin_profile" # admin profile -> `aav`
+#   export AWS_VAULT_POWER_PROFILE="your_power_profile" # power profile  -> `apv`
 #   export AWS_VAULT_1P_ITEM="AWS"  # 1Password item name for OTP
 if command -v aws-vault &> /dev/null && command -v op &> /dev/null; then
     if [[ -n "$AWS_VAULT_PROFILE" ]]; then
@@ -119,5 +120,11 @@ if command -v aws-vault &> /dev/null && command -v op &> /dev/null; then
     fi
     if [[ -n "$AWS_VAULT_ADMIN_PROFILE" ]]; then
         alias aav="aws-vault exec --duration=1h ${AWS_VAULT_ADMIN_PROFILE} --mfa-token=\$(op item get \"${AWS_VAULT_1P_ITEM:-AWS}\" --otp)"
+    fi
+    # Power-developer role. No inline --mfa-token: relies on the cached ~12h
+    # session + the `mfa_process` in ~/.aws/config, so 1Password is only
+    # prompted when the session actually needs refreshing (~once per 12h).
+    if [[ -n "$AWS_VAULT_POWER_PROFILE" ]]; then
+        alias apv="aws-vault exec --duration=12h ${AWS_VAULT_POWER_PROFILE}"
     fi
 fi
