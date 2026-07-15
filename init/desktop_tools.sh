@@ -39,6 +39,7 @@ if is_macos; then
     brew install --cask alfred          # Application launcher
     brew install --cask 1password       # Password manager
     brew install --cask karabiner-elements  # Keyboard customization
+    brew install --cask hammerspoon     # macOS automation (window show/hide hotkeys)
     brew install --cask anki            # Flashcard learning app
     brew install --cask dictionaries    # Dictionary app
     # Kindle is installed via Mac App Store (see MAC APP STORE APPS section below)
