@@ -125,6 +125,6 @@ if command -v aws-vault &> /dev/null && command -v op &> /dev/null; then
     # session + the `mfa_process` in ~/.aws/config, so 1Password is only
     # prompted when the session actually needs refreshing (~once per 12h).
     if [[ -n "$AWS_VAULT_POWER_PROFILE" ]]; then
-        alias apv="aws-vault exec --duration=12h ${AWS_VAULT_POWER_PROFILE}"
+        alias apv="aws-vault exec --duration=12h ${AWS_VAULT_POWER_PROFILE} --mfa-token=\$(op item get \"${AWS_VAULT_1P_ITEM:-AWS}\" --otp)"
     fi
 fi
