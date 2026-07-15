@@ -68,8 +68,10 @@ else
   }
 
   # Wrapper functions that trigger NVM loading on first use
-  node() { _load_nvm && node "$@" }
-  npm() { _load_nvm && npm "$@" }
-  npx() { _load_nvm && npx "$@" }
-  nvm() { _load_nvm && nvm "$@" }
+  # Resilient pattern: works even if _load_nvm was already called and unset
+  # (fixes Claude Code shell snapshot mismatch issue)
+  node() { (( $+functions[_load_nvm] )) && _load_nvm; command node "$@" }
+  npm() { (( $+functions[_load_nvm] )) && _load_nvm; command npm "$@" }
+  npx() { (( $+functions[_load_nvm] )) && _load_nvm; command npx "$@" }
+  nvm() { (( $+functions[_load_nvm] )) && _load_nvm; command nvm "$@" }
 fi
