@@ -116,6 +116,14 @@ check_symlinks() {
     else
         log_warning "Tmux config not symlinked (may not be installed)"
     fi
+
+    # Hammerspoon config
+    log_check "~/.hammerspoon/init.lua symlink"
+    if [[ -L "$HOME/.hammerspoon/init.lua" ]] && [[ -f "$HOME/.hammerspoon/init.lua" ]]; then
+        log_pass
+    else
+        log_warning "Hammerspoon config not symlinked (may not be installed)"
+    fi
 }
 
 # Check required binaries

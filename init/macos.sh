@@ -301,6 +301,21 @@ fi
 [[ ! -L ~/.gitignore ]] && ln -s $DOTFILES/git/gitignore ~/.gitignore
 [[ ! -L ~/.git_template ]] && ln -s $DOTFILES/git/git_template ~/.git_template
 
+# Create symlink for Hammerspoon config (~/.hammerspoon/init.lua)
+e_header "Creating Hammerspoon config symlink"
+
+mkdir -p ~/.hammerspoon
+if [[ ! -L ~/.hammerspoon/init.lua ]]; then
+    [[ -f ~/.hammerspoon/init.lua ]] && mv ~/.hammerspoon/init.lua ~/.hammerspoon/init.lua.old && e_arrow "Backed up existing init.lua to init.lua.old"
+    if ln -s $DOTFILES/hammerspoon/init.lua ~/.hammerspoon/init.lua; then
+        e_success "Symlinked ~/.hammerspoon/init.lua"
+    else
+        e_error "Failed to symlink ~/.hammerspoon/init.lua"
+    fi
+else
+    e_success "~/.hammerspoon/init.lua already symlinked"
+fi
+
 e_header "Configure iTerm to load preferences from dotfiles directory"
 # This ensures all themes, profiles, key bindings, and settings are version controlled
 defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$DOTFILES/iterm"
