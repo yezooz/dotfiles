@@ -97,6 +97,12 @@ export DOTFILES=~/.dotfiles
 
 source $DOTFILES/bin/dotfiles "source"
 
+# path.zsh (above) hardcodes /usr/local/opt/ruby/bin (Homebrew system Ruby)
+# and prepends it, pushing rbenv's shims (set up earlier via
+# ~/.zshrc.local) back down in PATH. Re-init rbenv here so its shims win,
+# ensuring per-project .ruby-version and bundled gems are actually used.
+command -v rbenv >/dev/null && eval "$(rbenv init - zsh)"
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
