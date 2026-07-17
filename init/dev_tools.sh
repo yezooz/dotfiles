@@ -41,13 +41,15 @@ if is_macos; then
     brew install go                    # Go 1.25+
     brew install rust                  # Rust with cargo
     brew install python@3.14           # Latest Python
-    brew install node@20               # Node.js LTS
+    # Node.js is managed by mise (installed below), not Homebrew, to keep the
+    # version consistent across machines. See "Package Managers" -> mise use.
     brew install ruby                  # Ruby
     brew install php                   # PHP 8.4+
     brew install lua                   # Lua
 
     e_arrow "Package Managers & Build Tools"
-    brew install mise                  # Modern runtime manager
+    brew install mise                  # Modern runtime manager (owns Node)
+    mise use -g node@22                # Global Node via mise (>=22 for current npm)
     brew install composer              # PHP package manager
     brew install yarn                  # Node.js package manager
 
@@ -135,11 +137,12 @@ elif is_ubuntu; then
     e_arrow "Development Tools via Homebrew"
     brew install go
     brew install rust
-    brew install node
+    # Node.js is managed by mise (installed below), not Homebrew.
     brew install typescript
     brew install python@3.14
     brew install composer
     brew install mise
+    mise use -g node@22                 # Global Node via mise (>=22 for current npm)
     brew install direnv
     brew install pre-commit
     brew install cloc

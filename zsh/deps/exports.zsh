@@ -43,35 +43,12 @@ export DEFAULT_USER="${DEFAULT_USER:-$USER}"
 # export GIT_AUTHOR_EMAIL="$USER_EMAIL"
 # export GIT_COMMITTER_EMAIL="$USER_EMAIL"
 
-# NVM (Node Version Manager) - Lazy Loaded for Performance
-# Loading NVM synchronously adds ~300-500ms to shell startup.
-# We use lazy loading: NVM initializes only when you first run
-# node, npm, npx, or nvm commands, providing instant shell startup.
-# To force immediate load: nvm --version
-# To disable lazy loading: export NVM_LAZY_LOAD=0
-export NVM_DIR="$HOME/.nvm"
-
-# Check if lazy loading is disabled
-if [[ "${NVM_LAZY_LOAD:-1}" == "0" ]]; then
-  # Load NVM immediately (old behavior)
-  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
-  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
-else
-  # Lazy load NVM on first use (~300-500ms savings)
-  _load_nvm() {
-    # Remove wrapper functions
-    unset -f node npm npx nvm _load_nvm
-
-    # Load NVM
-    [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
-    [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
-  }
-
-  # Wrapper functions that trigger NVM loading on first use
-  # Resilient pattern: works even if _load_nvm was already called and unset
-  # (fixes Claude Code shell snapshot mismatch issue)
-  node() { (( $+functions[_load_nvm] )) && _load_nvm; command node "$@" }
-  npm() { (( $+functions[_load_nvm] )) && _load_nvm; command npm "$@" }
-  npx() { (( $+functions[_load_nvm] )) && _load_nvm; command npx "$@" }
-  nvm() { (( $+functions[_load_nvm] )) && _load_nvm; command nvm "$@" }
+# mise (https://mise.jdx.dev) - polyglot runtime manager for Node, Python, etc.
+# Replaces NVM. Chosen because it is Homebrew-prefix-agnostic (works identically
+# on Intel /usr/local and Apple Silicon /opt/homebrew), fast enough to activate
+# eagerly (no lazy-load hack needed), and manages the Node version per-repo via
+# .mise.toml / .tool-versions plus a global default in ~/.config/mise/config.toml.
+# Install: brew install mise   |   Set global Node: mise use -g node@22
+if command -v mise &>/dev/null; then
+  eval "$(mise activate zsh)"
 fi
