@@ -44,11 +44,13 @@ export DEFAULT_USER="${DEFAULT_USER:-$USER}"
 # export GIT_COMMITTER_EMAIL="$USER_EMAIL"
 
 # mise (https://mise.jdx.dev) - polyglot runtime manager for Node, Python, etc.
-# Replaces NVM. Chosen because it is Homebrew-prefix-agnostic (works identically
-# on Intel /usr/local and Apple Silicon /opt/homebrew), fast enough to activate
-# eagerly (no lazy-load hack needed), and manages the Node version per-repo via
+# Replaces NVM. Homebrew-prefix-agnostic (works identically on Intel /usr/local
+# and Apple Silicon /opt/homebrew) and pins the Node version per-repo via
 # .mise.toml / .tool-versions plus a global default in ~/.config/mise/config.toml.
+# Shims mode (not hook mode): puts ~/.local/share/mise/shims on PATH once instead
+# of running a per-prompt hook, saving ~50ms/startup. Still resolves the correct
+# Node per directory. Trade-off: env vars from .mise.toml aren't auto-loaded on cd.
 # Install: brew install mise   |   Set global Node: mise use -g node@22
 if command -v mise &>/dev/null; then
-  eval "$(mise activate zsh)"
+  eval "$(mise activate zsh --shims)"
 fi
