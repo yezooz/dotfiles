@@ -119,11 +119,12 @@ When modifying installation scripts:
 
 ### Key Optimizations
 
-**NVM Lazy Loading** (~300-500ms savings)
-- Defers NVM initialization until first Node command (`node`, `npm`, `npx`, `nvm`)
-- Provides instant shell startup while preserving all functionality
-- Disable lazy loading: `export NVM_LAZY_LOAD=0` in `~/.zshrc.local`
-- Implementation: `zsh/deps/exports.zsh`
+**Node via mise** (replaces NVM)
+- Node (and other runtimes) are managed by [mise](https://mise.jdx.dev), not NVM or Homebrew
+- Homebrew-prefix-agnostic: works identically on Intel (`/usr/local`) and Apple Silicon (`/opt/homebrew`), so both machines stay in sync
+- Global Node version pinned in `~/.config/mise/config.toml` (`mise use -g node@22`); per-repo override via `.mise.toml` / `.tool-versions`
+- Activated eagerly (fast enough, no lazy-load hack needed): `eval "$(mise activate zsh)"`
+- Implementation: `zsh/deps/exports.zsh`; installed + pinned in `init/dev_tools.sh`
 
 **Completion Caching** (~20-40ms savings)
 - Caches completion dump for 24 hours

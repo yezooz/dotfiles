@@ -102,7 +102,7 @@ source $DOTFILES/bin/dotfiles "source"
 
 is_linux && return
 
-. "$HOME/.local/bin/env"
+[[ -f "$HOME/.local/bin/env" ]] && . "$HOME/.local/bin/env"
 
 # Show profiling results if enabled
 if [[ -n "$PROFILE_ZSH" ]]; then
