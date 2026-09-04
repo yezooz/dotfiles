@@ -8,7 +8,7 @@
 
 # AWS Vault configuration
 # export AWS_VAULT_PROFILE="your_profile_name"
-# export AWS_VAULT_1P_ITEM="AWS"  # 1Password item name for OTP
+# MFA OTP comes from `mfa_process` in ~/.aws/config, not from here.
 
 # ========================================
 # User settings

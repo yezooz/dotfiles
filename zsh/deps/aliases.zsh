@@ -113,18 +113,31 @@ fi
 #   export AWS_VAULT_PROFILE="your_profile_name"        # base profile  -> `av`
 #   export AWS_VAULT_ADMIN_PROFILE="your_admin_profile" # admin profile -> `aav`
 #   export AWS_VAULT_POWER_PROFILE="your_power_profile" # power profile  -> `apv`
-#   export AWS_VAULT_1P_ITEM="AWS"  # 1Password item name for OTP
+# MFA comes from `mfa_process` in ~/.aws/config, which aws-vault runs only when
+# the cached session expires — passing --mfa-token here would hit 1Password on
+# every single call instead.
+# These are functions, not aliases: aws-vault's flag parser doesn't stop at the
+# first positional arg, so `av kubectl --context foo` (no `--`) makes aws-vault
+# try to parse --context as its own flag and fail with "unknown long flag". The
+# function inserts the `--` separator itself; a caller-supplied leading `--`
+# (as in existing docs, e.g. `apv -- kubectl --context foo`) is still accepted.
 if command -v aws-vault &> /dev/null && command -v op &> /dev/null; then
     if [[ -n "$AWS_VAULT_PROFILE" ]]; then
-        alias av="aws-vault exec --duration=12h ${AWS_VAULT_PROFILE} --mfa-token=\$(op item get \"${AWS_VAULT_1P_ITEM:-AWS}\" --otp)"
+        av() {
+            [[ "$1" == "--" ]] && shift
+            aws-vault exec --duration=12h "$AWS_VAULT_PROFILE" -- "$@"
+        }
     fi
     if [[ -n "$AWS_VAULT_ADMIN_PROFILE" ]]; then
-        alias aav="aws-vault exec --duration=1h ${AWS_VAULT_ADMIN_PROFILE} --mfa-token=\$(op item get \"${AWS_VAULT_1P_ITEM:-AWS}\" --otp)"
+        aav() {
+            [[ "$1" == "--" ]] && shift
+            aws-vault exec --duration=1h "$AWS_VAULT_ADMIN_PROFILE" -- "$@"
+        }
     fi
-    # Power-developer role. No inline --mfa-token: relies on the cached ~12h
-    # session + the `mfa_process` in ~/.aws/config, so 1Password is only
-    # prompted when the session actually needs refreshing (~once per 12h).
     if [[ -n "$AWS_VAULT_POWER_PROFILE" ]]; then
-        alias apv="aws-vault exec --duration=12h ${AWS_VAULT_POWER_PROFILE} --mfa-token=\$(op item get \"${AWS_VAULT_1P_ITEM:-AWS}\" --otp)"
+        apv() {
+            [[ "$1" == "--" ]] && shift
+            aws-vault exec --duration=12h "$AWS_VAULT_POWER_PROFILE" -- "$@"
+        }
     fi
 fi
