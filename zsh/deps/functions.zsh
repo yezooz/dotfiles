@@ -105,14 +105,22 @@ function _is_rails_project() {
 function _worktree_setup_rails() {
   e_arrow "Rails project detected, setting up credentials..."
 
-  # Determine source worktree (prefer master, fallback to main)
+  # Determine source worktree (prefer master, fallback to main).
+  # Checked at both ../ and ../../ since a worktree created while cwd was
+  # already inside another worktree (e.g. `gwa` run from within `master/`
+  # instead of its parent) nests one level deeper than the usual sibling
+  # layout.
   local source_worktree=""
-  if [[ -d "../master/config" ]]; then
-    source_worktree="../master"
-  elif [[ -d "../main/config" ]]; then
-    source_worktree="../main"
-  else
-    e_error "Could not find source worktree (checked ../master and ../main)"
+  local candidate
+  for candidate in ../master ../main ../../master ../../main; do
+    if [[ -d "$candidate/config" ]]; then
+      source_worktree="$candidate"
+      break
+    fi
+  done
+
+  if [[ -z "$source_worktree" ]]; then
+    e_error "Could not find source worktree (checked ../master, ../main, ../../master, ../../main)"
     e_error "Please ensure you have a 'master' or 'main' worktree with credentials"
     return 1
   fi
