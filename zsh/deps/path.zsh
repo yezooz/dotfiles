@@ -21,16 +21,8 @@ if is_macos; then
   #   p+="/opt/homebrew/opt/node@22/bin"
   # fi
   
-  # Ruby
-  if [ -d "/opt/homebrew/opt/ruby/bin" ]; then
-    p+="/opt/homebrew/opt/ruby/bin"
-    p+="/opt/homebrew/lib/ruby/gems/4.0.0/bin"
-  fi
-  
-  if [ -d "/usr/local/opt/ruby/bin" ]; then
-      p+="/usr/local/opt/ruby/bin"
-      p+="/usr/local/lib/ruby/gems/4.0.0/bin"
-  fi
+  # Ruby is managed by rbenv (see rbenv init in ~/.zshrc.local).
+  # Do not prepend Homebrew Ruby here — it shadows rbenv shims.
 
   if [ -f "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" ]; then
     p+="/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
