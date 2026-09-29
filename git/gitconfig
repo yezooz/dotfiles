@@ -19,7 +19,7 @@
 [fetch]
 	prune = true
 [push]
-	default = tracking
+	default = simple
 [log]
 	decorate = short
 [pager]
