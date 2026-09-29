@@ -1012,6 +1012,8 @@
 				<key>Red Component</key>
 				<real>0.96744710206985474</real>
 			</dict>
+			<key>Automatically Enable Alternate Mouse Scroll</key>
+			<true/>
 			<key>BM Growl</key>
 			<true/>
 			<key>Background Color</key>
@@ -1347,6 +1349,8 @@
 			<string>kNextWindowPointerAction</string>
 		</dict>
 	</dict>
+	<key>Print In Black And White</key>
+	<true/>
 	<key>PromptOnQuit</key>
 	<false/>
 	<key>ShowFullScreenTabBar</key>
