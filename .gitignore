@@ -21,3 +21,6 @@ tmp/**/*
 
 # Cache directories
 caches/
+# Tool binaries come from mise (~/.config/mise/config.toml), never the repo
+bin/terraform*
+bin/terragrunt*
