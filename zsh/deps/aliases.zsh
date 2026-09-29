@@ -90,6 +90,8 @@ alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resource
 alias claude-yolo="claude --allow-dangerously-skip-permissions"
 alias claude-work="CLAUDE_CONFIG_DIR=~/.claude-work claude"
 alias claude-work-yolo="CLAUDE_CONFIG_DIR=~/.claude-work claude --allow-dangerously-skip-permissions"
+alias cc="claude-yolo"
+alias ccw="claude-work-yolo"
 
 # Kube
 if command -v kubectl &>/dev/null; then
